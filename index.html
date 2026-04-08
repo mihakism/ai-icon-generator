@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Icon Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --dark: #1a1a1a;
+      --dark2: #2c2c2c;
+      --accent: #0066ff;
+      --accent2: #3385ff;
+      --gray1: #888;
+      --gray2: #aaa;
+      --gray3: #e8e8ea;
+      --gray4: #f0f0f2;
+      --text: #1a1a1a;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 0 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 36px; height: 36px;
+      background: var(--dark);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo svg { width: 20px; height: 20px; }
+
+    .logo-text { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-badge {
+      margin-left: 8px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 5px;
+      padding: 2px 7px;
+    }
+
+    /* ── Main grid ── */
+    .main-grid {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 700px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray1);
+      margin-bottom: 16px;
+    }
+
+    /* ── Plugin panel (dark macOS style) ── */
+    .plugin-panel {
+      background: var(--dark);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+
+    .panel-titlebar {
+      background: var(--dark2);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #28c840; }
+
+    .panel-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: #888;
+      margin-left: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .panel-body {
+      padding: 20px 18px;
+    }
+
+    .panel-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 10px;
+      margin-top: 18px;
+    }
+    .panel-label:first-child { margin-top: 0; }
+
+    /* ── Style selector ── */
+    .style-tabs {
+      display: flex;
+      background: #111;
+      border-radius: 8px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .style-tab {
+      flex: 1;
+      padding: 7px 0;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: #666;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .style-tab.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ── API Key ── */
+    .panel-input {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-family: inherit;
+      font-size: 12px;
+      color: #ccc;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .panel-input::placeholder { color: #555; }
+    .panel-input:focus { border-color: var(--accent); }
+
+    /* ── Count selector ── */
+    .count-selector {
+      display: flex;
+      gap: 6px;
+    }
+    .count-btn {
+      flex: 1;
+      padding: 7px 0;
+      border: 1px solid #333;
+      border-radius: 7px;
+      background: transparent;
+      color: #666;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .count-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,102,255,0.08);
+    }
+
+    /* ── Size selector ── */
+    .size-select {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-family: inherit;
+      font-size: 12px;
+      color: #ccc;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    /* ── Generate button ── */
+    .btn-generate {
+      width: 100%;
+      margin-top: 20px;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-generate:hover { background: var(--accent2); transform: translateY(-1px); }
+    .btn-generate:active { transform: translateY(0); }
+    .btn-generate:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+
+    /* ── Left panel content ── */
+    .left-panel { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── Reference input ── */
+    .ref-input-area {
+      border: 2px dashed var(--gray3);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .ref-input-area:hover { border-color: var(--accent); background: rgba(0,102,255,0.02); }
+    .ref-input-area.drag-over { border-color: var(--accent); background: rgba(0,102,255,0.05); }
+    .ref-input-area input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    }
+    .ref-icon { font-size: 32px; margin-bottom: 10px; }
+    .ref-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .ref-sub { font-size: 12px; color: var(--gray1); }
+
+    .ref-preview {
+      display: none;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .ref-preview.visible { display: flex; }
+    .ref-preview-item {
+      width: 64px; height: 64px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--gray4);
+      border: 1px solid var(--gray3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: var(--gray1);
+      position: relative;
+    }
+    .ref-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+    .ref-preview-item .remove-btn {
+      position: absolute; top: 2px; right: 2px;
+      width: 16px; height: 16px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 9px; color: #fff;
+      border: none;
+    }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 4px 0; }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--gray3);
+    }
+    .divider span { font-size: 11px; color: var(--gray2); font-weight: 500; }
+
+    /* ── URL input ── */
+    .url-row {
+      display: flex;
+      gap: 8px;
+    }
+    .url-input {
+      flex: 1;
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray3);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--card);
+    }
+    .url-input::placeholder { color: var(--gray2); }
+    .url-input:focus { border-color: var(--accent); }
+
+    .btn-attach {
+      padding: 11px 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--dark);
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .btn-attach:hover { background: #333; }
+
+    /* ── Icon type input ── */
+    .icon-input-wrap {
+      position: relative;
+    }
+    .icon-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--gray3);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--card);
+    }
+    .icon-input::placeholder { color: var(--gray2); }
+    .icon-input:focus { border-color: var(--accent); }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+    .suggestion-tag {
+      padding: 5px 12px;
+      border: 1.5px solid var(--gray3);
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #555;
+      cursor: pointer;
+      background: var(--card);
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .suggestion-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,102,255,0.04);
+    }
+    .suggestion-tag.selected {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ── Sample icons grid ── */
+    .sample-section { margin-top: 8px; }
+    .sample-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    @media (max-width: 700px) { .sample-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .sample-icon-card {
+      aspect-ratio: 1;
+      background: var(--gray4);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.15s;
+      padding: 12px 8px 10px;
+    }
+    .sample-icon-card:hover { border-color: var(--accent); background: rgba(0,102,255,0.04); }
+    .sample-icon-card.selected { border-color: var(--accent); background: rgba(0,102,255,0.06); }
+    .sample-icon-card svg { width: 36px; height: 36px; flex-shrink: 0; }
+    .sample-icon-card .icon-name {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--gray1);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    /* ── Output grid ── */
+    .output-section {
+      max-width: 860px;
+      margin: 20px auto 0;
+    }
+
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .output-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .output-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-sm {
+      padding: 7px 14px;
+      border: 1.5px solid var(--gray3);
+      border-radius: 8px;
+      background: var(--card);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-sm:hover { border-color: var(--dark); color: var(--dark); }
+
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 500px) { .output-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .output-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      cursor: pointer;
+      animation: fadeUp 0.4s ease both;
+    }
+    .output-card:hover { border-color: var(--accent); box-shadow: 0 4px 20px rgba(0,102,255,0.12); }
+    .output-card svg { width: 56px; height: 56px; }
+    .output-card .out-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gray1);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .output-card .btn-dl {
+      padding: 5px 12px;
+      border: 1.5px solid var(--gray3);
+      border-radius: 6px;
+      background: var(--gray4);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: none;
+    }
+    .output-card:hover .btn-dl { display: block; }
+    .output-card .btn-dl:hover { background: var(--dark); color: #fff; border-color: var(--dark); }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: none;
+      width: 20px; height: 20px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    .loading .spinner { display: block; }
+    .loading .btn-text { display: none; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--dark);
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Skeleton ── */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f2 25%, #e8e8ea 50%, #f0f0f2 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 12px;
+    }
+    .output-card.skeleton-card {
+      pointer-events: none;
+    }
+    .output-card.skeleton-card .skel-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+    }
+    .output-card.skeleton-card .skel-text {
+      width: 60px; height: 10px;
+      border-radius: 5px;
+    }
+
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── URL attached preview ── */
+    .url-preview {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--gray4);
+      border-radius: 10px;
+      margin-top: 8px;
+    }
+    .url-preview.visible { display: flex; }
+    .url-favicon { width: 20px; height: 20px; border-radius: 4px; object-fit: cover; }
+    .url-text { font-size: 12px; color: #555; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .url-remove { background: none; border: none; color: var(--gray1); cursor: pointer; font-size: 14px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 20 20" fill="none">
+      <rect x="3" y="3" width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
+      <rect x="11" y="3" width="6" height="6" rx="1.5" fill="white" opacity="0.6"/>
+      <rect x="3" y="11" width="6" height="6" rx="1.5" fill="white" opacity="0.6"/>
+      <rect x="11" y="11" width="6" height="6" rx="1.5" fill="white" opacity="0.9"/>
+    </svg>
+  </div>
+  <span class="logo-text">AI Icon Generator</span>
+  <span class="logo-badge">Beta</span>
+</header>
+
+<!-- Main Grid -->
+<div class="main-grid">
+
+  <!-- Left: Controls -->
+  <div class="left-panel">
+
+    <!-- Reference input -->
+    <div class="card">
+      <div class="section-label">스타일 레퍼런스</div>
+
+      <div class="ref-input-area" id="dropArea">
+        <input type="file" id="fileInput" accept="image/*" multiple />
+        <div class="ref-icon">🖼️</div>
+        <div class="ref-title">아이콘 스타일 이미지 첨부</div>
+        <div class="ref-sub">드래그 앤 드롭 또는 클릭하여 업로드 (PNG, SVG, JPG)</div>
+      </div>
+
+      <div class="ref-preview" id="refPreview"></div>
+
+      <div class="divider" style="margin-top: 16px;"><span>또는</span></div>
+
+      <div class="url-row" style="margin-top: 12px;">
+        <input class="url-input" id="urlInput" type="url" placeholder="아이콘 사이트 URL 입력 (예: thenounproject.com/...)" />
+        <button class="btn-attach" id="urlAttachBtn">첨부</button>
+      </div>
+      <div class="url-preview" id="urlPreview">
+        <img class="url-favicon" id="urlFavicon" src="" alt="" />
+        <span class="url-text" id="urlText"></span>
+        <button class="url-remove" id="urlRemove">✕</button>
+      </div>
+    </div>
+
+    <!-- Icon type input -->
+    <div class="card">
+      <div class="section-label">원하는 아이콘 입력</div>
+      <div class="icon-input-wrap">
+        <input class="icon-input" id="iconInput" type="text"
+          placeholder="예: 설정, 알림, 돋보기, 글쓰기, 홈..." />
+      </div>
+      <div class="suggestions" id="suggestions">
+        <span class="suggestion-tag" data-val="설정">⚙️ 설정</span>
+        <span class="suggestion-tag" data-val="알림">🔔 알림</span>
+        <span class="suggestion-tag" data-val="검색">🔍 검색</span>
+        <span class="suggestion-tag" data-val="글쓰기">✏️ 글쓰기</span>
+        <span class="suggestion-tag" data-val="홈">🏠 홈</span>
+        <span class="suggestion-tag" data-val="사용자">👤 사용자</span>
+        <span class="suggestion-tag" data-val="다운로드">⬇️ 다운로드</span>
+        <span class="suggestion-tag" data-val="즐겨찾기">❤️ 즐겨찾기</span>
+        <span class="suggestion-tag" data-val="공유">↗️ 공유</span>
+        <span class="suggestion-tag" data-val="달력">📅 달력</span>
+        <span class="suggestion-tag" data-val="카메라">📷 카메라</span>
+        <span class="suggestion-tag" data-val="메시지">💬 메시지</span>
+      </div>
+    </div>
+
+    <!-- Sample icons from Noun Project style -->
+    <div class="card sample-section">
+      <div class="section-label">레퍼런스 아이콘 샘플 <span style="color:#aaa;font-weight:400;text-transform:none;letter-spacing:0">— 클릭해서 스타일 참고</span></div>
+      <div class="sample-grid" id="sampleGrid">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Plugin Panel -->
+  <div class="plugin-panel">
+    <div class="panel-titlebar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <span class="panel-title">Icon Generator</span>
+    </div>
+    <div class="panel-body">
+
+      <div class="panel-label">아이콘 스타일</div>
+      <div class="style-tabs">
+        <button class="style-tab active" data-style="line">Line</button>
+        <button class="style-tab" data-style="solid">Solid</button>
+        <button class="style-tab" data-style="3d">3D</button>
+      </div>
+
+      <div class="panel-label">생성 수량</div>
+      <div class="count-selector">
+        <button class="count-btn active" data-count="4">4개</button>
+        <button class="count-btn" data-count="8">8개</button>
+        <button class="count-btn" data-count="12">12개</button>
+      </div>
+
+      <div class="panel-label">아이콘 크기</div>
+      <select class="size-select" id="sizeSelect">
+        <option value="256">256 × 256</option>
+        <option value="512" selected>512 × 512</option>
+        <option value="1024">1024 × 1024</option>
+      </select>
+
+      <div class="panel-label">Recraft API Key</div>
+      <input class="panel-input" id="apiKeyInput" type="password"
+        placeholder="sk-..." />
+      <div style="font-size:10px;color:#555;margin-top:6px;">
+        <a href="https://www.recraft.ai" target="_blank" style="color:#444;text-decoration:underline;">recraft.ai</a>에서 API 키를 발급받으세요
+      </div>
+
+      <button class="btn-generate" id="generateBtn">
+        <span class="btn-text">✦ 아이콘 생성</span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Output -->
+<div class="output-section" id="outputSection" style="display:none;">
+  <div class="output-header">
+    <div class="output-title" id="outputTitle">생성된 아이콘</div>
+    <div class="output-actions">
+      <button class="btn-sm" id="downloadAllBtn">모두 다운로드</button>
+      <button class="btn-sm" id="regenerateBtn">재생성</button>
+    </div>
+  </div>
+  <div class="output-grid" id="outputGrid"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── State ─── */
+const state = {
+  style: 'line',
+  count: 4,
+  size: '512',
+  apiKey: '',
+  selectedTags: [],
+  refImages: [],
+  refUrl: '',
+};
+
+/* ─── SVG Icon Library (Noun Project style, 8 icons) ─── */
+const ICON_LIB = {
+  settings: {
+    name: '설정',
+    line: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="24" r="6" stroke="#1a1a1a" stroke-width="2"/>
+      <path d="M24 4v4M24 40v4M4 24h4M40 24h4" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M8.686 8.686l2.828 2.828M36.485 36.485l2.829 2.829M8.686 39.314l2.828-2.829M36.485 11.515l2.829-2.829" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+    </svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M20.1 4a2 2 0 0 0-1.96 1.608l-.487 2.433a14.066 14.066 0 0 0-3.02 1.744l-2.354-.785a2 2 0 0 0-2.399.961L7.88 12.04a2 2 0 0 0 .437 2.434l1.844 1.594a14.1 14.1 0 0 0 0 3.864L8.317 21.526a2 2 0 0 0-.437 2.434l2 3.079a2 2 0 0 0 2.399.961l2.354-.786a14.07 14.07 0 0 0 3.02 1.745l.487 2.433A2 2 0 0 0 20.1 33h3.8a2 2 0 0 0 1.96-1.608l.487-2.433a14.07 14.07 0 0 0 3.02-1.745l2.354.786a2 2 0 0 0 2.399-.961l2-3.08a2 2 0 0 0-.437-2.433l-1.844-1.594a14.1 14.1 0 0 0 0-3.864l1.844-1.594a2 2 0 0 0 .437-2.434l-2-3.079a2 2 0 0 0-2.399-.961l-2.354.785a14.065 14.065 0 0 0-3.02-1.744L25.86 5.608A2 2 0 0 0 23.9 4H20.1zM22 23a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" fill="#1a1a1a"/>
+    </svg>`,
+    '3d': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="sg1" cx="40%" cy="35%" r="65%">
+          <stop offset="0%" stop-color="#6b7cff"/>
+          <stop offset="100%" stop-color="#2c3aee"/>
+        </radialGradient>
+      </defs>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M20.1 7a2 2 0 0 0-1.96 1.608l-.487 2.433a14.066 14.066 0 0 0-3.02 1.744l-2.354-.785a2 2 0 0 0-2.399.961L7.88 15.04a2 2 0 0 0 .437 2.434l1.844 1.594a14.1 14.1 0 0 0 0 3.864L8.317 24.526a2 2 0 0 0-.437 2.434l2 3.079a2 2 0 0 0 2.399.961l2.354-.786a14.07 14.07 0 0 0 3.02 1.745l.487 2.433A2 2 0 0 0 20.1 36h3.8a2 2 0 0 0 1.96-1.608l.487-2.433a14.07 14.07 0 0 0 3.02-1.745l2.354.786a2 2 0 0 0 2.399-.961l2-3.08a2 2 0 0 0-.437-2.433l-1.844-1.594a14.1 14.1 0 0 0 0-3.864l1.844-1.594a2 2 0 0 0 .437-2.434l-2-3.079a2 2 0 0 0-2.399-.961l-2.354.785a14.065 14.065 0 0 0-3.02-1.744L25.86 8.608A2 2 0 0 0 23.9 7H20.1zM22 26a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" fill="url(#sg1)" filter="drop-shadow(0 4px 8px rgba(44,58,238,0.4))"/>
+    </svg>`,
+  },
+  bell: {
+    name: '알림',
+    line: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 6C17.373 6 12 11.373 12 18v8l-3 5h30l-3-5v-8c0-6.627-5.373-12-12-12z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M20 31c0 2.21 1.79 4 4 4s4-1.79 4-4" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="24" cy="6" r="2" fill="#1a1a1a"/>
+    </svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 6C17.373 6 12 11.373 12 18v8l-3 5h30l-3-5v-8c0-6.627-5.373-12-12-12z" fill="#1a1a1a"/>
+      <path d="M20 31c0 2.21 1.79 4 4 4s4-1.79 4-4h-8z" fill="#1a1a1a"/>
+      <circle cx="24" cy="5" r="2.5" fill="#1a1a1a"/>
+    </svg>`,
+    '3d': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bg1" x1="12" y1="6" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#ff9f43"/>
+          <stop offset="1" stop-color="#ee5a24"/>
+        </linearGradient>
+      </defs>
+      <path d="M24 6C17.373 6 12 11.373 12 18v8l-3 5h30l-3-5v-8c0-6.627-5.373-12-12-12z" fill="url(#bg1)" filter="drop-shadow(0 4px 10px rgba(238,90,36,0.4))"/>
+      <path d="M20 31c0 2.21 1.79 4 4 4s4-1.79 4-4h-8z" fill="#cc4a16"/>
+      <circle cx="24" cy="5" r="2.5" fill="#ff9f43"/>
+    </svg>`,
+  },
+  search: {
+    name: '검색',
+    line: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="21" cy="21" r="13" stroke="#1a1a1a" stroke-width="2"/>
+      <path d="M31 31l9 9" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="21" cy="21" r="13" fill="#1a1a1a"/>
+      <circle cx="21" cy="21" r="9" fill="white"/>
+      <path d="M31 31l9 9" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/>
+    </svg>`,
+    '3d': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="sg2" cx="35%" cy="30%" r="65%">
+          <stop offset="0%" stop-color="#55efc4"/>
+          <stop offset="100%" stop-color="#00b894"/>
+        </radialGradient>
+      </defs>
+      <circle cx="21" cy="21" r="13" fill="url(#sg2)" filter="drop-shadow(0 4px 8px rgba(0,184,148,0.4))"/>
+      <circle cx="21" cy="21" r="9" fill="rgba(255,255,255,0.25)"/>
+      <path d="M31 31l9 9" stroke="#00b894" stroke-width="4" stroke-linecap="round"/>
+    </svg>`,
+  },
+  edit: {
+    name: '글쓰기',
+    line: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M33.5 7.5l7 7-21 21H13v-7l20.5-21z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M8 42h32" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+    </svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M33.5 7.5l7 7-21 21H13v-7l20.5-21z" fill="#1a1a1a"/>
+      <path d="M8 42h32" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`,
+    '3d': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="eg1" x1="13" y1="7" x2="40" y2="35" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#a29bfe"/>
+          <stop offset="1" stop-color="#6c5ce7"/>
+        </linearGradient>
+      </defs>
+      <path d="M33.5 7.5l7 7-21 21H13v-7l20.5-21z" fill="url(#eg1)" filter="drop-shadow(0 4px 8px rgba(108,92,231,0.4))"/>
+      <path d="M8 42h32" stroke="#6c5ce7" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`,
+  },
+  home: {
+    name: '홈',
+    line: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 22L24 8l16 14v20H30V30h-4v12H8V22z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+    </svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 22L24 8l16 14v20H30V30h-4v12H8V22z" fill="#1a1a1a"/>
+    </svg>`,
+    '3d': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hg1" x1="8" y1="8" x2="40" y2="42" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#fd79a8"/>
+          <stop offset="1" stop-color="#d63031"/>
+        </linearGradient>
+      </defs>
+      <path d="M8 22L24 8l16 14v20H30V30h-4v12H8V22z" fill="url(#hg1)" filter="drop-shadow(0 5px 10px rgba(214,48,49,0.35))"/>
+    </svg>`,
+  },
+  user: {
+    name: '사용자',
+    line: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="16" r="8" stroke="#1a1a1a" stroke-width="2"/>
+      <path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+    </svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="16" r="8" fill="#1a1a1a"/>
+      <path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16H8z" fill="#1a1a1a"/>
+    </svg>`,
+    '3d': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ug1" cx="40%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#74b9ff"/>
+          <stop offset="100%" stop-color="#0984e3"/>
+        </radialGradient>
+      </defs>
+      <circle cx="24" cy="16" r="8" fill="url(#ug1)" filter="drop-shadow(0 4px 8px rgba(9,132,227,0.4))"/>
+      <path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16H8z" fill="url(#ug1)" filter="drop-shadow(0 4px 8px rgba(9,132,227,0.3))"/>
+    </svg>`,
+  },
+  download: {
+    name: '다운로드',
+    line: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 6v26M14 24l10 10 10-10" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 36v4a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2v-4" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+    </svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22 6h4v22l10-10 2.828 2.828L24 35.657 9.172 20.828 12 18l10 10V6z" fill="#1a1a1a"/>
+      <rect x="8" y="36" width="32" height="6" rx="2" fill="#1a1a1a"/>
+    </svg>`,
+    '3d': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="dg1" x1="8" y1="6" x2="40" y2="42" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#00cec9"/>
+          <stop offset="1" stop-color="#00b894"/>
+        </linearGradient>
+      </defs>
+      <path d="M22 6h4v22l10-10 2.828 2.828L24 35.657 9.172 20.828 12 18l10 10V6z" fill="url(#dg1)" filter="drop-shadow(0 4px 8px rgba(0,184,148,0.35))"/>
+      <rect x="8" y="36" width="32" height="6" rx="2" fill="url(#dg1)"/>
+    </svg>`,
+  },
+  heart: {
+    name: '즐겨찾기',
+    line: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 40s-18-11.5-18-23a11 11 0 0 1 18-8.437A11 11 0 0 1 42 17c0 11.5-18 23-18 23z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/>
+    </svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 40s-18-11.5-18-23a11 11 0 0 1 18-8.437A11 11 0 0 1 42 17c0 11.5-18 23-18 23z" fill="#1a1a1a"/>
+    </svg>`,
+    '3d': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heg1" x1="6" y1="9" x2="42" y2="40" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#ff7675"/>
+          <stop offset="1" stop-color="#d63031"/>
+        </linearGradient>
+      </defs>
+      <path d="M24 40s-18-11.5-18-23a11 11 0 0 1 18-8.437A11 11 0 0 1 42 17c0 11.5-18 23-18 23z" fill="url(#heg1)" filter="drop-shadow(0 5px 12px rgba(214,48,49,0.4))"/>
+    </svg>`,
+  },
+};
+
+/* ─── Render sample grid ─── */
+const sampleGrid = document.getElementById('sampleGrid');
+Object.entries(ICON_LIB).forEach(([key, icon]) => {
+  const card = document.createElement('div');
+  card.className = 'sample-icon-card';
+  card.dataset.key = key;
+  card.innerHTML = `${icon[state.style]}<span class="icon-name">${icon.name}</span>`;
+  card.addEventListener('click', () => {
+    card.classList.toggle('selected');
+    // Add to input suggestions
+    const val = icon.name;
+    const current = document.getElementById('iconInput').value;
+    if (!current.includes(val)) {
+      document.getElementById('iconInput').value = current ? current + ', ' + val : val;
+    }
+  });
+  sampleGrid.appendChild(card);
+});
+
+/* ─── Style tabs ─── */
+document.querySelectorAll('.style-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    state.style = tab.dataset.style;
+    // Re-render sample icons
+    document.querySelectorAll('.sample-icon-card').forEach(card => {
+      const key = card.dataset.key;
+      const icon = ICON_LIB[key];
+      card.innerHTML = `${icon[state.style]}<span class="icon-name">${icon.name}</span>`;
+    });
+  });
+});
+
+/* ─── Count selector ─── */
+document.querySelectorAll('.count-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.count = parseInt(btn.dataset.count);
+  });
+});
+
+/* ─── Size select ─── */
+document.getElementById('sizeSelect').addEventListener('change', e => {
+  state.size = e.target.value;
+});
+
+/* ─── Suggestion tags ─── */
+document.querySelectorAll('.suggestion-tag').forEach(tag => {
+  tag.addEventListener('click', () => {
+    tag.classList.toggle('selected');
+    const val = tag.dataset.val;
+    let current = document.getElementById('iconInput').value;
+    const parts = current.split(',').map(s => s.trim()).filter(Boolean);
+    if (tag.classList.contains('selected')) {
+      if (!parts.includes(val)) parts.push(val);
+    } else {
+      const idx = parts.indexOf(val);
+      if (idx > -1) parts.splice(idx, 1);
+    }
+    document.getElementById('iconInput').value = parts.join(', ');
+  });
+});
+
+/* ─── File upload ─── */
+const dropArea = document.getElementById('dropArea');
+const fileInput = document.getElementById('fileInput');
+const refPreview = document.getElementById('refPreview');
+
+fileInput.addEventListener('change', e => handleFiles(e.target.files));
+dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('drag-over'); });
+dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag-over'));
+dropArea.addEventListener('drop', e => {
+  e.preventDefault();
+  dropArea.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+});
+
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.refImages.push(e.target.result);
+      addImagePreview(e.target.result, state.refImages.length - 1);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function addImagePreview(src, idx) {
+  refPreview.classList.add('visible');
+  const item = document.createElement('div');
+  item.className = 'ref-preview-item';
+  item.innerHTML = `<img src="${src}" alt="ref" /><button class="remove-btn" data-idx="${idx}">✕</button>`;
+  item.querySelector('.remove-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    state.refImages.splice(idx, 1);
+    item.remove();
+    if (state.refImages.length === 0) refPreview.classList.remove('visible');
+  });
+  refPreview.appendChild(item);
+}
+
+/* ─── URL attach ─── */
+document.getElementById('urlAttachBtn').addEventListener('click', attachUrl);
+document.getElementById('urlInput').addEventListener('keydown', e => { if (e.key === 'Enter') attachUrl(); });
+
+function attachUrl() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) return;
+  try { new URL(url); } catch { showToast('유효한 URL을 입력해주세요'); return; }
+  state.refUrl = url;
+  const hostname = new URL(url).hostname;
+  document.getElementById('urlFavicon').src = `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`;
+  document.getElementById('urlText').textContent = url;
+  document.getElementById('urlPreview').classList.add('visible');
+  document.getElementById('urlInput').value = '';
+}
+
+document.getElementById('urlRemove').addEventListener('click', () => {
+  state.refUrl = '';
+  document.getElementById('urlPreview').classList.remove('visible');
+});
+
+/* ─── API Key ─── */
+document.getElementById('apiKeyInput').addEventListener('input', e => {
+  state.apiKey = e.target.value.trim();
+});
+
+/* ─── Generate ─── */
+document.getElementById('generateBtn').addEventListener('click', generate);
+document.getElementById('regenerateBtn').addEventListener('click', generate);
+
+async function generate() {
+  const iconText = document.getElementById('iconInput').value.trim();
+  const iconNames = iconText
+    ? iconText.split(',').map(s => s.trim()).filter(Boolean)
+    : ['아이콘'];
+
+  const btn = document.getElementById('generateBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const outputSection = document.getElementById('outputSection');
+  const outputGrid = document.getElementById('outputGrid');
+  outputSection.style.display = 'block';
+  outputGrid.innerHTML = '';
+
+  // Show skeletons
+  for (let i = 0; i < state.count; i++) {
+    const card = document.createElement('div');
+    card.className = 'output-card skeleton-card';
+    card.innerHTML = `<div class="skeleton skel-icon"></div><div class="skeleton skel-text"></div>`;
+    outputGrid.appendChild(card);
+  }
+  outputGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  try {
+    if (state.apiKey) {
+      await generateWithRecraft(iconNames, outputGrid);
+    } else {
+      await simulateGeneration(iconNames, outputGrid);
+    }
+    document.getElementById('outputTitle').textContent = `생성된 아이콘 · ${state.style.toUpperCase()} 스타일`;
+  } catch (err) {
+    showToast('생성 중 오류가 발생했습니다: ' + err.message);
+    outputGrid.innerHTML = '';
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+/* ─── Recraft API integration ─── */
+async function generateWithRecraft(iconNames, grid) {
+  grid.innerHTML = '';
+  const styleMap = {
+    line: 'icon',
+    solid: 'icon',
+    '3d': 'icon',
+  };
+
+  const substyleMap = {
+    line: 'outline',
+    solid: 'filled',
+    '3d': '3d',
+  };
+
+  const names = [];
+  for (let i = 0; i < state.count; i++) {
+    names.push(iconNames[i % iconNames.length]);
+  }
+
+  const results = await Promise.allSettled(
+    names.map(async (name) => {
+      const prompt = buildPrompt(name);
+      const body = {
+        prompt,
+        style: 'icon',
+        substyle: substyleMap[state.style],
+        width: parseInt(state.size),
+        height: parseInt(state.size),
+        n: 1,
+      };
+
+      const res = await fetch('https://external.api.recraft.ai/v1/images/generations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${state.apiKey}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error?.message || res.statusText);
+      }
+      const data = await res.json();
+      return { name, url: data.data[0].url };
+    })
+  );
+
+  results.forEach((result, i) => {
+    if (result.status === 'fulfilled') {
+      const { name, url } = result.value;
+      addOutputCard(grid, name, null, url, i);
+    } else {
+      const card = document.createElement('div');
+      card.className = 'output-card';
+      card.style.animationDelay = `${i * 0.08}s`;
+      card.innerHTML = `<div style="font-size:24px">❌</div><span class="out-label" style="color:#e17055">오류</span>`;
+      grid.appendChild(card);
+    }
+  });
+}
+
+function buildPrompt(iconName) {
+  const styleDesc = {
+    line: 'minimal line icon, thin strokes, outline style, clean, monochrome, white background',
+    solid: 'solid filled icon, bold shapes, flat design, clean, monochrome, white background',
+    '3d': '3D icon, glossy, colorful gradient, soft shadows, modern app icon style, white background',
+  }[state.style];
+
+  const refHint = state.refUrl ? ` Reference style from: ${state.refUrl}.` : '';
+  return `A single ${iconName} icon. ${styleDesc}.${refHint} Simple, centered, professional icon design.`;
+}
+
+/* ─── Simulate generation (no API key) ─── */
+async function simulateGeneration(iconNames, grid) {
+  grid.innerHTML = '';
+  const iconKeys = Object.keys(ICON_LIB);
+
+  for (let i = 0; i < state.count; i++) {
+    await new Promise(r => setTimeout(r, 200 + i * 120));
+
+    const inputName = iconNames[i % iconNames.length] || '아이콘';
+    // Try to match to library
+    let matchKey = iconKeys.find(k =>
+      ICON_LIB[k].name === inputName ||
+      k.toLowerCase().includes(inputName.toLowerCase()) ||
+      inputName.includes(ICON_LIB[k].name)
+    );
+    if (!matchKey) matchKey = iconKeys[i % iconKeys.length];
+
+    const icon = ICON_LIB[matchKey];
+    addOutputCard(grid, inputName, icon[state.style], null, i);
+  }
+}
+
+function addOutputCard(grid, name, svgStr, imgUrl, idx) {
+  const card = document.createElement('div');
+  card.className = 'output-card';
+  card.style.animationDelay = `${idx * 0.08}s`;
+
+  let mediaHtml;
+  if (imgUrl) {
+    mediaHtml = `<img src="${imgUrl}" style="width:56px;height:56px;object-fit:contain;border-radius:8px;" alt="${name}" />`;
+  } else {
+    mediaHtml = svgStr || '<svg viewBox="0 0 48 48"></svg>';
+  }
+
+  card.innerHTML = `
+    ${mediaHtml}
+    <span class="out-label">${name}</span>
+    <button class="btn-dl">다운로드</button>
+  `;
+
+  card.querySelector('.btn-dl').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (imgUrl) {
+      downloadImage(imgUrl, `icon-${name}.png`);
+    } else {
+      downloadSvg(svgStr, `icon-${name}.svg`);
+    }
+  });
+
+  grid.appendChild(card);
+}
+
+/* ─── Download helpers ─── */
+function downloadSvg(svgStr, filename) {
+  const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  triggerDownload(url, filename);
+}
+
+function downloadImage(url, filename) {
+  triggerDownload(url, filename);
+}
+
+function triggerDownload(url, filename) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('downloadAllBtn').addEventListener('click', () => {
+  document.querySelectorAll('.output-card .btn-dl').forEach(btn => btn.click());
+  showToast('모든 아이콘 다운로드를 시작했습니다');
+});
+
+/* ─── Toast ─── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
