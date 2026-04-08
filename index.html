@@ -19,34 +19,34 @@
     /* ── Header ── */
     header {
       text-align: center;
-      padding: 64px 24px 48px;
+      padding: 83px 31px 62px;
     }
     header h1 {
-      font-size: 40px;
+      font-size: 52px;
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1.15;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
     header p {
-      font-size: 16px;
+      font-size: 21px;
       color: #888;
       line-height: 1.6;
     }
 
     /* ── Main layout ── */
     main {
-      max-width: 720px;
+      max-width: 936px;
       margin: 0 auto;
-      padding: 0 24px 80px;
+      padding: 0 31px 104px;
       display: flex;
-      gap: 20px;
+      gap: 26px;
       align-items: flex-start;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 700px) {
       main { flex-direction: column-reverse; }
-      header h1 { font-size: 28px; }
+      header h1 { font-size: 36px; }
     }
 
     /* ── Left panel ── */
@@ -55,143 +55,177 @@
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 18px;
     }
 
-    .preview-card {
+    /* ── Cards ── */
+    .card {
       background: #fff;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border-radius: 26px;
+      padding: 31px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
     }
 
     .card-label {
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 1.2px;
       text-transform: uppercase;
       color: #aaa;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
-    /* ── Sample icon grid ── */
-    .sample-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .sample-card {
-      background: #f7f7f8;
-      border-radius: 12px;
-      padding: 14px 8px 10px;
+    /* ── Upload zone (large) ── */
+    .upload-zone {
+      border: 2px dashed #d8d8da;
+      border-radius: 18px;
+      padding: 52px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      gap: 14px;
       cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.15s;
-    }
-    .sample-card:hover {
-      border-color: #0066ff;
-      background: rgba(0,102,255,0.04);
-    }
-    .sample-card.selected {
-      border-color: #0066ff;
-      background: rgba(0,102,255,0.06);
-    }
-    .sample-card svg { width: 32px; height: 32px; display: block; }
-    .sample-card .icon-name {
-      font-size: 9px;
-      font-weight: 600;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      transition: all 0.18s;
+      background: #fafafa;
+      position: relative;
       text-align: center;
     }
-
-    /* ── Attach button ── */
-    .attach-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: #0066ff;
+      background: rgba(0,102,255,0.03);
     }
-    .btn-attach-file {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 9px 16px;
-      border: 1.5px solid #e4e4e6;
-      border-radius: 10px;
-      background: #fff;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 600;
-      color: #444;
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
       cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
     }
-    .btn-attach-file:hover { border-color: #1a1a1a; color: #1a1a1a; }
-    .btn-attach-file svg { flex-shrink: 0; }
+    .upload-icon {
+      width: 56px;
+      height: 56px;
+      background: #f0f0f2;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .upload-icon svg { width: 26px; height: 26px; }
+    .upload-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+    .upload-sub {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.5;
+    }
 
+    /* ── URL row ── */
+    .url-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
     .url-input {
       flex: 1;
-      padding: 9px 14px;
+      padding: 12px 18px;
       border: 1.5px solid #e4e4e6;
-      border-radius: 10px;
+      border-radius: 13px;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 14px;
       color: #1a1a1a;
       outline: none;
       background: #fff;
       transition: border-color 0.15s;
       min-width: 0;
     }
-    .url-input::placeholder { color: #bbb; }
+    .url-input::placeholder { color: #ccc; }
     .url-input:focus { border-color: #0066ff; }
-
-    /* ── Attached preview chips ── */
-    .attached-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
+    .btn-url-attach {
+      padding: 12px 20px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 13px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
     }
-    .chip {
+    .btn-url-attach:hover { border-color: #1a1a1a; color: #1a1a1a; }
+
+    /* ── Image previews (after upload) ── */
+    .preview-area {
+      display: none;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .preview-area.visible { display: flex; }
+
+    .preview-item {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.5px solid #e4e4e6;
+      background: #f7f7f8;
+      flex-shrink: 0;
+    }
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .preview-item .remove-btn {
+      position: absolute;
+      top: 5px; right: 5px;
+      width: 20px; height: 20px;
+      background: rgba(0,0,0,0.55);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 11px;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
-      background: #f7f7f8;
-      border: 1.5px solid #e4e4e6;
-      border-radius: 8px;
-      font-size: 11px;
-      font-weight: 500;
-      color: #555;
-      max-width: 200px;
-    }
-    .chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .chip-remove {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #aaa;
-      font-size: 12px;
-      padding: 0;
-      flex-shrink: 0;
+      justify-content: center;
       line-height: 1;
     }
-    .chip-remove:hover { color: #e03737; }
+    .preview-item .remove-btn:hover { background: #e03737; }
+
+    /* URL chip */
+    .url-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #f7f7f8;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+      max-width: 260px;
+    }
+    .url-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .url-chip button {
+      background: none; border: none;
+      color: #bbb; cursor: pointer;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .url-chip button:hover { color: #e03737; }
 
     /* ── Output card ── */
     .output-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
       display: none;
     }
     .output-card.visible { display: block; }
@@ -200,31 +234,32 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
+
     .output-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 10px;
     }
 
     .out-card {
       background: #f7f7f8;
-      border-radius: 12px;
-      padding: 16px 8px 12px;
+      border-radius: 16px;
+      padding: 20px 10px 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       cursor: pointer;
       border: 2px solid transparent;
       transition: all 0.15s;
       animation: fadeUp 0.35s ease both;
     }
     .out-card:hover { border-color: #0066ff; background: rgba(0,102,255,0.04); }
-    .out-card svg, .out-card img { width: 40px; height: 40px; display: block; }
+    .out-card svg, .out-card img { width: 52px; height: 52px; display: block; }
     .out-card .out-name {
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 600;
       color: #aaa;
       text-transform: uppercase;
@@ -233,12 +268,12 @@
     }
     .out-card .btn-dl {
       display: none;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border: 1.5px solid #e4e4e6;
-      border-radius: 6px;
+      border-radius: 7px;
       background: #fff;
       font-family: inherit;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 600;
       color: #555;
       cursor: pointer;
@@ -250,141 +285,160 @@
       background: linear-gradient(90deg, #f0f0f2 25%, #e6e6e9 50%, #f0f0f2 75%);
       background-size: 200% 100%;
       animation: shimmer 1.2s infinite;
-      border-radius: 8px;
+      border-radius: 10px;
     }
-    .skel-icon { width: 40px; height: 40px; border-radius: 10px; }
-    .skel-text { width: 48px; height: 8px; border-radius: 4px; }
+    .skel-icon { width: 52px; height: 52px; border-radius: 13px; }
+    .skel-text { width: 52px; height: 10px; border-radius: 5px; }
 
-    /* ── Right panel (light mode) ── */
+    /* ── Right plugin panel (light) ── */
     .plugin-panel {
-      width: 220px;
+      width: 286px;
       flex-shrink: 0;
       background: #fff;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
       border: 1px solid #e8e8ea;
     }
 
     .panel-titlebar {
       background: #f0f0f2;
-      padding: 10px 14px;
+      padding: 13px 18px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       border-bottom: 1px solid #e4e4e6;
     }
-    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot { width: 13px; height: 13px; border-radius: 50%; }
     .dot-red    { background: #ff5f57; }
     .dot-yellow { background: #febc2e; }
     .dot-green  { background: #28c840; }
     .panel-title-text {
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
       color: #999;
       margin-left: 4px;
-      letter-spacing: 0.2px;
     }
 
-    .panel-body { padding: 18px 16px; }
+    .panel-body { padding: 24px 20px; }
 
     .panel-section-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 1.1px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       color: #bbb;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
-    .panel-section-label + * { }
 
-    /* ── Style tabs (light) ── */
+    /* ── Style tabs ── */
     .style-tabs {
       display: flex;
       background: #f0f0f2;
-      border-radius: 10px;
-      padding: 3px;
-      gap: 2px;
-      margin-bottom: 18px;
+      border-radius: 13px;
+      padding: 4px;
+      gap: 3px;
+      margin-bottom: 22px;
     }
     .style-tab {
       flex: 1;
-      padding: 7px 0;
+      padding: 9px 0;
       border: none;
-      border-radius: 7px;
+      border-radius: 10px;
       background: transparent;
-      color: #999;
+      color: #bbb;
       font-family: inherit;
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 700;
-      cursor: pointer;
+      cursor: not-allowed;
       transition: all 0.18s;
       letter-spacing: 0.2px;
+      user-select: none;
     }
+    .style-tab.enabled {
+      cursor: pointer;
+      color: #999;
+    }
+    .style-tab.enabled:hover { color: #555; }
     .style-tab.active {
       background: #fff;
       color: #1a1a1a;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
     }
 
-    /* ── Style description ── */
+    /* lock notice */
+    .lock-notice {
+      font-size: 12px;
+      color: #bbb;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.4;
+    }
+    .lock-notice.hidden { display: none; }
+
+    /* style desc */
     .style-desc {
-      font-size: 11px;
+      font-size: 13px;
       color: #888;
       line-height: 1.5;
-      margin-bottom: 18px;
-      min-height: 34px;
+      margin-bottom: 22px;
+      min-height: 40px;
     }
+    .style-desc.hidden { display: none; }
 
-    /* ── Divider ── */
     .panel-divider {
       height: 1px;
       background: #f0f0f2;
-      margin: 16px 0;
+      margin: 20px 0;
     }
 
-    /* ── Selected count ── */
     .selected-count {
-      font-size: 11px;
+      font-size: 13px;
       color: #888;
-      margin-bottom: 14px;
-      min-height: 16px;
+      margin-bottom: 18px;
+      min-height: 20px;
     }
     .selected-count strong { color: #1a1a1a; }
 
-    /* ── Generate button ── */
+    /* ── Buttons ── */
     .btn-generate {
       width: 100%;
-      padding: 12px;
+      padding: 15px;
       border: none;
-      border-radius: 10px;
+      border-radius: 13px;
       background: #1a1a1a;
       color: #fff;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.18s;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 8px;
       letter-spacing: 0.1px;
     }
     .btn-generate:hover { background: #333; }
     .btn-generate:active { transform: scale(0.98); }
-    .btn-generate:disabled { background: #e4e4e6; color: #bbb; cursor: not-allowed; transform: none; }
+    .btn-generate:disabled {
+      background: #e8e8ea;
+      color: #c0c0c4;
+      cursor: not-allowed;
+      transform: none;
+    }
 
-    /* ── Download all ── */
     .btn-dl-all {
       width: 100%;
-      margin-top: 8px;
-      padding: 9px;
+      margin-top: 10px;
+      padding: 11px;
       border: 1.5px solid #e4e4e6;
-      border-radius: 10px;
+      border-radius: 13px;
       background: #fff;
       font-family: inherit;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
       color: #555;
       cursor: pointer;
@@ -397,8 +451,8 @@
     /* ── Spinner ── */
     .spinner {
       display: none;
-      width: 14px; height: 14px;
-      border: 2px solid rgba(255,255,255,0.3);
+      width: 16px; height: 16px;
+      border: 2.5px solid rgba(255,255,255,0.3);
       border-top-color: #fff;
       border-radius: 50%;
       animation: spin 0.65s linear infinite;
@@ -420,13 +474,13 @@
     /* ── Toast ── */
     .toast {
       position: fixed;
-      bottom: 28px; left: 50%;
+      bottom: 32px; left: 50%;
       transform: translateX(-50%) translateY(16px);
       background: #1a1a1a;
       color: #fff;
-      padding: 11px 20px;
-      border-radius: 10px;
-      font-size: 13px;
+      padding: 13px 24px;
+      border-radius: 13px;
+      font-size: 14px;
       font-weight: 500;
       opacity: 0;
       transition: all 0.25s;
@@ -435,16 +489,13 @@
       white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* ── File input hidden ── */
-    #fileInput { display: none; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>AI Icon Generator</h1>
-  <p>스타일 레퍼런스를 선택하고 원하는 아이콘을 생성하세요</p>
+  <p>스타일 레퍼런스 이미지를 첨부하고 원하는 아이콘을 생성하세요</p>
 </header>
 
 <main>
@@ -452,32 +503,36 @@
   <!-- Left Panel -->
   <div class="left-panel">
 
-    <!-- Style Reference card -->
-    <div class="preview-card">
+    <!-- Reference card -->
+    <div class="card" id="refCard">
       <div class="card-label">스타일 레퍼런스</div>
 
-      <!-- 8 sample icons -->
-      <div class="sample-grid" id="sampleGrid"></div>
-
-      <!-- Attach row -->
-      <div class="attach-row">
-        <button class="btn-attach-file" id="attachFileBtn">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1v9M4 6l4-5 4 5" stroke="#444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 11v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2" stroke="#444" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Large upload zone -->
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/*" multiple />
+        <div class="upload-icon">
+          <svg viewBox="0 0 26 26" fill="none">
+            <rect x="2" y="2" width="22" height="22" rx="5" stroke="#999" stroke-width="1.8"/>
+            <path d="M9 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" fill="#999"/>
+            <path d="M4 18l5-5 4 4 3-3 6 6" stroke="#999" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          이미지 첨부
-        </button>
-        <input type="url" class="url-input" id="urlInput" placeholder="아이콘 URL 붙여넣기" />
-        <button class="btn-attach-file" id="urlAttachBtn" style="padding:9px 14px;">첨부</button>
+        </div>
+        <div class="upload-title">이미지를 여기에 드래그하거나 클릭하여 첨부</div>
+        <div class="upload-sub">PNG, SVG, JPG 지원 · 여러 장 동시 첨부 가능</div>
       </div>
 
-      <!-- Attached chips -->
-      <div class="attached-chips" id="attachedChips"></div>
+      <!-- URL row -->
+      <div class="url-row">
+        <input class="url-input" id="urlInput" type="url" placeholder="아이콘 URL 붙여넣기 (예: thenounproject.com/...)" />
+        <button class="btn-url-attach" id="urlAttachBtn">첨부</button>
+      </div>
+
+      <!-- Previews -->
+      <div class="preview-area" id="previewArea"></div>
     </div>
 
     <!-- Output card -->
-    <div class="output-card" id="outputCard">
+    <div class="card output-card" id="outputCard">
       <div class="output-header">
         <div class="card-label" id="outputLabel" style="margin-bottom:0">생성된 아이콘</div>
       </div>
@@ -486,7 +541,7 @@
 
   </div>
 
-  <!-- Right Panel (light mode) -->
+  <!-- Right Panel -->
   <div class="plugin-panel">
     <div class="panel-titlebar">
       <div class="dot dot-red"></div>
@@ -498,19 +553,26 @@
     <div class="panel-body">
 
       <div class="panel-section-label">아이콘 스타일</div>
+
       <div class="style-tabs">
-        <button class="style-tab active" data-style="line">Line</button>
+        <button class="style-tab" data-style="line">Line</button>
         <button class="style-tab" data-style="solid">Solid</button>
         <button class="style-tab" data-style="3d">3D</button>
       </div>
 
-      <div class="style-desc" id="styleDesc">얇은 선으로 그려진 미니멀한 아이콘 스타일</div>
+      <!-- Shown before image attached -->
+      <div class="lock-notice" id="lockNotice">
+        🔒 이미지를 첨부하면 스타일을 선택할 수 있습니다
+      </div>
+
+      <!-- Shown after style selected -->
+      <div class="style-desc hidden" id="styleDesc"></div>
 
       <div class="panel-divider"></div>
 
-      <div class="selected-count" id="selectedCount">레퍼런스를 선택해주세요</div>
+      <div class="selected-count" id="selectedCount">이미지를 첨부해주세요</div>
 
-      <button class="btn-generate" id="generateBtn">
+      <button class="btn-generate" id="generateBtn" disabled>
         <span class="btn-label">✦ 아이콘 생성</span>
         <div class="spinner"></div>
       </button>
@@ -522,152 +584,162 @@
 
 </main>
 
-<input type="file" id="fileInput" accept="image/*" multiple />
 <div class="toast" id="toast"></div>
 
 <script>
-/* ──────────────────────────────────────
-   SVG Icon Library — 8 icons × 3 styles
-   ────────────────────────────────────── */
+/* ── SVG Icon Library ── */
 const ICONS = {
-  settings: {
-    label: '설정',
-    line: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="6" stroke="#1a1a1a" stroke-width="2"/><path d="M24 4v4M24 40v4M4 24h4M40 24h4" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/><path d="M8.686 8.686l2.828 2.828M36.485 36.485l2.829 2.829M8.686 39.314l2.828-2.829M36.485 11.515l2.829-2.829" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
-    solid: `<svg viewBox="0 0 48 48" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 4a2 2 0 0 0-1.96 1.608l-.487 2.433a14.066 14.066 0 0 0-3.02 1.744l-2.354-.785a2 2 0 0 0-2.399.961L7.78 12.04a2 2 0 0 0 .437 2.434l1.844 1.594a14.1 14.1 0 0 0 0 3.864L8.217 21.526a2 2 0 0 0-.437 2.434l2 3.079a2 2 0 0 0 2.399.961l2.354-.786a14.07 14.07 0 0 0 3.02 1.745l.487 2.433A2 2 0 0 0 20 33h4a2 2 0 0 0 1.96-1.608l.487-2.433a14.07 14.07 0 0 0 3.02-1.745l2.354.786a2 2 0 0 0 2.399-.961l2-3.08a2 2 0 0 0-.437-2.433l-1.844-1.594a14.1 14.1 0 0 0 0-3.864l1.844-1.594a2 2 0 0 0 .437-2.434l-2-3.079a2 2 0 0 0-2.399-.961l-2.354.785a14.065 14.065 0 0 0-3.02-1.744L25.96 5.608A2 2 0 0 0 24 4h-4zM22 23a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" fill="#1a1a1a"/></svg>`,
-    '3d': `<svg viewBox="0 0 48 48" fill="none"><defs><radialGradient id="s3d" cx="38%" cy="32%" r="68%"><stop offset="0%" stop-color="#a29bfe"/><stop offset="100%" stop-color="#6c5ce7"/></radialGradient></defs><path fill-rule="evenodd" clip-rule="evenodd" d="M20 6a2 2 0 0 0-1.96 1.608l-.487 2.433a14.066 14.066 0 0 0-3.02 1.744l-2.354-.785a2 2 0 0 0-2.399.961L7.78 14.04a2 2 0 0 0 .437 2.434l1.844 1.594a14.1 14.1 0 0 0 0 3.864L8.217 23.526a2 2 0 0 0-.437 2.434l2 3.079a2 2 0 0 0 2.399.961l2.354-.786a14.07 14.07 0 0 0 3.02 1.745l.487 2.433A2 2 0 0 0 20 35h4a2 2 0 0 0 1.96-1.608l.487-2.433a14.07 14.07 0 0 0 3.02-1.745l2.354.786a2 2 0 0 0 2.399-.961l2-3.08a2 2 0 0 0-.437-2.433l-1.844-1.594a14.1 14.1 0 0 0 0-3.864l1.844-1.594a2 2 0 0 0 .437-2.434l-2-3.079a2 2 0 0 0-2.399-.961l-2.354.785a14.065 14.065 0 0 0-3.02-1.744L25.96 7.608A2 2 0 0 0 24 6h-4zM22 25a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" fill="url(#s3d)" filter="drop-shadow(0 4px 10px rgba(108,92,231,.45))"/></svg>`,
+  settings: { label: '설정',
+    line:  `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="6" stroke="#1a1a1a" stroke-width="2"/><path d="M24 4v4M24 40v4M4 24h4M40 24h4" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/><path d="M8.686 8.686l2.828 2.828M36.485 36.485l2.829 2.829M8.686 39.314l2.828-2.829M36.485 11.515l2.829-2.829" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
+    solid: `<svg viewBox="0 0 48 48" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 4a2 2 0 0 0-1.96 1.608l-.487 2.433a14 14 0 0 0-3.02 1.744l-2.354-.785a2 2 0 0 0-2.399.961L7.78 12.04a2 2 0 0 0 .437 2.434l1.844 1.594a14 14 0 0 0 0 3.864L8.217 21.526a2 2 0 0 0-.437 2.434l2 3.079a2 2 0 0 0 2.399.961l2.354-.786a14 14 0 0 0 3.02 1.745l.487 2.433A2 2 0 0 0 20 33h4a2 2 0 0 0 1.96-1.608l.487-2.433a14 14 0 0 0 3.02-1.745l2.354.786a2 2 0 0 0 2.399-.961l2-3.08a2 2 0 0 0-.437-2.433l-1.844-1.594a14 14 0 0 0 0-3.864l1.844-1.594a2 2 0 0 0 .437-2.434l-2-3.079a2 2 0 0 0-2.399-.961l-2.354.785a14 14 0 0 0-3.02-1.744L25.96 5.608A2 2 0 0 0 24 4h-4zM22 23a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" fill="#1a1a1a"/></svg>`,
+    '3d':  `<svg viewBox="0 0 48 48" fill="none"><defs><radialGradient id="s3d" cx="38%" cy="32%" r="68%"><stop offset="0%" stop-color="#a29bfe"/><stop offset="100%" stop-color="#6c5ce7"/></radialGradient></defs><path fill-rule="evenodd" clip-rule="evenodd" d="M20 6a2 2 0 0 0-1.96 1.608l-.487 2.433a14 14 0 0 0-3.02 1.744l-2.354-.785a2 2 0 0 0-2.399.961L7.78 14.04a2 2 0 0 0 .437 2.434l1.844 1.594a14 14 0 0 0 0 3.864L8.217 23.526a2 2 0 0 0-.437 2.434l2 3.079a2 2 0 0 0 2.399.961l2.354-.786a14 14 0 0 0 3.02 1.745l.487 2.433A2 2 0 0 0 20 35h4a2 2 0 0 0 1.96-1.608l.487-2.433a14 14 0 0 0 3.02-1.745l2.354.786a2 2 0 0 0 2.399-.961l2-3.08a2 2 0 0 0-.437-2.433l-1.844-1.594a14 14 0 0 0 0-3.864l1.844-1.594a2 2 0 0 0 .437-2.434l-2-3.079a2 2 0 0 0-2.399-.961l-2.354.785a14 14 0 0 0-3.02-1.744L25.96 7.608A2 2 0 0 0 24 6h-4zM22 25a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" fill="url(#s3d)" filter="drop-shadow(0 4px 10px rgba(108,92,231,.45))"/></svg>`,
   },
-  bell: {
-    label: '알림',
-    line: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6C17.373 6 12 11.373 12 18v8l-3 5h30l-3-5v-8c0-6.627-5.373-12-12-12z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/><path d="M20 31c0 2.21 1.79 4 4 4s4-1.79 4-4" stroke="#1a1a1a" stroke-width="2"/><circle cx="24" cy="6" r="2" fill="#1a1a1a"/></svg>`,
+  bell: { label: '알림',
+    line:  `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6C17.373 6 12 11.373 12 18v8l-3 5h30l-3-5v-8c0-6.627-5.373-12-12-12z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/><path d="M20 31c0 2.21 1.79 4 4 4s4-1.79 4-4" stroke="#1a1a1a" stroke-width="2"/><circle cx="24" cy="6" r="2" fill="#1a1a1a"/></svg>`,
     solid: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6C17.373 6 12 11.373 12 18v8l-3 5h30l-3-5v-8c0-6.627-5.373-12-12-12z" fill="#1a1a1a"/><path d="M20 31c0 2.21 1.79 4 4 4s4-1.79 4-4h-8z" fill="#1a1a1a"/><circle cx="24" cy="5" r="2.5" fill="#1a1a1a"/></svg>`,
-    '3d': `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="b3d" x1="12" y1="6" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#fdcb6e"/><stop offset="1" stop-color="#e17055"/></linearGradient></defs><path d="M24 6C17.373 6 12 11.373 12 18v8l-3 5h30l-3-5v-8c0-6.627-5.373-12-12-12z" fill="url(#b3d)" filter="drop-shadow(0 4px 10px rgba(225,112,85,.4))"/><path d="M20 31c0 2.21 1.79 4 4 4s4-1.79 4-4h-8z" fill="#c0392b"/><circle cx="24" cy="5" r="2.5" fill="#fdcb6e"/></svg>`,
+    '3d':  `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="b3d" x1="12" y1="6" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#fdcb6e"/><stop offset="1" stop-color="#e17055"/></linearGradient></defs><path d="M24 6C17.373 6 12 11.373 12 18v8l-3 5h30l-3-5v-8c0-6.627-5.373-12-12-12z" fill="url(#b3d)" filter="drop-shadow(0 4px 10px rgba(225,112,85,.4))"/><path d="M20 31c0 2.21 1.79 4 4 4s4-1.79 4-4h-8z" fill="#c0392b"/><circle cx="24" cy="5" r="2.5" fill="#fdcb6e"/></svg>`,
   },
-  search: {
-    label: '검색',
-    line: `<svg viewBox="0 0 48 48" fill="none"><circle cx="21" cy="21" r="13" stroke="#1a1a1a" stroke-width="2"/><path d="M31 31l9 9" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  search: { label: '검색',
+    line:  `<svg viewBox="0 0 48 48" fill="none"><circle cx="21" cy="21" r="13" stroke="#1a1a1a" stroke-width="2"/><path d="M31 31l9 9" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
     solid: `<svg viewBox="0 0 48 48" fill="none"><circle cx="21" cy="21" r="13" fill="#1a1a1a"/><circle cx="21" cy="21" r="9" fill="white"/><path d="M31 31l9 9" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/></svg>`,
-    '3d': `<svg viewBox="0 0 48 48" fill="none"><defs><radialGradient id="se3d" cx="35%" cy="30%" r="65%"><stop offset="0%" stop-color="#55efc4"/><stop offset="100%" stop-color="#00b894"/></radialGradient></defs><circle cx="21" cy="21" r="13" fill="url(#se3d)" filter="drop-shadow(0 4px 8px rgba(0,184,148,.4))"/><circle cx="21" cy="21" r="9" fill="rgba(255,255,255,.25)"/><path d="M31 31l9 9" stroke="#00b894" stroke-width="4" stroke-linecap="round"/></svg>`,
+    '3d':  `<svg viewBox="0 0 48 48" fill="none"><defs><radialGradient id="se3d" cx="35%" cy="30%" r="65%"><stop offset="0%" stop-color="#55efc4"/><stop offset="100%" stop-color="#00b894"/></radialGradient></defs><circle cx="21" cy="21" r="13" fill="url(#se3d)" filter="drop-shadow(0 4px 8px rgba(0,184,148,.4))"/><circle cx="21" cy="21" r="9" fill="rgba(255,255,255,.25)"/><path d="M31 31l9 9" stroke="#00b894" stroke-width="4" stroke-linecap="round"/></svg>`,
   },
-  edit: {
-    label: '글쓰기',
-    line: `<svg viewBox="0 0 48 48" fill="none"><path d="M33.5 7.5l7 7-21 21H13v-7l20.5-21z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/><path d="M8 42h32" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
+  edit: { label: '글쓰기',
+    line:  `<svg viewBox="0 0 48 48" fill="none"><path d="M33.5 7.5l7 7-21 21H13v-7l20.5-21z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/><path d="M8 42h32" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
     solid: `<svg viewBox="0 0 48 48" fill="none"><path d="M33.5 7.5l7 7-21 21H13v-7l20.5-21z" fill="#1a1a1a"/><path d="M8 42h32" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-    '3d': `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="e3d" x1="13" y1="7" x2="40" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#74b9ff"/><stop offset="1" stop-color="#0984e3"/></linearGradient></defs><path d="M33.5 7.5l7 7-21 21H13v-7l20.5-21z" fill="url(#e3d)" filter="drop-shadow(0 4px 8px rgba(9,132,227,.4))"/><path d="M8 42h32" stroke="#0984e3" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    '3d':  `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="e3d" x1="13" y1="7" x2="40" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#74b9ff"/><stop offset="1" stop-color="#0984e3"/></linearGradient></defs><path d="M33.5 7.5l7 7-21 21H13v-7l20.5-21z" fill="url(#e3d)" filter="drop-shadow(0 4px 8px rgba(9,132,227,.4))"/><path d="M8 42h32" stroke="#0984e3" stroke-width="2.5" stroke-linecap="round"/></svg>`,
   },
-  home: {
-    label: '홈',
-    line: `<svg viewBox="0 0 48 48" fill="none"><path d="M8 22L24 8l16 14v20H30V30h-4v12H8V22z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/></svg>`,
+  home: { label: '홈',
+    line:  `<svg viewBox="0 0 48 48" fill="none"><path d="M8 22L24 8l16 14v20H30V30h-4v12H8V22z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/></svg>`,
     solid: `<svg viewBox="0 0 48 48" fill="none"><path d="M8 22L24 8l16 14v20H30V30h-4v12H8V22z" fill="#1a1a1a"/></svg>`,
-    '3d': `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="h3d" x1="8" y1="8" x2="40" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#fd79a8"/><stop offset="1" stop-color="#e84393"/></linearGradient></defs><path d="M8 22L24 8l16 14v20H30V30h-4v12H8V22z" fill="url(#h3d)" filter="drop-shadow(0 5px 10px rgba(232,67,147,.35))"/></svg>`,
+    '3d':  `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="h3d" x1="8" y1="8" x2="40" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#fd79a8"/><stop offset="1" stop-color="#e84393"/></linearGradient></defs><path d="M8 22L24 8l16 14v20H30V30h-4v12H8V22z" fill="url(#h3d)" filter="drop-shadow(0 5px 10px rgba(232,67,147,.35))"/></svg>`,
   },
-  user: {
-    label: '사용자',
-    line: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="16" r="8" stroke="#1a1a1a" stroke-width="2"/><path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
+  user: { label: '사용자',
+    line:  `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="16" r="8" stroke="#1a1a1a" stroke-width="2"/><path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
     solid: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="16" r="8" fill="#1a1a1a"/><path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16H8z" fill="#1a1a1a"/></svg>`,
-    '3d': `<svg viewBox="0 0 48 48" fill="none"><defs><radialGradient id="u3d" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#74b9ff"/><stop offset="100%" stop-color="#0984e3"/></radialGradient></defs><circle cx="24" cy="16" r="8" fill="url(#u3d)" filter="drop-shadow(0 3px 6px rgba(9,132,227,.35))"/><path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16H8z" fill="url(#u3d)" filter="drop-shadow(0 4px 8px rgba(9,132,227,.3))"/></svg>`,
+    '3d':  `<svg viewBox="0 0 48 48" fill="none"><defs><radialGradient id="u3d" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#74b9ff"/><stop offset="100%" stop-color="#0984e3"/></radialGradient></defs><circle cx="24" cy="16" r="8" fill="url(#u3d)" filter="drop-shadow(0 3px 6px rgba(9,132,227,.35))"/><path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16H8z" fill="url(#u3d)"/></svg>`,
   },
-  download: {
-    label: '다운로드',
-    line: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6v26M14 24l10 10 10-10" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 36v4a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2v-4" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
+  download: { label: '다운로드',
+    line:  `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6v26M14 24l10 10 10-10" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 36v4a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2v-4" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
     solid: `<svg viewBox="0 0 48 48" fill="none"><path d="M22 6h4v22l10-10 2.828 2.828L24 35.657 9.172 20.828 12 18l10 10V6z" fill="#1a1a1a"/><rect x="8" y="36" width="32" height="6" rx="2" fill="#1a1a1a"/></svg>`,
-    '3d': `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="d3d" x1="8" y1="6" x2="40" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#00cec9"/><stop offset="1" stop-color="#00b894"/></linearGradient></defs><path d="M22 6h4v22l10-10 2.828 2.828L24 35.657 9.172 20.828 12 18l10 10V6z" fill="url(#d3d)" filter="drop-shadow(0 4px 8px rgba(0,184,148,.35))"/><rect x="8" y="36" width="32" height="6" rx="2" fill="url(#d3d)"/></svg>`,
+    '3d':  `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="d3d" x1="8" y1="6" x2="40" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#00cec9"/><stop offset="1" stop-color="#00b894"/></linearGradient></defs><path d="M22 6h4v22l10-10 2.828 2.828L24 35.657 9.172 20.828 12 18l10 10V6z" fill="url(#d3d)" filter="drop-shadow(0 4px 8px rgba(0,184,148,.35))"/><rect x="8" y="36" width="32" height="6" rx="2" fill="url(#d3d)"/></svg>`,
   },
-  heart: {
-    label: '즐겨찾기',
-    line: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 40S6 28.5 6 17a11 11 0 0 1 18-8.437A11 11 0 0 1 42 17c0 11.5-18 23-18 23z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/></svg>`,
+  heart: { label: '즐겨찾기',
+    line:  `<svg viewBox="0 0 48 48" fill="none"><path d="M24 40S6 28.5 6 17a11 11 0 0 1 18-8.437A11 11 0 0 1 42 17c0 11.5-18 23-18 23z" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round"/></svg>`,
     solid: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 40S6 28.5 6 17a11 11 0 0 1 18-8.437A11 11 0 0 1 42 17c0 11.5-18 23-18 23z" fill="#1a1a1a"/></svg>`,
-    '3d': `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="he3d" x1="6" y1="9" x2="42" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#ff7675"/><stop offset="1" stop-color="#d63031"/></linearGradient></defs><path d="M24 40S6 28.5 6 17a11 11 0 0 1 18-8.437A11 11 0 0 1 42 17c0 11.5-18 23-18 23z" fill="url(#he3d)" filter="drop-shadow(0 5px 12px rgba(214,48,49,.4))"/></svg>`,
+    '3d':  `<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="he3d" x1="6" y1="9" x2="42" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#ff7675"/><stop offset="1" stop-color="#d63031"/></linearGradient></defs><path d="M24 40S6 28.5 6 17a11 11 0 0 1 18-8.437A11 11 0 0 1 42 17c0 11.5-18 23-18 23z" fill="url(#he3d)" filter="drop-shadow(0 5px 12px rgba(214,48,49,.4))"/></svg>`,
   },
-};
-
-/* ──────────────────────────────────────
-   State
-   ────────────────────────────────────── */
-const state = {
-  style: 'line',
-  selected: new Set(),
-  refImages: [],
-  refUrls: [],
 };
 
 const STYLE_DESCS = {
-  line: '얇은 선으로 그려진 미니멀한 아이콘 스타일',
+  line:  '얇은 선으로 그려진 미니멀한 아이콘 스타일',
   solid: '꽉 채운 실루엣의 선명하고 굵은 아이콘 스타일',
-  '3d': '입체감 있는 그라디언트의 생동감 있는 아이콘 스타일',
+  '3d':  '입체감 있는 그라디언트의 생동감 있는 아이콘 스타일',
 };
 
-/* ──────────────────────────────────────
-   Render sample grid
-   ────────────────────────────────────── */
-function renderSampleGrid() {
-  const grid = document.getElementById('sampleGrid');
-  grid.innerHTML = '';
-  Object.entries(ICONS).forEach(([key, icon]) => {
-    const card = document.createElement('div');
-    card.className = 'sample-card' + (state.selected.has(key) ? ' selected' : '');
-    card.dataset.key = key;
-    card.innerHTML = `${icon[state.style]}<span class="icon-name">${icon.label}</span>`;
-    card.addEventListener('click', () => toggleSelect(key));
-    grid.appendChild(card);
+/* ── State ── */
+const state = {
+  style: null,        // null until selected
+  hasImage: false,    // true after at least one image/url attached
+  refCount: 0,
+};
+
+/* ── Unlock: called when image/URL added ── */
+function checkUnlock() {
+  const previewArea = document.getElementById('previewArea');
+  const items = previewArea.querySelectorAll('.preview-item, .url-chip');
+  state.hasImage = items.length > 0;
+  state.refCount = items.length;
+
+  // Enable style tabs
+  document.querySelectorAll('.style-tab').forEach(t => {
+    t.classList.toggle('enabled', state.hasImage);
   });
+
+  updateStatusText();
 }
 
-function toggleSelect(key) {
-  if (state.selected.has(key)) {
-    state.selected.delete(key);
-  } else {
-    state.selected.add(key);
+function updateStatusText() {
+  const countEl = document.getElementById('selectedCount');
+  const genBtn  = document.getElementById('generateBtn');
+
+  if (!state.hasImage) {
+    countEl.innerHTML = '이미지를 첨부해주세요';
+    genBtn.disabled = true;
+    return;
   }
-  document.querySelector(`.sample-card[data-key="${key}"]`).classList.toggle('selected');
-  updateSelectedCount();
-}
-
-function updateSelectedCount() {
-  const n = state.selected.size;
-  const el = document.getElementById('selectedCount');
-  if (n === 0) {
-    el.innerHTML = '레퍼런스를 선택해주세요';
-  } else {
-    el.innerHTML = `<strong>${n}개</strong>의 레퍼런스 선택됨`;
+  if (!state.style) {
+    countEl.innerHTML = `<strong>${state.refCount}개</strong>의 레퍼런스 첨부됨 · 스타일을 선택해주세요`;
+    genBtn.disabled = true;
+    return;
   }
+  countEl.innerHTML = `<strong>${state.refCount}개</strong>의 레퍼런스 · <strong>${state.style.toUpperCase()}</strong> 스타일 선택됨`;
+  genBtn.disabled = false;
 }
 
-/* ──────────────────────────────────────
-   Style tabs
-   ────────────────────────────────────── */
+/* ── Style tabs ── */
 document.querySelectorAll('.style-tab').forEach(tab => {
   tab.addEventListener('click', () => {
+    if (!tab.classList.contains('enabled')) return;
+
     document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     state.style = tab.dataset.style;
-    document.getElementById('styleDesc').textContent = STYLE_DESCS[state.style];
-    renderSampleGrid();
+
+    // Update desc, hide lock notice
+    document.getElementById('lockNotice').classList.add('hidden');
+    const desc = document.getElementById('styleDesc');
+    desc.classList.remove('hidden');
+    desc.textContent = STYLE_DESCS[state.style];
+
+    // Left panel does NOT change — no sample icons to update
+    updateStatusText();
   });
 });
 
-/* ──────────────────────────────────────
-   File attach
-   ────────────────────────────────────── */
-document.getElementById('attachFileBtn').addEventListener('click', () => {
-  document.getElementById('fileInput').click();
-});
+/* ── File upload ── */
+const uploadZone = document.getElementById('uploadZone');
+const fileInput  = document.getElementById('fileInput');
 
-document.getElementById('fileInput').addEventListener('change', e => {
-  Array.from(e.target.files).forEach(file => {
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener('change', e => { handleFiles(e.target.files); e.target.value = ''; });
+
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
     if (!file.type.startsWith('image/')) return;
     const reader = new FileReader();
-    reader.onload = ev => {
-      state.refImages.push({ name: file.name, src: ev.target.result });
-      addChip('img', file.name, state.refImages.length - 1);
-    };
+    reader.onload = ev => addImagePreview(ev.target.result, file.name);
     reader.readAsDataURL(file);
   });
-  e.target.value = '';
-});
+}
 
-/* ──────────────────────────────────────
-   URL attach
-   ────────────────────────────────────── */
+function addImagePreview(src, name) {
+  const previewArea = document.getElementById('previewArea');
+  previewArea.classList.add('visible');
+
+  const item = document.createElement('div');
+  item.className = 'preview-item';
+  item.innerHTML = `
+    <img src="${src}" alt="${name}" />
+    <button class="remove-btn" title="제거">✕</button>
+  `;
+  item.querySelector('.remove-btn').addEventListener('click', () => {
+    item.remove();
+    const remaining = previewArea.querySelectorAll('.preview-item, .url-chip');
+    if (remaining.length === 0) previewArea.classList.remove('visible');
+    checkUnlock();
+  });
+  previewArea.appendChild(item);
+  checkUnlock();
+}
+
+/* ── URL attach ── */
 document.getElementById('urlAttachBtn').addEventListener('click', attachUrl);
 document.getElementById('urlInput').addEventListener('keydown', e => { if (e.key === 'Enter') attachUrl(); });
 
@@ -675,36 +747,28 @@ function attachUrl() {
   const val = document.getElementById('urlInput').value.trim();
   if (!val) return;
   try { new URL(val); } catch { showToast('유효한 URL을 입력해주세요'); return; }
-  state.refUrls.push(val);
-  addChip('url', new URL(val).hostname, state.refUrls.length - 1);
-  document.getElementById('urlInput').value = '';
-}
 
-function addChip(type, label, idx) {
-  const chips = document.getElementById('attachedChips');
+  const previewArea = document.getElementById('previewArea');
+  previewArea.classList.add('visible');
+
   const chip = document.createElement('div');
-  chip.className = 'chip';
-  chip.dataset.type = type;
-  chip.dataset.idx = idx;
-  chip.innerHTML = `<span>${type === 'img' ? '🖼 ' : '🔗 '}${label}</span><button class="chip-remove">✕</button>`;
-  chip.querySelector('.chip-remove').addEventListener('click', () => {
+  chip.className = 'url-chip';
+  chip.innerHTML = `<span>🔗 ${new URL(val).hostname}</span><button title="제거">✕</button>`;
+  chip.querySelector('button').addEventListener('click', () => {
     chip.remove();
-    updateSelectedCount();
+    const remaining = previewArea.querySelectorAll('.preview-item, .url-chip');
+    if (remaining.length === 0) previewArea.classList.remove('visible');
+    checkUnlock();
   });
-  chips.appendChild(chip);
-  updateSelectedCount();
+  previewArea.appendChild(chip);
+  document.getElementById('urlInput').value = '';
+  checkUnlock();
 }
 
-/* ──────────────────────────────────────
-   Generate
-   ────────────────────────────────────── */
+/* ── Generate ── */
 document.getElementById('generateBtn').addEventListener('click', generate);
 
 async function generate() {
-  const keys = state.selected.size > 0
-    ? Array.from(state.selected)
-    : Object.keys(ICONS);
-
   const btn = document.getElementById('generateBtn');
   btn.classList.add('loading');
   btn.disabled = true;
@@ -718,8 +782,8 @@ async function generate() {
     `생성된 아이콘 · ${state.style.toUpperCase()} 스타일`;
 
   // Skeletons
-  const count = Math.max(keys.length, 4);
-  for (let i = 0; i < count; i++) {
+  const keys = Object.keys(ICONS);
+  for (let i = 0; i < keys.length; i++) {
     const c = document.createElement('div');
     c.className = 'out-card';
     c.style.pointerEvents = 'none';
@@ -728,18 +792,18 @@ async function generate() {
   }
   outputCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-  // Simulate generation (staggered)
-  await new Promise(r => setTimeout(r, 400));
+  await new Promise(r => setTimeout(r, 500));
   outputGrid.innerHTML = '';
 
   for (let i = 0; i < keys.length; i++) {
-    await new Promise(r => setTimeout(r, 100 + i * 80));
-    const key = keys[i];
+    await new Promise(r => setTimeout(r, 80 + i * 70));
+    const key  = keys[i];
     const icon = ICONS[key];
+    const svgStr = icon[state.style];
+
     const card = document.createElement('div');
     card.className = 'out-card';
-    card.style.animationDelay = `${i * 0.06}s`;
-    const svgStr = icon[state.style];
+    card.style.animationDelay = `${i * 0.05}s`;
     card.innerHTML = `${svgStr}<span class="out-name">${icon.label}</span><button class="btn-dl">SVG 저장</button>`;
     card.querySelector('.btn-dl').addEventListener('click', e => {
       e.stopPropagation();
@@ -753,34 +817,27 @@ async function generate() {
   btn.disabled = false;
 }
 
-/* ──────────────────────────────────────
-   Download
-   ────────────────────────────────────── */
+/* ── Download ── */
 function downloadSvg(svgStr, filename) {
   const blob = new Blob([svgStr], { type: 'image/svg+xml' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
   a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
 }
 
 document.getElementById('dlAllBtn').addEventListener('click', () => {
-  document.querySelectorAll('.out-card .btn-dl').forEach(btn => btn.click());
+  document.querySelectorAll('.out-card .btn-dl').forEach(b => b.click());
   showToast('모든 아이콘을 다운로드했습니다');
 });
 
-/* ──────────────────────────────────────
-   Toast
-   ────────────────────────────────────── */
+/* ── Toast ── */
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
-
-/* ── Init ── */
-renderSampleGrid();
 </script>
 </body>
 </html>
