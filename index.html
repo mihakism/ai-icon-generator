@@ -72,46 +72,47 @@
       margin-bottom: 20px;
     }
 
-    /* ── Upload zone ── */
+    /* ── Upload zone (compact horizontal) ── */
     .upload-zone {
-      border: 2px dashed #d8d8da;
-      border-radius: 18px;
-      padding: 24px 24px 20px;
+      border: 1.5px dashed #d8d8da;
+      border-radius: 14px;
+      padding: 14px 18px;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
+      gap: 14px;
       background: #fafafa;
       transition: all 0.18s;
-      position: relative;
+      cursor: pointer;
+      margin-top: 14px;
     }
+    .upload-zone:hover,
     .upload-zone.drag-over {
       border-color: #0066ff;
       background: rgba(0,102,255,0.03);
     }
 
     .upload-icon {
-      width: 60px; height: 60px;
+      width: 40px; height: 40px;
       background: #f0f0f2;
-      border-radius: 18px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
-    .upload-icon svg { width: 28px; height: 28px; }
+    .upload-icon svg { width: 20px; height: 20px; }
 
+    .upload-text-group { display: flex; flex-direction: column; gap: 2px; }
     .upload-title {
-      font-size: 17px;
+      font-size: 14px;
       font-weight: 700;
       color: #1a1a1a;
-      text-align: center;
     }
     .upload-sub {
-      font-size: 13px;
-      color: #aaa;
-      text-align: center;
-      line-height: 1.5;
+      font-size: 12px;
+      color: #bbb;
+      line-height: 1.4;
     }
 
     /* ── Sample picker ── */
@@ -493,13 +494,7 @@
     }
     .style-desc.hidden { display: none; }
 
-    .selected-count {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 18px;
-      min-height: 20px;
-    }
-    .selected-count strong { color: #1a1a1a; }
+    .selected-count { display: none; }
 
     /* ── Buttons ── */
     .btn-generate {
@@ -597,7 +592,13 @@
     <div class="card" id="refCard">
       <div class="card-label">스타일 레퍼런스</div>
 
-      <!-- Upload zone -->
+      <!-- Sample picker (always visible, comes first) -->
+      <div class="sample-picker visible" id="samplePicker">
+        <div class="sample-picker-label">예시 아이콘 세트 선택</div>
+        <div class="sample-picker-grid" id="samplePickerGrid"></div>
+      </div>
+
+      <!-- Upload zone (compact, clickable) -->
       <div class="upload-zone" id="uploadZone">
         <div class="upload-icon">
           <svg viewBox="0 0 28 28" fill="none">
@@ -606,14 +607,10 @@
             <path d="M5 20v1a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1" stroke="#999" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </div>
-        <div class="upload-title">스타일 레퍼런스 이미지 첨부</div>
-        <div class="upload-sub">내 아이콘 세트 이미지를 드래그해서 첨부하세요</div>
-      </div>
-
-      <!-- Sample picker (always visible) -->
-      <div class="sample-picker visible" id="samplePicker">
-        <div class="sample-picker-label">예시 아이콘 세트 선택</div>
-        <div class="sample-picker-grid" id="samplePickerGrid"></div>
+        <div class="upload-text-group">
+          <div class="upload-title">이미지 직접 첨부</div>
+          <div class="upload-sub">클릭하거나 드래그해서 업로드</div>
+        </div>
       </div>
 
       <!-- URL row -->
@@ -794,9 +791,10 @@ function makeVariations(iconKey, style) {
   return Array(8).fill(base);
 }
 
-/* ── File attach (drag & drop only) ── */
+/* ── File attach (click + drag & drop) ── */
 
 const uploadZone = document.getElementById('uploadZone');
+uploadZone.addEventListener('click', () => document.getElementById('fileInput').click());
 uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
 uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
 uploadZone.addEventListener('drop', e => {
@@ -872,14 +870,10 @@ function updateStatus() {
   const countEl = document.getElementById('selectedCount');
   const genBtn  = document.getElementById('generateBtn');
 
-  if (!state.hasImage) {
-    countEl.innerHTML = '';
-    genBtn.disabled = true;
-  } else if (!state.style) {
-    countEl.innerHTML = `<strong>${state.refCount}개</strong>의 레퍼런스 첨부됨 · 스타일을 선택해주세요`;
+  countEl.innerHTML = '';
+  if (!state.hasImage || !state.style) {
     genBtn.disabled = true;
   } else {
-    countEl.innerHTML = `<strong>${state.refCount}개</strong> 레퍼런스 · <strong>${state.style.toUpperCase()}</strong>`;
     genBtn.disabled = false;
   }
 }
