@@ -114,30 +114,6 @@
       line-height: 1.5;
     }
 
-    /* ── Sample + File buttons inside zone ── */
-    .zone-buttons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .btn-sample {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 11px 20px;
-      border: none;
-      border-radius: 12px;
-      background: #1a1a1a;
-      color: #fff;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .btn-sample:hover { background: #333; }
-
     /* ── Sample picker ── */
     .sample-picker {
       display: none;
@@ -156,80 +132,29 @@
 
     .sample-picker-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
     }
 
-    .sample-set-card {
+    /* Individual icon cell */
+    .sample-icon-cell {
+      aspect-ratio: 1;
       background: #f7f7f8;
       border: 2px solid transparent;
-      border-radius: 16px;
-      padding: 16px 12px 12px;
+      border-radius: 14px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: all 0.15s;
-      position: relative;
-    }
-    .sample-set-card:hover {
-      border-color: #0066ff;
-      background: rgba(0,102,255,0.03);
-    }
-    .sample-set-card.used {
-      border-color: #28c840;
-      background: rgba(40,200,64,0.04);
-    }
-
-    /* X remove button inside card */
-    .sample-set-remove {
-      display: none;
-      position: absolute;
-      top: 7px; right: 7px;
-      width: 20px; height: 20px;
-      background: rgba(0,0,0,0.18);
-      border: none;
-      border-radius: 50%;
-      color: #555;
-      font-size: 10px;
-      cursor: pointer;
       align-items: center;
       justify-content: center;
-      line-height: 1;
-      padding: 0;
-      transition: background 0.15s;
+      cursor: pointer;
+      transition: all 0.15s;
+      padding: 12px;
     }
-    .sample-set-card.used .sample-set-remove { display: flex; }
-    .sample-set-remove:hover { background: #e03737; color: #fff; }
-
-    .sample-set-preview {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-      width: 100%;
+    .sample-icon-cell svg { width: 100%; height: 100%; display: block; }
+    .sample-icon-cell:hover { border-color: #0066ff; background: rgba(0,102,255,0.04); }
+    .sample-icon-cell.selected {
+      border-color: #0066ff;
+      background: rgba(0,102,255,0.08);
     }
-    .sample-set-preview svg {
-      width: 100%;
-      aspect-ratio: 1;
-      display: block;
-    }
-
-    .sample-set-name {
-      font-size: 11px;
-      font-weight: 700;
-      color: #777;
-      text-align: center;
-      letter-spacing: 0.3px;
-    }
-    .sample-set-badge {
-      font-size: 10px;
-      font-weight: 600;
-      color: #28c840;
-      display: none;
-    }
-    .sample-set-card.used .sample-set-badge { display: block; }
-    .sample-set-card.used .sample-set-name { color: #28c840; }
 
     /* ── URL row ── */
     .url-row {
@@ -676,9 +601,9 @@
       <div class="upload-zone" id="uploadZone">
         <div class="upload-icon">
           <svg viewBox="0 0 28 28" fill="none">
-            <rect x="2" y="2" width="24" height="24" rx="6" stroke="#999" stroke-width="1.8"/>
-            <path d="M9 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="#999"/>
-            <path d="M4 20l6-6 4 4 3.5-3.5L24 22" stroke="#999" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 18V8" stroke="#999" stroke-width="2" stroke-linecap="round"/>
+            <path d="M9 13l5-6 5 6" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 20v1a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1" stroke="#999" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </div>
         <div class="upload-title">스타일 레퍼런스 이미지 첨부</div>
@@ -801,30 +726,6 @@ const ICONS = {
   },
 };
 
-/* ── Sample sets ── */
-const SAMPLE_SETS = [
-  {
-    id: 'line-set',
-    name: 'Line Style',
-    desc: '미니멀 선형',
-    style: 'line',
-    icons: ['settings', 'bell', 'search', 'edit', 'home', 'user', 'download', 'heart'],
-  },
-  {
-    id: 'solid-set',
-    name: 'Solid Style',
-    desc: '굵은 실루엣',
-    style: 'solid',
-    icons: ['settings', 'bell', 'search', 'edit', 'home', 'user', 'download', 'heart'],
-  },
-  {
-    id: '3d-set',
-    name: '3D Style',
-    desc: '입체 그라디언트',
-    style: '3d',
-    icons: ['settings', 'bell', 'search', 'edit', 'home', 'user', 'download', 'heart'],
-  },
-];
 
 const STYLE_DESCS = {
   line:  '얇은 선으로 그려진 미니멀한 아이콘 스타일',
@@ -840,45 +741,57 @@ const state = {
   usedSampleIds: new Set(),
 };
 
-/* ── Build sample picker ── */
+/* ── Build sample picker — individual icon cells ── */
 function buildSamplePicker() {
   const grid = document.getElementById('samplePickerGrid');
-  SAMPLE_SETS.forEach(set => {
-    const card = document.createElement('div');
-    card.className = 'sample-set-card';
-    card.id = 'sampleCard_' + set.id;
-
-    const previewSvgs = set.icons.map(k => ICONS[k][set.style]).join('');
-
-    card.innerHTML = `
-      <div class="sample-set-preview">${previewSvgs}</div>
-      <div class="sample-set-name">${set.name}</div>
-      <div class="sample-set-badge">✓ 첨부됨</div>
-      <button class="sample-set-remove" title="제거">✕</button>
-    `;
-
-    // Click card to select
-    card.addEventListener('click', e => {
-      if (e.target.closest('.sample-set-remove')) return;
-      if (!state.usedSampleIds.has(set.id)) attachSampleSet(set, card);
-    });
-
-    // X button to deselect
-    card.querySelector('.sample-set-remove').addEventListener('click', e => {
-      e.stopPropagation();
-      state.usedSampleIds.delete(set.id);
-      card.classList.remove('used');
+  const iconKeys = Object.keys(ICONS);           // 8 icons
+  iconKeys.forEach(key => {
+    const cell = document.createElement('div');
+    cell.className = 'sample-icon-cell';
+    cell.dataset.key = key;
+    cell.innerHTML = ICONS[key].line;            // show line style as sample
+    cell.addEventListener('click', () => {
+      const isSelected = cell.classList.toggle('selected');
+      if (isSelected) {
+        state.usedSampleIds.add(key);
+      } else {
+        state.usedSampleIds.delete(key);
+      }
       syncPreview();
     });
-
-    grid.appendChild(card);
+    grid.appendChild(cell);
   });
 }
 
-function attachSampleSet(set, card) {
-  state.usedSampleIds.add(set.id);
-  card.classList.add('used');
-  syncPreview();
+/* ── Variation generator ── */
+function makeVariations(iconKey, style) {
+  const base = ICONS[iconKey][style];
+  if (style === 'line') {
+    return [
+      base,
+      base.replace(/stroke-width="2"/g, 'stroke-width="1.2"'),
+      base.replace(/stroke-width="2"/g, 'stroke-width="3"'),
+      base.replace(/stroke-width="2"/g, 'stroke-width="2.5"').replace(/stroke="#1a1a1a"/g, 'stroke="#444"'),
+      base.replace(/stroke-width="2"/g, 'stroke-width="1.5"').replace(/stroke="#1a1a1a"/g, 'stroke="#888"'),
+      base.replace(/stroke-width="2"/g, 'stroke-width="2"').replace(/stroke="#1a1a1a"/g, 'stroke="#0066ff"'),
+      base.replace(/stroke-width="2"/g, 'stroke-width="2.5"').replace(/stroke-linecap="round"/g, 'stroke-linecap="square"'),
+      base.replace(/stroke-width="2"/g, 'stroke-width="1.8"').replace(/stroke="#1a1a1a"/g, 'stroke="#333"'),
+    ];
+  }
+  if (style === 'solid') {
+    return [
+      base,
+      base.replace(/fill="#1a1a1a"/g, 'fill="#333"'),
+      base.replace(/fill="#1a1a1a"/g, 'fill="#555"'),
+      base.replace(/fill="#1a1a1a"/g, 'fill="#0066ff"'),
+      base.replace(/fill="#1a1a1a"/g, 'fill="#888"'),
+      base.replace(/fill="#1a1a1a"/g, 'fill="#111"').replace(/<\/svg>/, '<rect x="0" y="0" width="48" height="48" rx="12" fill="#f5f5f7" style="mix-blend-mode:multiply"/></svg>'),
+      base.replace(/fill="#1a1a1a"/g, 'fill="#2c2c2c"'),
+      base.replace(/fill="#1a1a1a"/g, 'fill="#444"'),
+    ];
+  }
+  // 3d — return as-is with slight label variation
+  return Array(8).fill(base);
 }
 
 /* ── File attach (drag & drop only) ── */
@@ -1002,6 +915,35 @@ document.querySelectorAll('.form-tag').forEach(tag => {
   });
 });
 
+/* ── Resolve which icons to generate ── */
+function resolveTargetIcons() {
+  const inputRaw = document.getElementById('iconFormInput').value.trim();
+  const keywords = inputRaw
+    ? inputRaw.split(',').map(s => s.trim()).filter(Boolean)
+    : [];
+
+  // label → key lookup
+  const labelMap = {};
+  Object.entries(ICONS).forEach(([k, v]) => { labelMap[v.label] = k; });
+
+  let matched = keywords
+    .map(kw => labelMap[kw] || Object.keys(ICONS).find(k =>
+      ICONS[k].label.includes(kw) || kw.includes(ICONS[k].label)))
+    .filter(Boolean);
+
+  // deduplicate
+  matched = [...new Set(matched)];
+
+  // fallback: use selected cells, else all
+  if (matched.length === 0) {
+    matched = state.usedSampleIds.size > 0
+      ? [...state.usedSampleIds].filter(k => ICONS[k])
+      : Object.keys(ICONS);
+  }
+
+  return matched;
+}
+
 /* ── Generate ── */
 document.getElementById('generateBtn').addEventListener('click', generate);
 
@@ -1015,10 +957,34 @@ async function generate() {
   outputCard.classList.add('visible');
   outputGrid.innerHTML = '';
   document.getElementById('dlAllBtn').classList.remove('visible');
-  document.getElementById('outputLabel').textContent = `생성된 아이콘 · ${state.style.toUpperCase()} 스타일`;
 
-  const keys = Object.keys(ICONS);
-  keys.forEach(() => {
+  const targetKeys = resolveTargetIcons();
+  const isSingleType = targetKeys.length === 1;
+  const outputLabel = isSingleType
+    ? `"${ICONS[targetKeys[0]].label}" 아이콘 배리에이션 · ${state.style.toUpperCase()}`
+    : `생성된 아이콘 · ${state.style.toUpperCase()} 스타일`;
+  document.getElementById('outputLabel').textContent = outputLabel;
+
+  // Build task list: if single type → 8 variations; multi → 4 variations each (max 8 total)
+  let tasks = [];
+  if (isSingleType) {
+    const variations = makeVariations(targetKeys[0], state.style);
+    tasks = variations.map((svg, i) => ({
+      svg, label: `${ICONS[targetKeys[0]].label} v${i + 1}`, key: targetKeys[0], idx: i,
+    }));
+  } else {
+    const varsPerIcon = Math.max(1, Math.floor(8 / targetKeys.length));
+    targetKeys.forEach(key => {
+      const variations = makeVariations(key, state.style);
+      for (let i = 0; i < varsPerIcon; i++) {
+        tasks.push({ svg: variations[i] || variations[0], label: ICONS[key].label, key, idx: i });
+      }
+    });
+    tasks = tasks.slice(0, 8);
+  }
+
+  // Skeleton
+  tasks.forEach(() => {
     const c = document.createElement('div');
     c.className = 'out-card';
     c.style.pointerEvents = 'none';
@@ -1027,21 +993,20 @@ async function generate() {
   });
   outputCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-  await new Promise(r => setTimeout(r, 500));
+  await new Promise(r => setTimeout(r, 480));
   outputGrid.innerHTML = '';
 
-  for (let i = 0; i < keys.length; i++) {
-    await new Promise(r => setTimeout(r, 70 + i * 60));
-    const key = keys[i];
-    const icon = ICONS[key];
-    const svgStr = icon[state.style];
+  for (let i = 0; i < tasks.length; i++) {
+    await new Promise(r => setTimeout(r, 60 + i * 55));
+    const { svg, label, key, idx } = tasks[i];
     const card = document.createElement('div');
     card.className = 'out-card';
     card.style.animationDelay = `${i * 0.05}s`;
-    card.innerHTML = `${svgStr}<span class="out-name">${icon.label}</span><button class="btn-dl">SVG 저장</button>`;
+    const dispLabel = isSingleType ? `v${idx + 1}` : label;
+    card.innerHTML = `${svg}<span class="out-name">${dispLabel}</span><button class="btn-dl">SVG 저장</button>`;
     card.querySelector('.btn-dl').addEventListener('click', e => {
       e.stopPropagation();
-      downloadSvg(svgStr, `icon-${key}-${state.style}.svg`);
+      downloadSvg(svg, `icon-${key}-${state.style}-v${idx + 1}.svg`);
     });
     outputGrid.appendChild(card);
   }
