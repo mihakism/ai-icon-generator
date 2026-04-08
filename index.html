@@ -763,32 +763,59 @@ function buildSamplePicker() {
 /* ── Variation generator ── */
 function makeVariations(iconKey, style) {
   const base = ICONS[iconKey][style];
+
   if (style === 'line') {
+    const rc = (svg, color) =>
+      svg.replace(/stroke="#1a1a1a"/g, `stroke="${color}"`)
+         .replace(/(?<![a-z])fill="#1a1a1a"/g, `fill="${color}"`);
+    const rw = (svg, w) =>
+      svg.replace(/stroke-width="2(?:\.5)?"/g, `stroke-width="${w}"`);
+    const cap = (svg, lc, lj) =>
+      svg.replace(/stroke-linecap="round"/g, `stroke-linecap="${lc}"`)
+         .replace(/stroke-linejoin="round"/g, `stroke-linejoin="${lj}"`);
     return [
-      base,
-      base.replace(/stroke-width="2"/g, 'stroke-width="1.2"'),
-      base.replace(/stroke-width="2"/g, 'stroke-width="3"'),
-      base.replace(/stroke-width="2"/g, 'stroke-width="2.5"').replace(/stroke="#1a1a1a"/g, 'stroke="#444"'),
-      base.replace(/stroke-width="2"/g, 'stroke-width="1.5"').replace(/stroke="#1a1a1a"/g, 'stroke="#888"'),
-      base.replace(/stroke-width="2"/g, 'stroke-width="2"').replace(/stroke="#1a1a1a"/g, 'stroke="#0066ff"'),
-      base.replace(/stroke-width="2"/g, 'stroke-width="2.5"').replace(/stroke-linecap="round"/g, 'stroke-linecap="square"'),
-      base.replace(/stroke-width="2"/g, 'stroke-width="1.8"').replace(/stroke="#1a1a1a"/g, 'stroke="#333"'),
+      base,                                            // 1. 기본 (검정 2px)
+      rw(base, '1'),                                   // 2. 헤어라인 (1px)
+      rw(base, '3'),                                   // 3. 볼드 (3px)
+      cap(rw(base, '2.5'), 'square', 'miter'),         // 4. 각진 캡
+      rc(base, '#0066ff'),                             // 5. 블루
+      rc(rw(base, '1.5'), '#888'),                     // 6. 연회색 씬
+      rc(rw(base, '3'), '#e03737'),                    // 7. 레드 볼드
+      rc(cap(rw(base, '2'), 'butt', 'bevel'), '#6c5ce7'), // 8. 퍼플 버트캡
     ];
   }
+
   if (style === 'solid') {
+    const rc = (svg, color) => svg.replace(/fill="#1a1a1a"/g, `fill="${color}"`);
+    const inv = svg =>
+      rc(svg, '#fff').replace('<svg ', '<svg style="background:#1a1a1a;border-radius:14px;" ');
     return [
-      base,
-      base.replace(/fill="#1a1a1a"/g, 'fill="#333"'),
-      base.replace(/fill="#1a1a1a"/g, 'fill="#555"'),
-      base.replace(/fill="#1a1a1a"/g, 'fill="#0066ff"'),
-      base.replace(/fill="#1a1a1a"/g, 'fill="#888"'),
-      base.replace(/fill="#1a1a1a"/g, 'fill="#111"').replace(/<\/svg>/, '<rect x="0" y="0" width="48" height="48" rx="12" fill="#f5f5f7" style="mix-blend-mode:multiply"/></svg>'),
-      base.replace(/fill="#1a1a1a"/g, 'fill="#2c2c2c"'),
-      base.replace(/fill="#1a1a1a"/g, 'fill="#444"'),
+      base,                          // 1. 블랙
+      rc(base, '#0066ff'),           // 2. 블루
+      rc(base, '#6c5ce7'),           // 3. 퍼플
+      rc(base, '#00b894'),           // 4. 민트
+      rc(base, '#e03737'),           // 5. 레드
+      rc(base, '#e17055'),           // 6. 오렌지
+      rc(base, '#636e72'),           // 7. 다크 그레이
+      inv(base),                     // 8. 인버티드 (흰 아이콘/검정 배경)
     ];
   }
-  // 3d — return as-is with slight label variation
-  return Array(8).fill(base);
+
+  // 3D — 8가지 그라디언트 팔레트로 교체
+  const PALETTES = [
+    ['#a29bfe', '#6c5ce7'],   // 1. 퍼플
+    ['#74b9ff', '#0984e3'],   // 2. 오션 블루
+    ['#55efc4', '#00b894'],   // 3. 민트 그린
+    ['#fdcb6e', '#e17055'],   // 4. 선셋 오렌지
+    ['#fd79a8', '#e84393'],   // 5. 핫핑크
+    ['#ff7675', '#c0392b'],   // 6. 레드
+    ['#ffeaa7', '#f9ca24'],   // 7. 골드
+    ['#a8e6cf', '#2ecc71'],   // 8. 라임 그린
+  ];
+  return PALETTES.map(([c1, c2]) => {
+    let n = 0;
+    return base.replace(/stop-color="[^"]+"/g, () => `stop-color="${n++ === 0 ? c1 : c2}"`);
+  });
 }
 
 /* ── File attach (click + drag & drop) ── */
