@@ -16,7 +16,6 @@
       min-height: 100vh;
     }
 
-    /* ── Header ── */
     header {
       text-align: center;
       padding: 83px 31px 62px;
@@ -34,7 +33,6 @@
       line-height: 1.6;
     }
 
-    /* ── Main layout ── */
     main {
       max-width: 936px;
       margin: 0 auto;
@@ -49,7 +47,7 @@
       header h1 { font-size: 36px; }
     }
 
-    /* ── Left panel ── */
+    /* ── Left ── */
     .left-panel {
       flex: 1;
       min-width: 0;
@@ -58,7 +56,6 @@
       gap: 18px;
     }
 
-    /* ── Cards ── */
     .card {
       background: #fff;
       border-radius: 26px;
@@ -75,54 +72,142 @@
       margin-bottom: 20px;
     }
 
-    /* ── Upload zone (large) ── */
+    /* ── Upload zone ── */
     .upload-zone {
       border: 2px dashed #d8d8da;
       border-radius: 18px;
-      padding: 52px 24px;
+      padding: 44px 24px 36px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: all 0.18s;
+      gap: 18px;
       background: #fafafa;
+      transition: all 0.18s;
       position: relative;
-      text-align: center;
     }
-    .upload-zone:hover,
     .upload-zone.drag-over {
       border-color: #0066ff;
       background: rgba(0,102,255,0.03);
     }
-    .upload-zone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
+
     .upload-icon {
-      width: 56px;
-      height: 56px;
+      width: 60px; height: 60px;
       background: #f0f0f2;
-      border-radius: 16px;
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
     }
-    .upload-icon svg { width: 26px; height: 26px; }
+    .upload-icon svg { width: 28px; height: 28px; }
+
     .upload-title {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 700;
       color: #1a1a1a;
+      text-align: center;
     }
     .upload-sub {
       font-size: 13px;
       color: #aaa;
+      text-align: center;
       line-height: 1.5;
     }
+
+    /* ── Sample + File buttons inside zone ── */
+    .zone-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-sample {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 11px 20px;
+      border: none;
+      border-radius: 12px;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-sample:hover { background: #333; }
+
+    /* ── Sample picker (shown below upload zone) ── */
+    .sample-picker {
+      display: none;
+      margin-top: 14px;
+    }
+    .sample-picker.visible { display: block; }
+
+    .sample-picker-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 12px;
+    }
+
+    .sample-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .sample-set-card {
+      background: #f7f7f8;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      padding: 16px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .sample-set-card:hover {
+      border-color: #0066ff;
+      background: rgba(0,102,255,0.03);
+    }
+    .sample-set-card.used {
+      border-color: #28c840;
+      background: rgba(40,200,64,0.04);
+    }
+
+    .sample-set-preview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      width: 100%;
+    }
+    .sample-set-preview svg {
+      width: 100%;
+      aspect-ratio: 1;
+      display: block;
+    }
+
+    .sample-set-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #777;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+    .sample-set-badge {
+      font-size: 10px;
+      font-weight: 600;
+      color: #28c840;
+      display: none;
+    }
+    .sample-set-card.used .sample-set-badge { display: block; }
+    .sample-set-card.used .sample-set-name { color: #28c840; }
 
     /* ── URL row ── */
     .url-row {
@@ -132,11 +217,11 @@
     }
     .url-input {
       flex: 1;
-      padding: 12px 18px;
+      padding: 11px 16px;
       border: 1.5px solid #e4e4e6;
-      border-radius: 13px;
+      border-radius: 12px;
       font-family: inherit;
-      font-size: 14px;
+      font-size: 13px;
       color: #1a1a1a;
       outline: none;
       background: #fff;
@@ -145,10 +230,11 @@
     }
     .url-input::placeholder { color: #ccc; }
     .url-input:focus { border-color: #0066ff; }
+
     .btn-url-attach {
-      padding: 12px 20px;
+      padding: 11px 18px;
       border: 1.5px solid #e4e4e6;
-      border-radius: 13px;
+      border-radius: 12px;
       background: #fff;
       font-family: inherit;
       font-size: 13px;
@@ -160,49 +246,96 @@
     }
     .btn-url-attach:hover { border-color: #1a1a1a; color: #1a1a1a; }
 
-    /* ── Image previews (after upload) ── */
+    /* ── Small file attach button (bottom) ── */
+    .bottom-attach-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .btn-attach-small {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 10px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: #777;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-attach-small:hover { border-color: #1a1a1a; color: #1a1a1a; }
+    .btn-attach-small svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    .attach-hint {
+      font-size: 12px;
+      color: #bbb;
+    }
+
+    /* ── Previews ── */
     .preview-area {
       display: none;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-top: 16px;
+      margin-top: 14px;
     }
     .preview-area.visible { display: flex; }
 
     .preview-item {
       position: relative;
-      width: 90px;
-      height: 90px;
+      width: 86px; height: 86px;
       border-radius: 14px;
       overflow: hidden;
       border: 1.5px solid #e4e4e6;
       background: #f7f7f8;
       flex-shrink: 0;
     }
-    .preview-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .preview-item .remove-btn {
       position: absolute;
       top: 5px; right: 5px;
       width: 20px; height: 20px;
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.5);
       border: none;
       border-radius: 50%;
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      line-height: 1;
     }
     .preview-item .remove-btn:hover { background: #e03737; }
 
-    /* URL chip */
+    /* sample set preview item */
+    .preview-item.sample-thumb {
+      background: #f0f0f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      gap: 4px;
+    }
+    .preview-item.sample-thumb .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      width: 54px; height: 54px;
+    }
+    .preview-item.sample-thumb .thumb-grid svg { width: 100%; height: 100%; }
+    .preview-item.sample-thumb .thumb-label {
+      font-size: 8px;
+      font-weight: 700;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
     .url-chip {
       display: flex;
       align-items: center;
@@ -217,17 +350,11 @@
       max-width: 260px;
     }
     .url-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .url-chip button {
-      background: none; border: none;
-      color: #bbb; cursor: pointer;
-      font-size: 14px; flex-shrink: 0;
-    }
+    .url-chip button { background: none; border: none; color: #bbb; cursor: pointer; font-size: 14px; flex-shrink: 0; }
     .url-chip button:hover { color: #e03737; }
 
     /* ── Output card ── */
-    .output-card {
-      display: none;
-    }
+    .output-card { display: none; }
     .output-card.visible { display: block; }
 
     .output-header {
@@ -320,7 +447,7 @@
       margin-left: 4px;
     }
 
-    .panel-body { padding: 24px 20px; }
+    .panel-body { padding: 22px 20px; }
 
     .panel-section-label {
       font-size: 11px;
@@ -331,6 +458,50 @@
       margin-bottom: 10px;
     }
 
+    /* ── Icon form input ── */
+    .icon-form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #1a1a1a;
+      outline: none;
+      transition: border-color 0.15s;
+      background: #fff;
+      margin-bottom: 8px;
+    }
+    .icon-form-input::placeholder { color: #ccc; }
+    .icon-form-input:focus { border-color: #0066ff; }
+
+    .form-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+    .form-tag {
+      padding: 5px 11px;
+      border: 1.5px solid #e8e8ea;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #888;
+      cursor: pointer;
+      background: #fafafa;
+      transition: all 0.14s;
+      user-select: none;
+    }
+    .form-tag:hover { border-color: #0066ff; color: #0066ff; background: rgba(0,102,255,0.04); }
+    .form-tag.selected { border-color: #0066ff; background: #0066ff; color: #fff; }
+
+    .panel-divider {
+      height: 1px;
+      background: #f0f0f2;
+      margin: 18px 0;
+    }
+
     /* ── Style tabs ── */
     .style-tabs {
       display: flex;
@@ -338,7 +509,7 @@
       border-radius: 13px;
       padding: 4px;
       gap: 3px;
-      margin-bottom: 22px;
+      margin-bottom: 16px;
     }
     .style-tab {
       flex: 1;
@@ -352,47 +523,28 @@
       font-weight: 700;
       cursor: not-allowed;
       transition: all 0.18s;
-      letter-spacing: 0.2px;
       user-select: none;
     }
-    .style-tab.enabled {
-      cursor: pointer;
-      color: #999;
-    }
+    .style-tab.enabled { cursor: pointer; color: #999; }
     .style-tab.enabled:hover { color: #555; }
-    .style-tab.active {
-      background: #fff;
-      color: #1a1a1a;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-    }
+    .style-tab.active { background: #fff; color: #1a1a1a; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
 
-    /* lock notice */
     .lock-notice {
       font-size: 12px;
       color: #bbb;
-      margin-bottom: 22px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      margin-bottom: 20px;
       line-height: 1.4;
     }
     .lock-notice.hidden { display: none; }
 
-    /* style desc */
     .style-desc {
       font-size: 13px;
       color: #888;
       line-height: 1.5;
-      margin-bottom: 22px;
-      min-height: 40px;
+      margin-bottom: 20px;
+      min-height: 38px;
     }
     .style-desc.hidden { display: none; }
-
-    .panel-divider {
-      height: 1px;
-      background: #f0f0f2;
-      margin: 20px 0;
-    }
 
     .selected-count {
       font-size: 13px;
@@ -419,16 +571,10 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      letter-spacing: 0.1px;
     }
     .btn-generate:hover { background: #333; }
     .btn-generate:active { transform: scale(0.98); }
-    .btn-generate:disabled {
-      background: #e8e8ea;
-      color: #c0c0c4;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn-generate:disabled { background: #e8e8ea; color: #c0c0c4; cursor: not-allowed; transform: none; }
 
     .btn-dl-all {
       width: 100%;
@@ -460,7 +606,6 @@
     .loading .spinner { display: block; }
     .loading .btn-label { display: none; }
 
-    /* ── Animations ── */
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
@@ -471,7 +616,6 @@
       to   { background-position: -200% 0; }
     }
 
-    /* ── Toast ── */
     .toast {
       position: fixed;
       bottom: 32px; left: 50%;
@@ -499,7 +643,6 @@
 </header>
 
 <main>
-
   <!-- Left Panel -->
   <div class="left-panel">
 
@@ -507,31 +650,59 @@
     <div class="card" id="refCard">
       <div class="card-label">스타일 레퍼런스</div>
 
-      <!-- Large upload zone -->
+      <!-- Upload zone -->
       <div class="upload-zone" id="uploadZone">
-        <input type="file" id="fileInput" accept="image/*" multiple />
         <div class="upload-icon">
-          <svg viewBox="0 0 26 26" fill="none">
-            <rect x="2" y="2" width="22" height="22" rx="5" stroke="#999" stroke-width="1.8"/>
-            <path d="M9 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" fill="#999"/>
-            <path d="M4 18l5-5 4 4 3-3 6 6" stroke="#999" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 28 28" fill="none">
+            <rect x="2" y="2" width="24" height="24" rx="6" stroke="#999" stroke-width="1.8"/>
+            <path d="M9 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="#999"/>
+            <path d="M4 20l6-6 4 4 3.5-3.5L24 22" stroke="#999" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <div class="upload-title">이미지를 여기에 드래그하거나 클릭하여 첨부</div>
-        <div class="upload-sub">PNG, SVG, JPG 지원 · 여러 장 동시 첨부 가능</div>
+        <div class="upload-title">스타일 레퍼런스 이미지 첨부</div>
+        <div class="upload-sub">내 아이콘 세트 이미지를 드래그하거나<br>아래 버튼으로 첨부하세요</div>
+        <div class="zone-buttons">
+          <button class="btn-sample" id="btnSample">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <rect x="1" y="1" width="5.5" height="5.5" rx="1.5" fill="white" opacity="0.9"/>
+              <rect x="8.5" y="1" width="5.5" height="5.5" rx="1.5" fill="white" opacity="0.7"/>
+              <rect x="1" y="8.5" width="5.5" height="5.5" rx="1.5" fill="white" opacity="0.7"/>
+              <rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.5" fill="white" opacity="0.9"/>
+            </svg>
+            샘플 아이콘 세트 보기
+          </button>
+        </div>
+      </div>
+
+      <!-- Sample picker (hidden by default) -->
+      <div class="sample-picker" id="samplePicker">
+        <div class="sample-picker-label">예시 아이콘 세트 선택</div>
+        <div class="sample-picker-grid" id="samplePickerGrid"></div>
       </div>
 
       <!-- URL row -->
       <div class="url-row">
-        <input class="url-input" id="urlInput" type="url" placeholder="아이콘 URL 붙여넣기 (예: thenounproject.com/...)" />
+        <input class="url-input" id="urlInput" type="url" placeholder="아이콘 URL 붙여넣기" />
         <button class="btn-url-attach" id="urlAttachBtn">첨부</button>
+      </div>
+
+      <!-- Small file attach button at bottom -->
+      <div class="bottom-attach-row">
+        <button class="btn-attach-small" id="attachFileBtn">
+          <svg viewBox="0 0 13 13" fill="none">
+            <path d="M6.5 1v8M3 5l3.5-4 3.5 4" stroke="#777" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 10v1a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-1" stroke="#777" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          이미지 직접 첨부
+        </button>
+        <span class="attach-hint">PNG, SVG, JPG</span>
       </div>
 
       <!-- Previews -->
       <div class="preview-area" id="previewArea"></div>
     </div>
 
-    <!-- Output card -->
+    <!-- Output -->
     <div class="card output-card" id="outputCard">
       <div class="output-header">
         <div class="card-label" id="outputLabel" style="margin-bottom:0">생성된 아이콘</div>
@@ -541,7 +712,7 @@
 
   </div>
 
-  <!-- Right Panel -->
+  <!-- Right plugin panel -->
   <div class="plugin-panel">
     <div class="panel-titlebar">
       <div class="dot dot-red"></div>
@@ -552,20 +723,32 @@
 
     <div class="panel-body">
 
-      <div class="panel-section-label">아이콘 스타일</div>
+      <!-- ① 원하는 형태 입력 -->
+      <div class="panel-section-label">원하는 아이콘 형태</div>
+      <input class="icon-form-input" id="iconFormInput"
+        type="text" placeholder="예: 설정, 알림, 검색, 글쓰기..." />
+      <div class="form-suggestions">
+        <span class="form-tag" data-val="설정">설정</span>
+        <span class="form-tag" data-val="알림">알림</span>
+        <span class="form-tag" data-val="검색">검색</span>
+        <span class="form-tag" data-val="글쓰기">글쓰기</span>
+        <span class="form-tag" data-val="홈">홈</span>
+        <span class="form-tag" data-val="사용자">사용자</span>
+        <span class="form-tag" data-val="다운로드">다운로드</span>
+        <span class="form-tag" data-val="즐겨찾기">즐겨찾기</span>
+      </div>
 
+      <div class="panel-divider" style="margin-top:0"></div>
+
+      <!-- ② 아이콘 스타일 -->
+      <div class="panel-section-label">아이콘 스타일</div>
       <div class="style-tabs">
         <button class="style-tab" data-style="line">Line</button>
         <button class="style-tab" data-style="solid">Solid</button>
         <button class="style-tab" data-style="3d">3D</button>
       </div>
 
-      <!-- Shown before image attached -->
-      <div class="lock-notice" id="lockNotice">
-        🔒 이미지를 첨부하면 스타일을 선택할 수 있습니다
-      </div>
-
-      <!-- Shown after style selected -->
+      <div class="lock-notice" id="lockNotice">🔒 이미지를 첨부하면 스타일을 선택할 수 있습니다</div>
       <div class="style-desc hidden" id="styleDesc"></div>
 
       <div class="panel-divider"></div>
@@ -581,13 +764,13 @@
 
     </div>
   </div>
-
 </main>
 
+<input type="file" id="fileInput" accept="image/*" multiple style="display:none" />
 <div class="toast" id="toast"></div>
 
 <script>
-/* ── SVG Icon Library ── */
+/* ── Icon library ── */
 const ICONS = {
   settings: { label: '설정',
     line:  `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="6" stroke="#1a1a1a" stroke-width="2"/><path d="M24 4v4M24 40v4M4 24h4M40 24h4" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/><path d="M8.686 8.686l2.828 2.828M36.485 36.485l2.829 2.829M8.686 39.314l2.828-2.829M36.485 11.515l2.829-2.829" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/></svg>`,
@@ -631,6 +814,31 @@ const ICONS = {
   },
 };
 
+/* ── Sample sets ── */
+const SAMPLE_SETS = [
+  {
+    id: 'line-set',
+    name: 'Line Style',
+    desc: '미니멀 선형',
+    style: 'line',
+    icons: ['settings', 'bell', 'search', 'edit', 'home', 'user', 'download', 'heart'],
+  },
+  {
+    id: 'solid-set',
+    name: 'Solid Style',
+    desc: '굵은 실루엣',
+    style: 'solid',
+    icons: ['settings', 'bell', 'search', 'edit', 'home', 'user', 'download', 'heart'],
+  },
+  {
+    id: '3d-set',
+    name: '3D Style',
+    desc: '입체 그라디언트',
+    style: '3d',
+    icons: ['settings', 'bell', 'search', 'edit', 'home', 'user', 'download', 'heart'],
+  },
+];
+
 const STYLE_DESCS = {
   line:  '얇은 선으로 그려진 미니멀한 아이콘 스타일',
   solid: '꽉 채운 실루엣의 선명하고 굵은 아이콘 스타일',
@@ -639,68 +847,76 @@ const STYLE_DESCS = {
 
 /* ── State ── */
 const state = {
-  style: null,        // null until selected
-  hasImage: false,    // true after at least one image/url attached
+  style: null,
+  hasImage: false,
   refCount: 0,
+  usedSampleIds: new Set(),
 };
 
-/* ── Unlock: called when image/URL added ── */
-function checkUnlock() {
+/* ── Build sample picker ── */
+function buildSamplePicker() {
+  const grid = document.getElementById('samplePickerGrid');
+  SAMPLE_SETS.forEach(set => {
+    const card = document.createElement('div');
+    card.className = 'sample-set-card';
+    card.id = 'sampleCard_' + set.id;
+
+    // 8-icon preview grid (2 rows × 4 cols)
+    const previewSvgs = set.icons.map(k =>
+      ICONS[k][set.style]
+    ).join('');
+
+    card.innerHTML = `
+      <div class="sample-set-preview">${previewSvgs}</div>
+      <div class="sample-set-name">${set.name}</div>
+      <div class="sample-set-badge">✓ 첨부됨</div>
+    `;
+    card.addEventListener('click', () => attachSampleSet(set, card));
+    grid.appendChild(card);
+  });
+}
+
+function attachSampleSet(set, card) {
+  if (state.usedSampleIds.has(set.id)) return;
+  state.usedSampleIds.add(set.id);
+  card.classList.add('used');
+
+  // Add a thumbnail preview
   const previewArea = document.getElementById('previewArea');
-  const items = previewArea.querySelectorAll('.preview-item, .url-chip');
-  state.hasImage = items.length > 0;
-  state.refCount = items.length;
+  previewArea.classList.add('visible');
 
-  // Enable style tabs
-  document.querySelectorAll('.style-tab').forEach(t => {
-    t.classList.toggle('enabled', state.hasImage);
+  const thumbIcons = set.icons.slice(0, 4).map(k => ICONS[k][set.style]).join('');
+
+  const item = document.createElement('div');
+  item.className = 'preview-item sample-thumb';
+  item.dataset.sampleId = set.id;
+  item.innerHTML = `
+    <div class="thumb-grid">${thumbIcons}</div>
+    <div class="thumb-label">${set.name}</div>
+    <button class="remove-btn" title="제거">✕</button>
+  `;
+  item.querySelector('.remove-btn').addEventListener('click', () => {
+    item.remove();
+    state.usedSampleIds.delete(set.id);
+    card.classList.remove('used');
+    syncPreview();
   });
-
-  updateStatusText();
+  previewArea.appendChild(item);
+  syncPreview();
 }
 
-function updateStatusText() {
-  const countEl = document.getElementById('selectedCount');
-  const genBtn  = document.getElementById('generateBtn');
-
-  if (!state.hasImage) {
-    countEl.innerHTML = '이미지를 첨부해주세요';
-    genBtn.disabled = true;
-    return;
-  }
-  if (!state.style) {
-    countEl.innerHTML = `<strong>${state.refCount}개</strong>의 레퍼런스 첨부됨 · 스타일을 선택해주세요`;
-    genBtn.disabled = true;
-    return;
-  }
-  countEl.innerHTML = `<strong>${state.refCount}개</strong>의 레퍼런스 · <strong>${state.style.toUpperCase()}</strong> 스타일 선택됨`;
-  genBtn.disabled = false;
-}
-
-/* ── Style tabs ── */
-document.querySelectorAll('.style-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    if (!tab.classList.contains('enabled')) return;
-
-    document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    state.style = tab.dataset.style;
-
-    // Update desc, hide lock notice
-    document.getElementById('lockNotice').classList.add('hidden');
-    const desc = document.getElementById('styleDesc');
-    desc.classList.remove('hidden');
-    desc.textContent = STYLE_DESCS[state.style];
-
-    // Left panel does NOT change — no sample icons to update
-    updateStatusText();
-  });
+/* ── Sample picker toggle ── */
+document.getElementById('btnSample').addEventListener('click', () => {
+  const picker = document.getElementById('samplePicker');
+  picker.classList.toggle('visible');
 });
 
-/* ── File upload ── */
-const uploadZone = document.getElementById('uploadZone');
-const fileInput  = document.getElementById('fileInput');
+/* ── File attach ── */
+document.getElementById('attachFileBtn').addEventListener('click', () => {
+  document.getElementById('fileInput').click();
+});
 
+const uploadZone = document.getElementById('uploadZone');
 uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
 uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
 uploadZone.addEventListener('drop', e => {
@@ -708,7 +924,11 @@ uploadZone.addEventListener('drop', e => {
   uploadZone.classList.remove('drag-over');
   handleFiles(e.dataTransfer.files);
 });
-fileInput.addEventListener('change', e => { handleFiles(e.target.files); e.target.value = ''; });
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  handleFiles(e.target.files);
+  e.target.value = '';
+});
 
 function handleFiles(files) {
   Array.from(files).forEach(file => {
@@ -722,21 +942,15 @@ function handleFiles(files) {
 function addImagePreview(src, name) {
   const previewArea = document.getElementById('previewArea');
   previewArea.classList.add('visible');
-
   const item = document.createElement('div');
   item.className = 'preview-item';
-  item.innerHTML = `
-    <img src="${src}" alt="${name}" />
-    <button class="remove-btn" title="제거">✕</button>
-  `;
+  item.innerHTML = `<img src="${src}" alt="${name}" /><button class="remove-btn">✕</button>`;
   item.querySelector('.remove-btn').addEventListener('click', () => {
     item.remove();
-    const remaining = previewArea.querySelectorAll('.preview-item, .url-chip');
-    if (remaining.length === 0) previewArea.classList.remove('visible');
-    checkUnlock();
+    syncPreview();
   });
   previewArea.appendChild(item);
-  checkUnlock();
+  syncPreview();
 }
 
 /* ── URL attach ── */
@@ -747,23 +961,78 @@ function attachUrl() {
   const val = document.getElementById('urlInput').value.trim();
   if (!val) return;
   try { new URL(val); } catch { showToast('유효한 URL을 입력해주세요'); return; }
-
   const previewArea = document.getElementById('previewArea');
   previewArea.classList.add('visible');
-
   const chip = document.createElement('div');
   chip.className = 'url-chip';
   chip.innerHTML = `<span>🔗 ${new URL(val).hostname}</span><button title="제거">✕</button>`;
-  chip.querySelector('button').addEventListener('click', () => {
-    chip.remove();
-    const remaining = previewArea.querySelectorAll('.preview-item, .url-chip');
-    if (remaining.length === 0) previewArea.classList.remove('visible');
-    checkUnlock();
-  });
+  chip.querySelector('button').addEventListener('click', () => { chip.remove(); syncPreview(); });
   previewArea.appendChild(chip);
   document.getElementById('urlInput').value = '';
-  checkUnlock();
+  syncPreview();
 }
+
+/* ── Sync preview → unlock tabs ── */
+function syncPreview() {
+  const previewArea = document.getElementById('previewArea');
+  const items = previewArea.querySelectorAll('.preview-item, .url-chip');
+  state.hasImage = items.length > 0;
+  state.refCount = items.length;
+  if (items.length === 0) previewArea.classList.remove('visible');
+
+  document.querySelectorAll('.style-tab').forEach(t =>
+    t.classList.toggle('enabled', state.hasImage)
+  );
+  updateStatus();
+}
+
+function updateStatus() {
+  const countEl = document.getElementById('selectedCount');
+  const genBtn  = document.getElementById('generateBtn');
+
+  if (!state.hasImage) {
+    countEl.innerHTML = '이미지를 첨부해주세요';
+    genBtn.disabled = true;
+  } else if (!state.style) {
+    countEl.innerHTML = `<strong>${state.refCount}개</strong>의 레퍼런스 첨부됨 · 스타일을 선택해주세요`;
+    genBtn.disabled = true;
+  } else {
+    countEl.innerHTML = `<strong>${state.refCount}개</strong> 레퍼런스 · <strong>${state.style.toUpperCase()}</strong>`;
+    genBtn.disabled = false;
+  }
+}
+
+/* ── Style tabs ── */
+document.querySelectorAll('.style-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (!tab.classList.contains('enabled')) return;
+    document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    state.style = tab.dataset.style;
+    document.getElementById('lockNotice').classList.add('hidden');
+    const desc = document.getElementById('styleDesc');
+    desc.classList.remove('hidden');
+    desc.textContent = STYLE_DESCS[state.style];
+    // Left panel does NOT change
+    updateStatus();
+  });
+});
+
+/* ── Suggestion tags ── */
+document.querySelectorAll('.form-tag').forEach(tag => {
+  tag.addEventListener('click', () => {
+    tag.classList.toggle('selected');
+    const input = document.getElementById('iconFormInput');
+    const val = tag.dataset.val;
+    const parts = input.value.split(',').map(s => s.trim()).filter(Boolean);
+    if (tag.classList.contains('selected')) {
+      if (!parts.includes(val)) parts.push(val);
+    } else {
+      const i = parts.indexOf(val); if (i > -1) parts.splice(i, 1);
+    }
+    input.value = parts.join(', ');
+  });
+});
 
 /* ── Generate ── */
 document.getElementById('generateBtn').addEventListener('click', generate);
@@ -778,29 +1047,26 @@ async function generate() {
   outputCard.classList.add('visible');
   outputGrid.innerHTML = '';
   document.getElementById('dlAllBtn').classList.remove('visible');
-  document.getElementById('outputLabel').textContent =
-    `생성된 아이콘 · ${state.style.toUpperCase()} 스타일`;
+  document.getElementById('outputLabel').textContent = `생성된 아이콘 · ${state.style.toUpperCase()} 스타일`;
 
-  // Skeletons
   const keys = Object.keys(ICONS);
-  for (let i = 0; i < keys.length; i++) {
+  keys.forEach(() => {
     const c = document.createElement('div');
     c.className = 'out-card';
     c.style.pointerEvents = 'none';
     c.innerHTML = `<div class="skeleton skel-icon"></div><div class="skeleton skel-text"></div>`;
     outputGrid.appendChild(c);
-  }
+  });
   outputCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   await new Promise(r => setTimeout(r, 500));
   outputGrid.innerHTML = '';
 
   for (let i = 0; i < keys.length; i++) {
-    await new Promise(r => setTimeout(r, 80 + i * 70));
-    const key  = keys[i];
+    await new Promise(r => setTimeout(r, 70 + i * 60));
+    const key = keys[i];
     const icon = ICONS[key];
     const svgStr = icon[state.style];
-
     const card = document.createElement('div');
     card.className = 'out-card';
     card.style.animationDelay = `${i * 0.05}s`;
@@ -817,12 +1083,10 @@ async function generate() {
   btn.disabled = false;
 }
 
-/* ── Download ── */
 function downloadSvg(svgStr, filename) {
   const blob = new Blob([svgStr], { type: 'image/svg+xml' });
   const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = filename; a.click();
+  const a    = document.createElement('a'); a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
 }
 
@@ -831,13 +1095,14 @@ document.getElementById('dlAllBtn').addEventListener('click', () => {
   showToast('모든 아이콘을 다운로드했습니다');
 });
 
-/* ── Toast ── */
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
+
+buildSamplePicker();
 </script>
 </body>
 </html>
