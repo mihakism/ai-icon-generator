@@ -76,12 +76,12 @@
     .upload-zone {
       border: 2px dashed #d8d8da;
       border-radius: 18px;
-      padding: 44px 24px 36px;
+      padding: 24px 24px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 18px;
+      gap: 10px;
       background: #fafafa;
       transition: all 0.18s;
       position: relative;
@@ -138,7 +138,7 @@
     }
     .btn-sample:hover { background: #333; }
 
-    /* ── Sample picker (shown below upload zone) ── */
+    /* ── Sample picker ── */
     .sample-picker {
       display: none;
       margin-top: 14px;
@@ -171,6 +171,7 @@
       gap: 10px;
       cursor: pointer;
       transition: all 0.15s;
+      position: relative;
     }
     .sample-set-card:hover {
       border-color: #0066ff;
@@ -180,6 +181,27 @@
       border-color: #28c840;
       background: rgba(40,200,64,0.04);
     }
+
+    /* X remove button inside card */
+    .sample-set-remove {
+      display: none;
+      position: absolute;
+      top: 7px; right: 7px;
+      width: 20px; height: 20px;
+      background: rgba(0,0,0,0.18);
+      border: none;
+      border-radius: 50%;
+      color: #555;
+      font-size: 10px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding: 0;
+      transition: background 0.15s;
+    }
+    .sample-set-card.used .sample-set-remove { display: flex; }
+    .sample-set-remove:hover { background: #e03737; color: #fff; }
 
     .sample-set-preview {
       display: grid;
@@ -639,7 +661,7 @@
 
 <header>
   <h1>AI Icon Generator</h1>
-  <p>스타일 레퍼런스 이미지를 첨부하고 원하는 아이콘을 생성하세요</p>
+  <p>스타일 레퍼런스 이미지를 첨부하면 원하는 아이콘을 생성하는 플러그인</p>
 </header>
 
 <main>
@@ -660,22 +682,11 @@
           </svg>
         </div>
         <div class="upload-title">스타일 레퍼런스 이미지 첨부</div>
-        <div class="upload-sub">내 아이콘 세트 이미지를 드래그하거나<br>아래 버튼으로 첨부하세요</div>
-        <div class="zone-buttons">
-          <button class="btn-sample" id="btnSample">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-              <rect x="1" y="1" width="5.5" height="5.5" rx="1.5" fill="white" opacity="0.9"/>
-              <rect x="8.5" y="1" width="5.5" height="5.5" rx="1.5" fill="white" opacity="0.7"/>
-              <rect x="1" y="8.5" width="5.5" height="5.5" rx="1.5" fill="white" opacity="0.7"/>
-              <rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.5" fill="white" opacity="0.9"/>
-            </svg>
-            샘플 아이콘 세트 보기
-          </button>
-        </div>
+        <div class="upload-sub">내 아이콘 세트 이미지를 드래그해서 첨부하세요</div>
       </div>
 
-      <!-- Sample picker (hidden by default) -->
-      <div class="sample-picker" id="samplePicker">
+      <!-- Sample picker (always visible) -->
+      <div class="sample-picker visible" id="samplePicker">
         <div class="sample-picker-label">예시 아이콘 세트 선택</div>
         <div class="sample-picker-grid" id="samplePickerGrid"></div>
       </div>
@@ -684,18 +695,6 @@
       <div class="url-row">
         <input class="url-input" id="urlInput" type="url" placeholder="아이콘 URL 붙여넣기" />
         <button class="btn-url-attach" id="urlAttachBtn">첨부</button>
-      </div>
-
-      <!-- Small file attach button at bottom -->
-      <div class="bottom-attach-row">
-        <button class="btn-attach-small" id="attachFileBtn">
-          <svg viewBox="0 0 13 13" fill="none">
-            <path d="M6.5 1v8M3 5l3.5-4 3.5 4" stroke="#777" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M1 10v1a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-1" stroke="#777" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          이미지 직접 첨부
-        </button>
-        <span class="attach-hint">PNG, SVG, JPG</span>
       </div>
 
       <!-- Previews -->
@@ -727,18 +726,7 @@
       <div class="panel-section-label">원하는 아이콘 형태</div>
       <input class="icon-form-input" id="iconFormInput"
         type="text" placeholder="예: 설정, 알림, 검색, 글쓰기..." />
-      <div class="form-suggestions">
-        <span class="form-tag" data-val="설정">설정</span>
-        <span class="form-tag" data-val="알림">알림</span>
-        <span class="form-tag" data-val="검색">검색</span>
-        <span class="form-tag" data-val="글쓰기">글쓰기</span>
-        <span class="form-tag" data-val="홈">홈</span>
-        <span class="form-tag" data-val="사용자">사용자</span>
-        <span class="form-tag" data-val="다운로드">다운로드</span>
-        <span class="form-tag" data-val="즐겨찾기">즐겨찾기</span>
-      </div>
-
-      <div class="panel-divider" style="margin-top:0"></div>
+      <div class="panel-divider" style="margin-top:4px"></div>
 
       <!-- ② 아이콘 스타일 -->
       <div class="panel-section-label">아이콘 스타일</div>
@@ -748,12 +736,11 @@
         <button class="style-tab" data-style="3d">3D</button>
       </div>
 
-      <div class="lock-notice" id="lockNotice">🔒 이미지를 첨부하면 스타일을 선택할 수 있습니다</div>
       <div class="style-desc hidden" id="styleDesc"></div>
 
       <div class="panel-divider"></div>
 
-      <div class="selected-count" id="selectedCount">이미지를 첨부해주세요</div>
+      <div class="selected-count" id="selectedCount"></div>
 
       <button class="btn-generate" id="generateBtn" disabled>
         <span class="btn-label">✦ 아이콘 생성</span>
@@ -861,60 +848,40 @@ function buildSamplePicker() {
     card.className = 'sample-set-card';
     card.id = 'sampleCard_' + set.id;
 
-    // 8-icon preview grid (2 rows × 4 cols)
-    const previewSvgs = set.icons.map(k =>
-      ICONS[k][set.style]
-    ).join('');
+    const previewSvgs = set.icons.map(k => ICONS[k][set.style]).join('');
 
     card.innerHTML = `
       <div class="sample-set-preview">${previewSvgs}</div>
       <div class="sample-set-name">${set.name}</div>
       <div class="sample-set-badge">✓ 첨부됨</div>
+      <button class="sample-set-remove" title="제거">✕</button>
     `;
-    card.addEventListener('click', () => attachSampleSet(set, card));
+
+    // Click card to select
+    card.addEventListener('click', e => {
+      if (e.target.closest('.sample-set-remove')) return;
+      if (!state.usedSampleIds.has(set.id)) attachSampleSet(set, card);
+    });
+
+    // X button to deselect
+    card.querySelector('.sample-set-remove').addEventListener('click', e => {
+      e.stopPropagation();
+      state.usedSampleIds.delete(set.id);
+      card.classList.remove('used');
+      syncPreview();
+    });
+
     grid.appendChild(card);
   });
 }
 
 function attachSampleSet(set, card) {
-  if (state.usedSampleIds.has(set.id)) return;
   state.usedSampleIds.add(set.id);
   card.classList.add('used');
-
-  // Add a thumbnail preview
-  const previewArea = document.getElementById('previewArea');
-  previewArea.classList.add('visible');
-
-  const thumbIcons = set.icons.slice(0, 4).map(k => ICONS[k][set.style]).join('');
-
-  const item = document.createElement('div');
-  item.className = 'preview-item sample-thumb';
-  item.dataset.sampleId = set.id;
-  item.innerHTML = `
-    <div class="thumb-grid">${thumbIcons}</div>
-    <div class="thumb-label">${set.name}</div>
-    <button class="remove-btn" title="제거">✕</button>
-  `;
-  item.querySelector('.remove-btn').addEventListener('click', () => {
-    item.remove();
-    state.usedSampleIds.delete(set.id);
-    card.classList.remove('used');
-    syncPreview();
-  });
-  previewArea.appendChild(item);
   syncPreview();
 }
 
-/* ── Sample picker toggle ── */
-document.getElementById('btnSample').addEventListener('click', () => {
-  const picker = document.getElementById('samplePicker');
-  picker.classList.toggle('visible');
-});
-
-/* ── File attach ── */
-document.getElementById('attachFileBtn').addEventListener('click', () => {
-  document.getElementById('fileInput').click();
-});
+/* ── File attach (drag & drop only) ── */
 
 const uploadZone = document.getElementById('uploadZone');
 uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
@@ -975,10 +942,12 @@ function attachUrl() {
 /* ── Sync preview → unlock tabs ── */
 function syncPreview() {
   const previewArea = document.getElementById('previewArea');
-  const items = previewArea.querySelectorAll('.preview-item, .url-chip');
-  state.hasImage = items.length > 0;
-  state.refCount = items.length;
-  if (items.length === 0) previewArea.classList.remove('visible');
+  const urlItems = previewArea.querySelectorAll('.preview-item, .url-chip');
+  if (urlItems.length === 0) previewArea.classList.remove('visible');
+
+  const totalRef = urlItems.length + state.usedSampleIds.size;
+  state.hasImage = totalRef > 0;
+  state.refCount = totalRef;
 
   document.querySelectorAll('.style-tab').forEach(t =>
     t.classList.toggle('enabled', state.hasImage)
@@ -991,7 +960,7 @@ function updateStatus() {
   const genBtn  = document.getElementById('generateBtn');
 
   if (!state.hasImage) {
-    countEl.innerHTML = '이미지를 첨부해주세요';
+    countEl.innerHTML = '';
     genBtn.disabled = true;
   } else if (!state.style) {
     countEl.innerHTML = `<strong>${state.refCount}개</strong>의 레퍼런스 첨부됨 · 스타일을 선택해주세요`;
@@ -1009,7 +978,6 @@ document.querySelectorAll('.style-tab').forEach(tab => {
     document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     state.style = tab.dataset.style;
-    document.getElementById('lockNotice').classList.add('hidden');
     const desc = document.getElementById('styleDesc');
     desc.classList.remove('hidden');
     desc.textContent = STYLE_DESCS[state.style];
