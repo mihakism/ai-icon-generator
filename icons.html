@@ -500,7 +500,8 @@ function colorizesvg(svgStr, color, size) {
     .replace(/fill="#222222"/g, `fill="${color}"`)
     .replace(/fill="white"/g, `fill="white"`)
     .replace(/width="24"/, `width="${size}"`)
-    .replace(/height="24"/, `height="${size}"`);
+    .replace(/height="24"/, `height="${size}"`)
+    .replace(/viewBox="0 0 120 120"/, `viewBox="30 30 60 60"`);
   return s;
 }
 
