@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-1120, -1540)">
+    <path d="M1171 1603C1171 1601.9 1171.9 1601 1173 1601H1175C1176.1 1601 1177 1601.9 1177 1603V1605C1177 1606.1 1176.1 1607 1175 1607H1173C1171.9 1607 1171 1606.1 1171 1605V1603Z" stroke="#222222" stroke-width="2" stroke-linejoin="round" />
+    <path d="M1186 1601V1599C1186 1598.45 1185.55 1598 1185 1598H1175C1174.45 1598 1174 1598.45 1174 1599V1601" stroke="#222222" stroke-width="2" stroke-linejoin="round" />
+    <path d="M1183 1603C1183 1601.9 1183.9 1601 1185 1601H1187C1188.1 1601 1189 1601.9 1189 1603V1605C1189 1606.1 1188.1 1607 1187 1607H1185C1183.9 1607 1183 1606.1 1183 1605V1603Z" stroke="#222222" stroke-width="2" stroke-linejoin="round" />
+    <path d="M1177 1591C1177 1589.9 1177.9 1589 1179 1589H1181C1182.1 1589 1183 1589.9 1183 1591V1593C1183 1594.1 1182.1 1595 1181 1595H1179C1177.9 1595 1177 1594.1 1177 1593V1591Z" stroke="#222222" stroke-width="2" stroke-linejoin="round" />
+    <path d="M1180 1595V1598" stroke="#222222" stroke-width="1.75" stroke-linecap="round" />
+  </g>
+</svg>

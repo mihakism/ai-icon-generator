@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-1250, -1540)">
+    <path d="M1302 1591.5C1302 1590.4 1302.9 1589.5 1304 1589.5H1309C1310.1 1589.5 1311 1590.4 1311 1591.5V1606.5H1302.5C1302.22 1606.5 1302 1606.28 1302 1606V1591.5Z" stroke="#222222" stroke-width="2" />
+    <path d="M1311 1596.5H1316C1317.1 1596.5 1318 1597.4 1318 1598.5V1606C1318 1606.28 1317.78 1606.5 1317.5 1606.5H1311V1596.5Z" stroke="#222222" stroke-width="2" />
+    <rect x="1304" y="1592" width="2" height="2" rx="0.5" fill="#222222" stroke="#222222" stroke-width="2" mask="url(#path-420-inside-1_14364_2939)" />
+    <rect x="1304" y="1595.5" width="2" height="2" rx="0.5" fill="#222222" stroke="#222222" stroke-width="2" mask="url(#path-421-inside-2_14364_2939)" />
+    <rect x="1304" y="1599" width="2" height="2" rx="0.5" fill="#222222" stroke="#222222" stroke-width="2" mask="url(#path-422-inside-3_14364_2939)" />
+    <rect x="1307" y="1592" width="2" height="2" rx="0.5" fill="#222222" stroke="#222222" stroke-width="2" mask="url(#path-423-inside-4_14364_2939)" />
+    <rect x="1307" y="1595.5" width="2" height="2" rx="0.5" fill="#222222" stroke="#222222" stroke-width="2" mask="url(#path-424-inside-5_14364_2939)" />
+    <rect x="1307" y="1599" width="2" height="2" rx="0.5" fill="#222222" stroke="#222222" stroke-width="2" mask="url(#path-425-inside-6_14364_2939)" />
+  </g>
+</svg>

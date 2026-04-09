@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-600, -1410)">
+    <path d="M654 1470H653C651.895 1470 651 1469.1 651 1468V1463C651 1461.9 651.895 1461 653 1461H667C668.105 1461 669 1461.9 669 1463V1468C669 1469.1 668.105 1470 667 1470H666" stroke="#222222" stroke-width="2" />
+    <rect x="654" y="1467" width="12" height="7" rx="2" stroke="#222222" stroke-width="2" />
+    <path d="M654 1458C654 1456.9 654.895 1456 656 1456H664C665.105 1456 666 1456.9 666 1458V1461H654V1458Z" stroke="#222222" stroke-width="2" />
+    <circle cx="666" cy="1464" r="1" fill="#222222" />
+  </g>
+</svg>

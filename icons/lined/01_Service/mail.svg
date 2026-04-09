@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-340, -320)">
+    <path d="M405 374H395C393.895 374 393 374.895 393 376V379.702C393 380.386 393.35 381.022 393.927 381.389L399.464 384.909C399.791 385.117 400.209 385.117 400.536 384.909L406.073 381.389C406.65 381.022 407 380.386 407 379.702V376C407 374.895 406.105 374 405 374Z" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M400.5 379.75H396.5" stroke="#222222" stroke-width="1.75" stroke-linecap="round" />
+    <path d="M403.5 377H396.5" stroke="#222222" stroke-width="1.75" stroke-linecap="round" />
+    <path d="M406.667 379C407.403 379 408 379.597 408 380.333V388C408 389.105 407.105 390 406 390H394C392.895 390 392 389.105 392 388V380.333C392 379.597 392.597 379 393.333 379" stroke="#222222" stroke-width="2" stroke-linejoin="round" />
+  </g>
+</svg>

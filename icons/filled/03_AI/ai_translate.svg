@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-730, -1830)">
+    <path d="M790.12 1894.7L793.897 1884.92C794.076 1884.45 794.733 1884.45 794.913 1884.92L798.69 1894.7" stroke="#222222" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M791.834 1891.43H796.976" stroke="#222222" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M786.1 1877.3V1879.92" stroke="#222222" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M788.718 1880.79C788.768 1884.76 785.821 1888.14 781.876 1888.62L781.736 1888.64" stroke="#222222" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M783.482 1880.79C783.482 1880.79 783.348 1883.62 785.571 1886.09C786.657 1887.3 787.902 1887.94 788.864 1888.27" stroke="#222222" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M781.3 1879.92H790.9" stroke="#222222" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M800.402 1879.38C800.933 1879.17 800.933 1878.42 800.402 1878.22L799.44 1877.86C798.846 1877.63 798.378 1877.15 798.145 1876.56L797.776 1875.6C797.569 1875.07 796.822 1875.07 796.624 1875.6L796.256 1876.56C796.031 1877.15 795.554 1877.62 794.96 1877.86L793.998 1878.22C793.467 1878.43 793.467 1879.18 793.998 1879.38L794.96 1879.74C795.554 1879.97 796.022 1880.45 796.256 1881.04L796.624 1882C796.831 1882.53 797.578 1882.53 797.776 1882L798.145 1881.04C798.369 1880.45 798.846 1879.98 799.44 1879.74L800.402 1879.38Z" fill="#222222" />
+  </g>
+</svg>

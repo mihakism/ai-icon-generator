@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-470, -870)">
+    <path d="M522 927C522 925.895 522.895 925 524 925H528.063C528.657 925 529.22 925.264 529.6 925.72L530.9 927.28C531.28 927.736 531.843 928 532.437 928H536C537.105 928 538 928.895 538 930V939C538 940.105 537.105 941 536 941H524C522.895 941 522 940.105 522 939V927Z" fill="#222222" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

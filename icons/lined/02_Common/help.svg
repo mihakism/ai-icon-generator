@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-80, -1270)">
+    <path d="M138.222 1329.78L138.261 1329.66C138.503 1328.93 139.183 1328.44 139.948 1328.44H140C140.982 1328.44 141.778 1329.24 141.778 1330.22C141.778 1330.78 141.514 1331.31 141.067 1331.64L140.356 1332.18C140.132 1332.35 140 1332.61 140 1332.89" stroke="#222222" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="140" cy="1335.69" r="1" fill="#222222" />
+    <circle cx="140" cy="1332" r="8" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

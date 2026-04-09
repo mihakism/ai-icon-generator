@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-860, -2400)">
+    <path d="M920 2468V2470.5" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M927 2460V2461.39C927 2465.03 923.852 2468 920 2468C916.148 2468 913 2465.03 913 2461.39V2460" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M916.5 2457C916.5 2455.07 918.067 2453.5 920 2453.5C921.933 2453.5 923.5 2455.07 923.5 2457V2461C923.5 2462.93 921.933 2464.5 920 2464.5C918.067 2464.5 916.5 2462.93 916.5 2461V2457Z" fill="#222222" stroke="#222222" stroke-width="2" />
+  </g>
+</svg>

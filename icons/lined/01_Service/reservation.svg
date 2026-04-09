@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-80, -450)">
+    <path d="M145 504C146.657 504 148 505.343 148 507V513.25C148 513.802 147.552 514.25 147 514.25C146.448 514.25 146 513.802 146 513.25V507C146 506.448 145.552 506 145 506H135C134.448 506 134 506.448 134 507V517C134 517.552 134.448 518 135 518H137.799C138.028 518 138.221 518.169 138.267 518.393C138.332 518.711 138.42 519.021 138.527 519.321C138.642 519.642 138.416 520 138.075 520H135C133.343 520 132 518.657 132 517V507C132 505.343 133.343 504 135 504H145Z" fill="#222222" />
+    <circle cx="145" cy="517" r="4" stroke="#222222" stroke-width="1.75" />
+    <path d="M145 515.5V517L146.25 517.75" stroke="#222222" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M136 503.5V505" stroke="#222222" stroke-width="2" stroke-linecap="round" />
+    <path d="M144 503.5V505" stroke="#222222" stroke-width="2" stroke-linecap="round" />
+    <path d="M133 508.5H147" stroke="#222222" stroke-width="2" stroke-linecap="round" />
+  </g>
+</svg>

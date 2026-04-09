@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-1250, -1410)">
+    <rect x="1302" y="1456.5" width="12" height="13" rx="2" stroke="#222222" stroke-width="2" />
+    <path d="M1314 1460.5H1316C1317.1 1460.5 1318 1461.4 1318 1462.5V1471.5C1318 1472.6 1317.1 1473.5 1316 1473.5H1308C1306.9 1473.5 1306 1472.6 1306 1471.5V1469.79" stroke="#222222" stroke-width="2" />
+    <path d="M1305.35 1460.35H1310.65" stroke="#222222" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M1305.35 1463.6H1308.65" stroke="#222222" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

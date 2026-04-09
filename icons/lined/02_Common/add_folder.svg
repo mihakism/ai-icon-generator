@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-210, -1540)">
+    <path d="M268.7 1606H264C262.895 1606 262 1605.1 262 1604V1592C262 1590.9 262.895 1590 264 1590H268.063C268.657 1590 269.22 1590.26 269.6 1590.72L270.9 1592.28C271.28 1592.74 271.843 1593 272.437 1593H276C277.105 1593 278 1593.9 278 1595V1596.65" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M272 1604L280 1604" stroke="#222222" stroke-width="1.75" stroke-linecap="round" />
+    <path d="M276 1600L276 1608" stroke="#222222" stroke-width="1.75" stroke-linecap="round" />
+  </g>
+</svg>

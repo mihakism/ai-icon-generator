@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-730, -2110)">
+    <path d="M798 2174C798 2178.42 794.418 2182 790 2182C787.73 2182 782.552 2182 782.041 2182C782.016 2182 782 2181.98 782 2181.96C782 2181.43 782 2175.93 782 2174C782 2169.58 785.582 2166 790 2166C794.418 2166 798 2169.58 798 2174Z" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="785.75" cy="2174" r="1.25" fill="#222222" />
+    <circle cx="790" cy="2174" r="1.25" fill="#222222" />
+    <circle cx="794.25" cy="2174" r="1.25" fill="#222222" />
+  </g>
+</svg>

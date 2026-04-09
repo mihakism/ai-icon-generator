@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-730, -740)">
+    <path d="M783 794.5H797L796.133 806.642C796.058 807.689 795.187 808.5 794.138 808.5H785.862C784.813 808.5 783.942 807.689 783.867 806.642L783 794.5Z" stroke="#222222" stroke-width="2" />
+    <path d="M788 791.5H792" stroke="#222222" stroke-width="2" stroke-linecap="round" />
+    <path d="M790 798L790 804.5" stroke="#222222" stroke-width="1.75" stroke-linecap="round" />
+    <path d="M786.756 798.008L787.244 804.492" stroke="#222222" stroke-width="1.75" stroke-linecap="round" />
+    <path d="M793.183 798.004L792.817 804.495" stroke="#222222" stroke-width="1.75" stroke-linecap="round" />
+    <path d="M782 794.5L798 794.5" stroke="#222222" stroke-width="2" stroke-linecap="round" />
+  </g>
+</svg>

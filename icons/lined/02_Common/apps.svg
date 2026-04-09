@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 120 120" fill="none">
+  <g transform="translate(-730, -1140)">
+    <rect x="782" y="1191" width="6.25" height="6.25" rx="2" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="791.75" y="1191" width="6.25" height="6.25" rx="2" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="782" y="1200.75" width="6.25" height="6.25" rx="2" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="791.75" y="1200.75" width="6.25" height="6.25" rx="2" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
