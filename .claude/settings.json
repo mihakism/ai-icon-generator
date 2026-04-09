@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(git cherry-pick:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:toss.tech)"
+    ],
+    "additionalDirectories": [
+      "/Users/user/Documents/auto-qa-demo"
+    ]
+  }
+}
