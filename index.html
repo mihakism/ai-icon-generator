@@ -1,794 +1,1177 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAVER WORKS AI — 기능 제안 프로토타입</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Icon Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --white: #FFFFFF;
-      --surface-1: #F7F8FA;
-      --surface-2: #EAECEF;
-      --border: #EAECEF;
-      --text-primary: #1A1A1A;
-      --text-secondary: #4A4A4A;
-      --text-tertiary: #9B9B9B;
-      --green: #03C75A;
-      --blue: #1A6AFF;
-      --red: #FF3B30;
-      --ai-blue-bg: #E8F0FE;
-      --ai-blue-border: #A8C4F4;
-      --ai-blue-text: #1A6AFF;
-      --ai-green-bg: #E8F8EF;
-      --ai-green-text: #03C75A;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
-      background: #F2F4F7;
-      color: var(--text-primary);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f7;
+      color: #1a1a1a;
       min-height: 100vh;
     }
 
-    /* Hero */
-    .hero {
-      background: var(--text-primary);
-      padding: 64px 24px 56px;
+    header {
       text-align: center;
+      padding: 83px 31px 62px;
     }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(3,199,90,0.15);
-      color: var(--green);
-      border: 1px solid rgba(3,199,90,0.3);
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-    .hero-title {
-      font-size: 36px;
-      font-weight: 700;
-      color: #FFFFFF;
-      line-height: 1.3;
+    header h1 {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
       margin-bottom: 16px;
     }
-    .hero-title span { color: var(--green); }
-    .hero-subtitle {
-      font-size: 15px;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.7;
-      max-width: 560px;
-      margin: 0 auto 36px;
-    }
-    .hero-meta {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .hero-meta-item {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-    }
-    .hero-meta-item strong { color: rgba(255,255,255,0.7); font-weight: 500; }
-
-    /* Demo CTA */
-    .demo-cta {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-    }
-    .demo-cta-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .demo-cta-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-    .demo-cta-text strong { color: var(--text-primary); font-weight: 600; }
-    .demo-btns {
-      display: flex;
-      gap: 10px;
-    }
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--blue);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity 0.15s;
-    }
-    .btn-primary:hover { opacity: 0.88; }
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: transparent;
-      color: var(--blue);
-      border: 1px solid var(--ai-blue-border);
-      border-radius: 8px;
-      padding: 9px 20px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .btn-secondary:hover { background: var(--ai-blue-bg); }
-
-    /* Content */
-    .content {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    /* Section label */
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-tertiary);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-    .section-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-      margin-bottom: 32px;
-    }
-
-    /* Design principles */
-    .principles {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 48px;
-    }
-    .principle-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-    }
-    .principle-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--ai-blue-bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      margin-bottom: 12px;
-    }
-    .principle-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 6px;
-    }
-    .principle-desc {
-      font-size: 12px;
-      color: var(--text-secondary);
+    header p {
+      font-size: 21px;
+      color: #888;
       line-height: 1.6;
     }
 
-    /* Feature grid */
-    .feature-section {
-      margin-bottom: 48px;
-    }
-    .feature-section-header {
+    main {
+      max-width: 936px;
+      margin: 0 auto;
+      padding: 0 31px 104px;
       display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
+      gap: 26px;
+      align-items: flex-start;
     }
-    .feature-section-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+
+    @media (max-width: 700px) {
+      main { flex-direction: column-reverse; }
+      header h1 { font-size: 36px; }
+    }
+
+    /* ── Left ── */
+    .left-panel {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 26px;
+      padding: 31px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
+
+    .card-label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    /* ── Upload zone (compact horizontal) ── */
+    .upload-zone {
+      border: 1.5px dashed #d8d8da;
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      background: #fafafa;
+      transition: all 0.18s;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: #0066ff;
+      background: rgba(0,102,255,0.03);
+    }
+
+    .upload-icon {
+      width: 40px; height: 40px;
+      background: #f0f0f2;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      flex-shrink: 0;
     }
-    .icon-green { background: var(--ai-green-bg); }
-    .icon-blue { background: var(--ai-blue-bg); }
-    .feature-section-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-    .feature-section-name span {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--text-tertiary);
-      margin-left: 6px;
-    }
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    .feature-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      display: block;
-    }
-    .feature-card:hover {
-      border-color: var(--ai-blue-border);
-      box-shadow: 0 2px 8px rgba(26,106,255,0.08);
-    }
-    .feature-card-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    .feature-priority {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-    .p0 { background: #FFF0EE; color: #FF3B30; }
-    .p1 { background: var(--ai-blue-bg); color: var(--blue); }
-    .p2 { background: var(--surface-1); color: var(--text-tertiary); }
-    .phase-tag {
-      font-size: 11px;
-      color: var(--text-tertiary);
-      background: var(--surface-1);
-      padding: 2px 7px;
-      border-radius: 4px;
-    }
-    .feature-num {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-tertiary);
-      margin-bottom: 6px;
-    }
-    .feature-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 6px;
-    }
-    .feature-desc {
-      font-size: 12px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
-    .feature-trigger {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--surface-1);
-      font-size: 11px;
-      color: var(--text-tertiary);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .feature-trigger strong { color: var(--text-secondary); font-weight: 500; }
+    .upload-icon svg { width: 20px; height: 20px; }
 
-    /* Roadmap */
-    .roadmap {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 48px;
+    .upload-text-group { display: flex; flex-direction: column; gap: 2px; }
+    .upload-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1a1a;
     }
-    .roadmap-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary);
+    .upload-sub {
+      font-size: 12px;
+      color: #bbb;
+      line-height: 1.4;
     }
-    .roadmap-phases {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+
+    /* ── Sample picker ── */
+    .sample-picker {
+      display: none;
+      margin-top: 14px;
     }
-    .roadmap-phase {
-      padding: 16px 20px;
-      border-right: 1px solid var(--border);
-    }
-    .roadmap-phase:last-child { border-right: none; }
-    .phase-title {
+    .sample-picker.visible { display: block; }
+
+    .sample-picker-label {
       font-size: 11px;
       font-weight: 700;
-      color: var(--text-tertiary);
+      letter-spacing: 1px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      color: #bbb;
       margin-bottom: 12px;
     }
-    .phase-item {
+
+    .sample-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    /* Individual icon cell */
+    .sample-icon-cell {
+      aspect-ratio: 1;
+      background: #f7f7f8;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      padding: 12px;
+    }
+    .sample-icon-cell svg { width: 70%; height: 70%; display: block; }
+    .sample-icon-cell:hover { border-color: #0066ff; background: rgba(0,102,255,0.04); }
+    .sample-icon-cell.selected {
+      border-color: #0066ff;
+      background: rgba(0,102,255,0.08);
+    }
+
+    /* ── URL row ── */
+    .url-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .url-input {
+      flex: 1;
+      padding: 11px 16px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 13px;
+      color: #1a1a1a;
+      outline: none;
+      background: #fff;
+      transition: border-color 0.15s;
+      min-width: 0;
+    }
+    .url-input::placeholder { color: #ccc; }
+    .url-input:focus { border-color: #0066ff; }
+
+    .btn-url-attach {
+      padding: 11px 18px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 12px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn-url-attach:hover { border-color: #1a1a1a; color: #1a1a1a; }
+
+    /* ── Small file attach button (bottom) ── */
+    .bottom-attach-row {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 8px;
+      margin-top: 12px;
     }
-    .phase-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
+    .btn-attach-small {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 10px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: #777;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-attach-small:hover { border-color: #1a1a1a; color: #1a1a1a; }
+    .btn-attach-small svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    .attach-hint {
+      font-size: 12px;
+      color: #bbb;
+    }
+
+    /* ── Previews ── */
+    .preview-area {
+      display: none;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .preview-area.visible { display: flex; }
+
+    .preview-item {
+      position: relative;
+      width: 86px; height: 86px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.5px solid #e4e4e6;
+      background: #f7f7f8;
       flex-shrink: 0;
     }
-    .dot-green { background: var(--green); }
-    .dot-blue { background: var(--blue); }
-    .dot-gray { background: #CCCCCC; }
-    .phase-item-text {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
-    /* KPI */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 48px;
-    }
-    .kpi-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-    }
-    .kpi-label {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      margin-bottom: 8px;
-    }
-    .kpi-value {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-    .kpi-value.green { color: var(--green); }
-    .kpi-value.blue { color: var(--blue); }
-    .kpi-desc {
-      font-size: 11px;
-      color: var(--text-tertiary);
-    }
-
-    /* User personas */
-    .persona-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 48px;
-    }
-    .persona-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      display: flex;
-      gap: 14px;
-    }
-    .persona-avatar {
-      width: 44px;
-      height: 44px;
+    .preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .preview-item .remove-btn {
+      position: absolute;
+      top: 5px; right: 5px;
+      width: 20px; height: 20px;
+      background: rgba(0,0,0,0.5);
+      border: none;
       border-radius: 50%;
+      color: #fff;
+      font-size: 10px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
     }
-    .persona-body { flex: 1; }
-    .persona-role {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-    .persona-pain {
-      font-size: 11px;
-      color: var(--text-tertiary);
-      margin-bottom: 8px;
-    }
-    .persona-solution {
-      font-size: 12px;
-      color: var(--text-secondary);
-      line-height: 1.55;
-    }
-    .persona-solution strong { color: var(--green); font-weight: 600; }
+    .preview-item .remove-btn:hover { background: #e03737; }
 
-    /* Footer note */
-    .footer-note {
-      background: var(--white);
-      border: 1px solid var(--border);
+    /* sample set preview item */
+    .preview-item.sample-thumb {
+      background: #f0f0f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      gap: 4px;
+    }
+    .preview-item.sample-thumb .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      width: 54px; height: 54px;
+    }
+    .preview-item.sample-thumb .thumb-grid svg { width: 100%; height: 100%; }
+    .preview-item.sample-thumb .thumb-label {
+      font-size: 8px;
+      font-weight: 700;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .url-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #f7f7f8;
+      border: 1.5px solid #e4e4e6;
       border-radius: 10px;
-      padding: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+      max-width: 260px;
+    }
+    .url-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .url-chip button { background: none; border: none; color: #bbb; cursor: pointer; font-size: 14px; flex-shrink: 0; }
+    .url-chip button:hover { color: #e03737; }
+
+    /* ── Output card ── */
+    .output-card { display: none; }
+    .output-card.visible { display: block; }
+
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .out-card {
+      background: #f7f7f8;
+      border-radius: 16px;
+      padding: 20px 10px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.15s;
+      animation: fadeUp 0.35s ease both;
+    }
+    .out-card:hover { border-color: #0066ff; background: rgba(0,102,255,0.04); }
+    .out-card svg, .out-card img { width: 52px; height: 52px; display: block; }
+    .out-card .out-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       text-align: center;
     }
-    .footer-note p {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      line-height: 1.6;
+    .out-card .btn-dl {
+      display: none;
+      padding: 4px 12px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 7px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
     }
+    .out-card:hover .btn-dl { display: block; }
+
+    /* ── Skeleton ── */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f2 25%, #e6e6e9 50%, #f0f0f2 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+      border-radius: 10px;
+    }
+    .skel-icon { width: 52px; height: 52px; border-radius: 13px; }
+    .skel-text { width: 52px; height: 10px; border-radius: 5px; }
+
+    /* ── Right plugin panel (light) ── */
+    .plugin-panel {
+      width: 286px;
+      flex-shrink: 0;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      border: 1px solid #e8e8ea;
+    }
+
+    .panel-titlebar {
+      background: #2c2c2c;
+      padding: 13px 18px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .dot { width: 13px; height: 13px; border-radius: 50%; }
+    .dot-red    { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green  { background: #28c840; }
+    .panel-title-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      margin-left: 4px;
+    }
+
+    .panel-body { padding: 22px 20px; }
+
+    .panel-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 10px;
+    }
+
+    /* ── Icon form input ── */
+    .icon-form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #1a1a1a;
+      outline: none;
+      transition: border-color 0.15s;
+      background: #fff;
+      margin-bottom: 8px;
+    }
+    .icon-form-input::placeholder { color: #ccc; }
+    .icon-form-input:focus { border-color: #0066ff; }
+
+    .form-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+    .form-tag {
+      padding: 5px 11px;
+      border: 1.5px solid #e8e8ea;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #888;
+      cursor: pointer;
+      background: #fafafa;
+      transition: all 0.14s;
+      user-select: none;
+    }
+    .form-tag:hover { border-color: #0066ff; color: #0066ff; background: rgba(0,102,255,0.04); }
+    .form-tag.selected { border-color: #0066ff; background: #0066ff; color: #fff; }
+
+    .panel-divider {
+      height: 1px;
+      background: #f0f0f2;
+      margin: 18px 0;
+    }
+
+    /* ── Style tabs ── */
+    .style-tabs {
+      display: flex;
+      background: #f0f0f2;
+      border-radius: 13px;
+      padding: 4px;
+      gap: 3px;
+      margin-bottom: 16px;
+    }
+    .style-tab {
+      flex: 1;
+      padding: 9px 0;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: #bbb;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: not-allowed;
+      transition: all 0.18s;
+      user-select: none;
+    }
+    .style-tab.enabled { cursor: pointer; color: #999; }
+    .style-tab.enabled:hover { color: #555; }
+    .style-tab.active { background: #fff; color: #1a1a1a; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
+
+    .lock-notice {
+      font-size: 12px;
+      color: #bbb;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    .lock-notice.hidden { display: none; }
+
+    .style-desc {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      min-height: 38px;
+    }
+    .style-desc.hidden { display: none; }
+
+    .selected-count { display: none; }
+
+    /* ── Buttons ── */
+    .btn-generate {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 13px;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-generate:hover { background: #333; }
+    .btn-generate:active { transform: scale(0.98); }
+    .btn-generate:disabled { background: #e8e8ea; color: #c0c0c4; cursor: not-allowed; transform: none; }
+
+    .btn-dl-all {
+      width: 100%;
+      margin-top: 10px;
+      padding: 11px;
+      border: 1.5px solid #e4e4e6;
+      border-radius: 13px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: none;
+    }
+    .btn-dl-all.visible { display: block; }
+    .btn-dl-all:hover { border-color: #1a1a1a; color: #1a1a1a; }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+    }
+    .loading .spinner { display: block; }
+    .loading .btn-label { display: none; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to   { background-position: -200% 0; }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 13px 24px;
+      border-radius: 13px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.25s;
+      pointer-events: none;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
-<!-- Hero -->
-<section class="hero">
-  <div class="hero-badge">
-    <span class="dot"></span>
-    HYPER AI Design Team · NAVER
-  </div>
-  <h1 class="hero-title">NAVER WORKS <span>AI</span> 기능 제안<br>인터랙티브 프로토타입</h1>
-  <p class="hero-subtitle">
-    협업 플랫폼의 메신저·캘린더 흐름에 AI를 자연스럽게 녹여<br>
-    반복 작업을 줄이고 핵심 업무에 집중할 수 있는 9가지 기능을 제안합니다.
-  </p>
-  <div class="hero-meta">
-    <span class="hero-meta-item"><strong>버전</strong> v0.1 초안</span>
-    <span class="hero-meta-item"><strong>작성일</strong> 2025년 6월</span>
-    <span class="hero-meta-item"><strong>상태</strong> 내부 검토용</span>
-    <span class="hero-meta-item"><strong>기능 수</strong> 9개</span>
-  </div>
-</section>
+<header>
+  <h1>AI Icon Generator</h1>
+  <p>스타일 레퍼런스 이미지를 첨부하면 원하는 아이콘을 생성하는 플러그인</p>
+</header>
 
-<!-- Demo CTA -->
-<div class="demo-cta">
-  <div class="demo-cta-inner">
-    <div class="demo-cta-text">
-      <strong>인터랙티브 데모 준비 완료</strong> — 메신저 AI와 캘린더 AI를 직접 체험해보세요
-    </div>
-    <div class="demo-btns">
-      <a href="messenger.html" class="btn-primary">
-        💬 메신저 AI 데모
-      </a>
-      <a href="calendar.html" class="btn-secondary">
-        📅 캘린더 AI 데모
-      </a>
-    </div>
-  </div>
-</div>
+<main>
+  <!-- Left Panel -->
+  <div class="left-panel">
 
-<!-- Content -->
-<main class="content">
+    <!-- Reference card -->
+    <div class="card" id="refCard">
+      <div class="card-label">스타일 레퍼런스</div>
 
-  <!-- Design Principles -->
-  <div class="section-label">설계 원칙</div>
-  <h2 class="section-title">챗봇 없이 기존 UI 안에서</h2>
-  <p class="section-desc">AI는 별도의 채팅창이나 사이드패널 없이 기존 WORKS UI 컴포넌트 안에 인라인으로 삽입됩니다.</p>
-  
-  <div class="principles">
-    <div class="principle-card">
-      <div class="principle-icon">🚫</div>
-      <div class="principle-title">챗봇 없이</div>
-      <div class="principle-desc">별도 AI 채팅창 없이 기존 메신저·캘린더 UI 안에 자연스럽게 통합</div>
-    </div>
-    <div class="principle-card">
-      <div class="principle-icon">🔍</div>
-      <div class="principle-title">발견형 UX</div>
-      <div class="principle-desc">유저가 먼저 찾는 것이 아니라 AI가 맥락을 감지해 먼저 제안</div>
-    </div>
-    <div class="principle-card">
-      <div class="principle-icon">⚡</div>
-      <div class="principle-title">낮은 진입 마찰</div>
-      <div class="principle-desc">기존 워크플로를 바꾸지 않고 도입 가능한 기능 우선 설계</div>
-    </div>
-    <div class="principle-card">
-      <div class="principle-icon">🔒</div>
-      <div class="principle-title">개인정보 보안</div>
-      <div class="principle-desc">온프레미스 처리 옵션 포함, 기업 보안 정책 준수</div>
-    </div>
-  </div>
-
-  <!-- User Personas -->
-  <div class="section-label">대상 사용자</div>
-  <div class="persona-grid">
-    <div class="persona-card">
-      <div class="persona-avatar" style="background:#E8F8EF;">👔</div>
-      <div class="persona-body">
-        <div class="persona-role">팀 리더 / PM</div>
-        <div class="persona-pain">Pain · 회의 후 후속 정리에 시간 소비</div>
-        <div class="persona-solution"><strong>회의록 자동화</strong> + <strong>태스크 파싱</strong>으로 후속 작업 시간 단축</div>
+      <!-- Sample picker (always visible, comes first) -->
+      <div class="sample-picker visible" id="samplePicker">
+        <div class="sample-picker-grid" id="samplePickerGrid"></div>
       </div>
-    </div>
-    <div class="persona-card">
-      <div class="persona-avatar" style="background:#E8F0FE;">💻</div>
-      <div class="persona-body">
-        <div class="persona-role">디자이너 / 개발자</div>
-        <div class="persona-pain">Pain · 일정 조율 핑퐁, 반복 메시지 작성</div>
-        <div class="persona-solution"><strong>최적 슬롯 제안</strong>으로 조율 단축, <strong>톤 조절</strong>로 메시지 효율화</div>
+
+      <!-- Upload zone (compact, clickable) -->
+      <div class="upload-zone" id="uploadZone">
+        <div class="upload-icon">
+          <svg viewBox="0 0 28 28" fill="none">
+            <path d="M14 18V8" stroke="#999" stroke-width="2" stroke-linecap="round"/>
+            <path d="M9 13l5-6 5 6" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 20v1a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1" stroke="#999" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="upload-text-group">
+          <div class="upload-title">이미지 직접 첨부</div>
+          <div class="upload-sub">클릭하거나 드래그해서 업로드</div>
+        </div>
       </div>
-    </div>
-    <div class="persona-card">
-      <div class="persona-avatar" style="background:#FFF3E0;">🌏</div>
-      <div class="persona-body">
-        <div class="persona-role">글로벌 팀원</div>
-        <div class="persona-pain">Pain · 언어 장벽으로 인한 맥락 파악 어려움</div>
-        <div class="persona-solution"><strong>실시간 번역</strong>으로 원문 아래 인라인 번역 제공</div>
+
+      <!-- URL row -->
+      <div class="url-row">
+        <input class="url-input" id="urlInput" type="url" placeholder="아이콘 URL 붙여넣기" />
+        <button class="btn-url-attach" id="urlAttachBtn">첨부</button>
       </div>
+
+      <!-- Previews -->
+      <div class="preview-area" id="previewArea"></div>
     </div>
-    <div class="persona-card">
-      <div class="persona-avatar" style="background:#F3E8FF;">🆕</div>
-      <div class="persona-body">
-        <div class="persona-role">신규 입사자</div>
-        <div class="persona-pain">Pain · 채널 흐름 파악에 시간 소요</div>
-        <div class="persona-solution"><strong>채널 요약</strong>으로 복귀 시 빠른 컨텍스트 캐치업</div>
+
+    <!-- Output -->
+    <div class="card output-card" id="outputCard">
+      <div class="output-header">
+        <div class="card-label" id="outputLabel" style="margin-bottom:0">생성된 아이콘</div>
       </div>
+      <div class="output-grid" id="outputGrid"></div>
     </div>
+
   </div>
 
-  <!-- Calendar AI Features -->
-  <div class="feature-section">
-    <div class="feature-section-header">
-      <div class="feature-section-icon icon-green">📅</div>
-      <div>
-        <div class="feature-section-name">캘린더 AI <span>일정 & 회의 자동화 · 4가지 기능</span></div>
-      </div>
-      <a href="calendar.html" class="btn-secondary" style="margin-left:auto; font-size:12px; padding: 6px 14px;">데모 보기 →</a>
+  <!-- Right plugin panel -->
+  <div class="plugin-panel">
+    <div class="panel-titlebar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <span class="panel-title-text">Icon Generator</span>
     </div>
-    <div class="feature-grid">
-      <a href="calendar.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p1">P1</span>
-          </div>
-          <span class="phase-tag">Phase 1</span>
-        </div>
-        <div class="feature-num">Feature 1</div>
-        <div class="feature-name">최적 일정 제안</div>
-        <div class="feature-desc">참석자 전원의 캘린더를 분석해 공통 가용 슬롯 3개를 카드 형태로 제시. 가용 인원 수 배지 표시.</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>참석자 2명 이상 추가 시</strong>
-        </div>
-      </a>
-      <a href="calendar.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p1">P1</span>
-          </div>
-          <span class="phase-tag">Phase 2</span>
-        </div>
-        <div class="feature-num">Feature 2</div>
-        <div class="feature-name">아젠다 초안 자동 생성</div>
-        <div class="feature-desc">미팅 제목, 참석자 역할, 이전 회의록 참고해 예상 아젠다를 자동 작성. 시간 배분 포함, 직접 편집 가능.</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>아젠다 추가 섹션 진입 시</strong>
-        </div>
-      </a>
-      <a href="calendar.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p0">P0</span>
-          </div>
-          <span class="phase-tag">Phase 1</span>
-        </div>
-        <div class="feature-num">Feature 3</div>
-        <div class="feature-name">회의록 자동 생성</div>
-        <div class="feature-desc">화상/보이스 미팅 종료 후 트랜스크립트 기반 회의록 자동 생성. 결정사항·발화자별 요약·액션 아이템 구조화.</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>화상회의 종료 후 5분</strong>
-        </div>
-      </a>
-      <a href="calendar.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p2">P2</span>
-          </div>
-          <span class="phase-tag">Phase 2</span>
-        </div>
-        <div class="feature-num">Feature 4</div>
-        <div class="feature-name">후속 태스크 생성 및 게시판 연동</div>
-        <div class="feature-desc">회의록에서 담당자·기한 포함된 액션 아이템 파싱 후 WORKS 게시판 태스크로 일괄 등록.</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>회의록 생성 완료 후</strong>
-        </div>
-      </a>
+
+    <div class="panel-body">
+
+      <!-- ① 원하는 형태 입력 -->
+      <div class="panel-section-label">원하는 아이콘 형태</div>
+      <input class="icon-form-input" id="iconFormInput"
+        type="text" placeholder="예: 설정, 알림, 검색, 글쓰기..." />
+
+      <div style="height:20px"></div>
+
+      <!-- ② 아이콘 스타일 -->
+      <div class="panel-section-label">아이콘 스타일</div>
+      <div class="style-tabs">
+        <button class="style-tab" data-style="line">Line</button>
+        <button class="style-tab" data-style="solid">Solid</button>
+        <button class="style-tab" data-style="3d">3D</button>
+      </div>
+
+      <div class="style-desc hidden" id="styleDesc"></div>
+
+      <div class="panel-divider"></div>
+
+      <div class="selected-count" id="selectedCount"></div>
+
+      <button class="btn-generate" id="generateBtn" disabled>
+        <span class="btn-label">✦ 아이콘 생성</span>
+        <div class="spinner"></div>
+      </button>
+
+      <button class="btn-dl-all" id="dlAllBtn">모두 다운로드</button>
+
     </div>
   </div>
-
-  <!-- Messenger AI Features -->
-  <div class="feature-section">
-    <div class="feature-section-header">
-      <div class="feature-section-icon icon-blue">💬</div>
-      <div>
-        <div class="feature-section-name">메신저 AI <span>대화 생산성 · 5가지 기능</span></div>
-      </div>
-      <a href="messenger.html" class="btn-primary" style="margin-left:auto; font-size:12px; padding: 6px 14px;">데모 보기 →</a>
-    </div>
-    <div class="feature-grid">
-      <a href="messenger.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p0">P0</span>
-          </div>
-          <span class="phase-tag">Phase 1</span>
-        </div>
-        <div class="feature-num">Feature 5</div>
-        <div class="feature-name">채널 요약 버블</div>
-        <div class="feature-desc">읽지 않은 메시지 아래 AI 요약 버블 인라인 표시. 클릭 시 주요 흐름/결정사항/감지된 일정 팝업.</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>미읽 3건 이상 또는 2시간+ 이탈 후</strong>
-        </div>
-      </a>
-      <a href="messenger.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p1">P1</span>
-          </div>
-          <span class="phase-tag">Phase 2</span>
-        </div>
-        <div class="feature-num">Feature 6</div>
-        <div class="feature-name">일정 감지 및 회의 예약 트리거</div>
-        <div class="feature-desc">날짜/시간 표현 초록 하이라이트 + 호버 툴팁. 플로팅 배너로 예약/무시 액션 제공 (6초 후 자동 소멸).</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>NER 날짜/시간 표현 감지 시</strong>
-        </div>
-      </a>
-      <a href="messenger.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p1">P1</span>
-          </div>
-          <span class="phase-tag">Phase 1</span>
-        </div>
-        <div class="feature-num">Feature 7</div>
-        <div class="feature-name">톤 조절</div>
-        <div class="feature-desc">텍스트 입력 시 입력창 상단에 톤 칩 슬라이드업. 격식체·캐주얼·영문·간결하게 선택 즉시 변환.</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>메시지 입력창에 텍스트 입력 시</strong>
-        </div>
-      </a>
-      <a href="messenger.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p2">P2</span>
-          </div>
-          <span class="phase-tag">Phase 2</span>
-        </div>
-        <div class="feature-num">Feature 8</div>
-        <div class="feature-name">실시간 번역</div>
-        <div class="feature-desc">채팅방 헤더 번역 토글 ON 시 모든 메시지 원문 아래 파란 왼쪽 보더 블록으로 번역문 인라인 표시.</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>헤더 번역 토글 활성화</strong>
-        </div>
-      </a>
-    </div>
-    <!-- Feature 9 - full width -->
-    <div style="margin-top:12px;">
-      <a href="messenger.html" class="feature-card">
-        <div class="feature-card-header">
-          <div>
-            <span class="feature-priority p2">P2</span>
-          </div>
-          <span class="phase-tag">Phase 3</span>
-        </div>
-        <div class="feature-num">Feature 9</div>
-        <div class="feature-name">대화 기반 일괄 처리</div>
-        <div class="feature-desc">회의 맥락 감지 시 입력창 옆 'AI 처리' 버튼 활성화. 클릭 시 회의 예약 / 회의록 초안 / 참석자 메일 발송 탭 구조로 한 번에 처리. AI가 참석자·날짜·목적을 자동 추출.</div>
-        <div class="feature-trigger">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" stroke="#C2C2C2"/><path d="M6 3v3l2 1" stroke="#C2C2C2" stroke-linecap="round"/></svg>
-          트리거 <strong>채팅 흐름에서 회의 관련 맥락 감지 시</strong>
-        </div>
-      </a>
-    </div>
-  </div>
-
-  <!-- Roadmap -->
-  <div class="section-label">출시 로드맵</div>
-  <div class="roadmap">
-    <div class="roadmap-header">단계별 출시 계획 — Phase 1 ~ 3</div>
-    <div class="roadmap-phases">
-      <div class="roadmap-phase">
-        <div class="phase-title">Phase 1 · 즉시 체감</div>
-        <div class="phase-item"><span class="phase-dot dot-green"></span><span class="phase-item-text">채널 요약 버블 <strong style="color:#FF3B30;font-size:10px;">P0</strong></span></div>
-        <div class="phase-item"><span class="phase-dot dot-green"></span><span class="phase-item-text">회의록 자동 생성 <strong style="color:#FF3B30;font-size:10px;">P0</strong></span></div>
-        <div class="phase-item"><span class="phase-dot dot-blue"></span><span class="phase-item-text">메일 스마트 초안 <strong style="color:#FF3B30;font-size:10px;">P0</strong></span></div>
-        <div class="phase-item"><span class="phase-dot dot-blue"></span><span class="phase-item-text">톤 조절 <strong style="color:#1A6AFF;font-size:10px;">P1</strong></span></div>
-        <div class="phase-item"><span class="phase-dot dot-blue"></span><span class="phase-item-text">최적 일정 제안 <strong style="color:#1A6AFF;font-size:10px;">P1</strong></span></div>
-      </div>
-      <div class="roadmap-phase">
-        <div class="phase-title">Phase 2 · 맥락 감지</div>
-        <div class="phase-item"><span class="phase-dot dot-blue"></span><span class="phase-item-text">일정 감지 트리거 <strong style="color:#1A6AFF;font-size:10px;">P1</strong></span></div>
-        <div class="phase-item"><span class="phase-dot dot-blue"></span><span class="phase-item-text">아젠다 초안 생성 <strong style="color:#1A6AFF;font-size:10px;">P1</strong></span></div>
-        <div class="phase-item"><span class="phase-dot dot-gray"></span><span class="phase-item-text">후속 태스크 연동 P2</span></div>
-        <div class="phase-item"><span class="phase-dot dot-gray"></span><span class="phase-item-text">실시간 번역 P2</span></div>
-      </div>
-      <div class="roadmap-phase">
-        <div class="phase-title">Phase 3 · 복합 기능</div>
-        <div class="phase-item"><span class="phase-dot dot-gray"></span><span class="phase-item-text">대화 기반 일괄 처리 P2</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- KPI -->
-  <div class="section-label">성공 지표 · 3개월 목표</div>
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-label">채널 요약 버블 클릭률</div>
-      <div class="kpi-value green">35%+</div>
-      <div class="kpi-desc">버블 노출 대비 클릭 수</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">회의록 자동 생성 채택률</div>
-      <div class="kpi-value green">60%+</div>
-      <div class="kpi-desc">화상회의 종료 후 회의록 확인 비율</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">일정 감지 → 예약 전환율</div>
-      <div class="kpi-value blue">25%+</div>
-      <div class="kpi-desc">플로팅 배너 노출 대비 예약 완료</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">톤 조절 사용률</div>
-      <div class="kpi-value blue">20%+</div>
-      <div class="kpi-desc">메시지 작성 중 톤 칩 클릭 비율</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">메일 초안 채택률</div>
-      <div class="kpi-value green">40%+</div>
-      <div class="kpi-desc">초안 생성 후 수정 없이 발송 비율</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">전체 AI 기능 수</div>
-      <div class="kpi-value" style="color:var(--text-primary)">9</div>
-      <div class="kpi-desc">캘린더 4개 + 메신저 5개</div>
-    </div>
-  </div>
-
-  <div class="footer-note">
-    <p>본 문서는 HYPER AI Design Team 내부 검토용 초안입니다. · NAVER WORKS 디자인 시스템(WDS) 기반으로 제작된 인터랙티브 프로토타입입니다.</p>
-  </div>
-
 </main>
 
+<input type="file" id="fileInput" accept="image/*" multiple style="display:none" />
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── Icon library (HCDS — HyperCLOVA Design System) ── */
+// All icons use fill="var(--fill-0, #212121)"; makeVariations() replaces this color.
+const _hcds = (vb, d) =>
+  `<svg viewBox="${vb}" fill="none" xmlns="http://www.w3.org/2000/svg">${d}</svg>`;
+
+const ICONS = {
+  settings: { label: '설정', base: _hcds('0 0 20 20',
+    `<path d="M17.1228 10.3659C17.1228 10.2514 17.1342 10.1255 17.1342 9.99959C17.1342 9.87364 17.1342 9.7592 17.1228 9.63325C17.1113 9.4157 17.18 9.20947 17.3289 9.07207C18.0388 8.40797 18.2563 7.36614 17.8556 6.47304C17.6151 5.93489 17.3174 5.41954 16.9739 4.93864C16.4014 4.14859 15.3938 3.81656 14.4664 4.10281H14.4435C14.2488 4.17151 14.0427 4.13721 13.8595 4.01126C13.6534 3.87386 13.4473 3.75928 13.2298 3.64478C13.0466 3.55318 12.9092 3.38153 12.8634 3.17543C12.6458 2.23653 11.8672 1.5266 10.9169 1.42355C10.31 1.35485 9.68026 1.35485 9.07341 1.42355C8.12306 1.5266 7.34446 2.23656 7.12691 3.19836C7.08111 3.39301 6.95516 3.5532 6.76051 3.65625C6.54296 3.77075 6.33685 3.89677 6.13075 4.02272C5.94755 4.13722 5.74145 4.17152 5.5239 4.11427C4.59645 3.82802 3.58885 4.16005 3.01635 4.9501C2.67285 5.431 2.37516 5.94635 2.13471 6.4845C1.73396 7.36615 1.9515 8.41943 2.6614 9.08353C2.81025 9.22093 2.89041 9.42702 2.86751 9.64457C2.86751 9.75907 2.85605 9.8851 2.85605 10.0111C2.85605 10.137 2.85606 10.2514 2.86751 10.3774C2.87896 10.5949 2.81025 10.801 2.6614 10.9384C1.9515 11.6025 1.73396 12.6445 2.13471 13.5376C2.37516 14.0758 2.67285 14.5911 3.01635 15.072C3.58885 15.8621 4.59646 16.1941 5.54681 15.8964C5.74146 15.8391 5.94755 15.8734 6.13075 15.9879C6.33685 16.1253 6.54296 16.2399 6.76051 16.3544C6.94371 16.446 7.08111 16.6176 7.12691 16.8237C7.34446 17.7626 8.12306 18.4726 9.07341 18.5756C9.37111 18.61 9.68026 18.6329 9.98941 18.6329C10.2986 18.6329 10.6077 18.61 10.9054 18.5756C11.8558 18.4726 12.6344 17.7626 12.8519 16.8008C12.8977 16.6062 13.0237 16.446 13.2183 16.3429C13.4359 16.2284 13.642 16.1024 13.8481 15.9765C14.0313 15.862 14.2374 15.8277 14.4549 15.8849C15.3824 16.1712 16.39 15.8391 16.9625 15.0491C17.306 14.5682 17.6037 14.0528 17.8441 13.5147C18.2449 12.633 18.0273 11.5797 17.3174 10.9156C17.1686 10.7782 17.0884 10.5722 17.1113 10.3546L17.1228 10.3659ZM15.5312 9.99959C15.5312 10.0797 15.5312 10.1598 15.5312 10.24C15.474 10.9499 15.7373 11.6254 16.2526 12.0949C16.4701 12.2895 16.5274 12.5987 16.4129 12.8621C16.2182 13.2972 15.9778 13.7208 15.6915 14.1101C15.5198 14.3391 15.2335 14.4422 14.9244 14.3392C14.2717 14.1445 13.5733 14.2476 12.9893 14.6254C12.829 14.7285 12.6687 14.8201 12.4969 14.9117C11.8901 15.2208 11.455 15.7819 11.3062 16.4574C11.2375 16.7322 11.0199 16.9497 10.7451 16.9726C10.2642 17.0299 9.74896 17.0299 9.26806 16.9726C8.99326 16.9383 8.7757 16.7322 8.707 16.4345C8.55815 15.7818 8.12306 15.2323 7.51621 14.9231C7.34446 14.8315 7.18415 14.7399 7.02385 14.6369C6.646 14.385 6.19945 14.2475 5.7529 14.2475C5.5239 14.2475 5.29491 14.2819 5.06591 14.3506C4.79111 14.4308 4.4934 14.3506 4.32165 14.1101C4.0354 13.7208 3.79496 13.2972 3.60031 12.8621C3.48581 12.5987 3.54306 12.2895 3.76061 12.0949C4.26441 11.6254 4.52775 10.9499 4.48195 10.24C4.48195 10.1598 4.48195 10.0797 4.48195 9.99959C4.48195 9.91944 4.48195 9.83933 4.48195 9.75918C4.5392 9.04928 4.27586 8.37374 3.76061 7.90429C3.54306 7.70964 3.48581 7.40044 3.60031 7.13709C3.79496 6.70199 4.0354 6.27838 4.32165 5.88908C4.4934 5.66008 4.79112 5.55695 5.08882 5.66C5.74147 5.85465 6.4399 5.7516 7.02385 5.37375C7.18415 5.2707 7.34446 5.1791 7.51621 5.0875C8.12306 4.77835 8.55815 4.21732 8.707 3.54177C8.7757 3.26697 8.99326 3.04948 9.26806 3.02658C9.74896 2.96933 10.2642 2.96933 10.7451 3.02658C11.0199 3.06093 11.2375 3.267 11.3062 3.5647C11.455 4.21735 11.8901 4.76688 12.4969 5.07603C12.6687 5.16763 12.829 5.25923 12.9893 5.36228C13.5733 5.74013 14.2717 5.85463 14.9244 5.64853H14.9473C15.2221 5.55693 15.5198 5.64862 15.6915 5.87762C15.9778 6.26692 16.2182 6.69053 16.4129 7.12563C16.5274 7.38898 16.4701 7.69818 16.2526 7.89283C15.7488 8.36228 15.4854 9.03782 15.5312 9.74772C15.5312 9.82787 15.5312 9.90798 15.5312 9.98813V9.99959ZM10.0009 6.0951C7.84826 6.0951 6.0964 7.84699 6.0964 9.99959C6.0964 12.1522 7.84826 13.9041 10.0009 13.9041C12.1535 13.9041 13.9053 12.1522 13.9053 9.99959C13.9053 7.84699 12.1535 6.0951 10.0009 6.0951ZM10.0009 12.3011C8.72991 12.3011 7.69941 11.2705 7.69941 9.99959C7.69941 8.72864 8.72991 7.69813 10.0009 7.69813C11.2718 7.69813 12.3023 8.72864 12.3023 9.99959C12.3023 11.2705 11.2718 12.3011 10.0009 12.3011Z" fill="var(--fill-0, #212121)"/>`) },
+  bell: { label: '알림', base: _hcds('0 0 24 24',
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M4.39565 9.43867C4.39565 5.24608 7.80156 1.84019 11.9941 1.84019C16.1867 1.84019 19.5926 5.24608 19.5926 9.43867V11.6034C19.5926 12.7541 19.7678 13.891 20.1025 14.9823L21.0041 17.8793C21.0434 18.0996 20.9933 18.3737 20.8408 18.589C20.6595 18.8449 20.361 19.0039 20.0445 19.0039H15.0676L15.0652 19.326C15.0524 21.0167 13.682 22.3853 11.9941 22.3853C10.304 22.3853 8.9231 21.015 8.9231 19.3284V19.0039H3.94378C3.62111 19.0039 3.328 18.8544 3.15103 18.5941C2.97269 18.3319 2.93806 18.0027 3.04709 17.6974L3.88619 14.981C4.22084 13.8897 4.39565 12.7541 4.39565 11.6034V9.43867ZM11.9941 3.4548C8.68813 3.4548 6.01029 6.13266 6.01029 9.43867V11.6034C6.01029 12.9154 5.81696 14.2132 5.4304 15.4695L4.83401 17.4033H19.1543L18.5579 15.4695C18.1713 14.2132 17.978 12.9154 17.978 11.6034V9.43867C17.978 6.13265 15.3001 3.4548 11.9941 3.4548ZM13.4505 19.0003H10.5303L10.5378 19.3499C10.5559 20.1444 11.1909 20.7848 11.9941 20.7848C12.7905 20.7848 13.4505 20.1496 13.4505 19.3425V19.0003Z" fill="var(--fill-0, #212121)"/>`) },
+  search: { label: '검색', base: _hcds('0 0 24 24',
+    `<path d="M11.5301 3.9688C15.3344 4.16155 18.3602 7.30698 18.3602 11.1592L18.3504 11.5293C18.2753 13.0109 17.7529 14.3747 16.9148 15.4874L20.9031 19.4756C21.2153 19.788 21.2154 20.2951 20.9031 20.6075C20.5908 20.9195 20.0846 20.9194 19.7723 20.6075L15.8152 16.6514C14.56 17.7166 12.9351 18.3594 11.16 18.3594L10.7889 18.3497C7.10744 18.1629 4.15606 15.2108 3.96953 11.5293L3.95977 11.1592C3.95977 7.18278 7.18351 3.95903 11.16 3.95903L11.5301 3.9688ZM11.16 5.55864C8.06717 5.55864 5.55938 8.06643 5.55938 11.1592C5.55948 14.2519 8.06723 16.7588 11.16 16.7588C14.2526 16.7587 16.7595 14.2519 16.7596 11.1592C16.7596 8.0665 14.2527 5.55875 11.16 5.55864Z" fill="var(--fill-0, #212121)"/>`) },
+  home: { label: '홈', base: _hcds('0 0 24 24',
+    `<path d="M20.4004 8.05469C20.4003 7.9244 20.3362 7.80237 20.2295 7.72754L12.2295 2.11426C12.0918 2.01788 11.9082 2.01788 11.7705 2.11426L3.77051 7.72754C3.66385 7.80237 3.59969 7.9244 3.59961 8.05469V19.3994H8.86133V12.0127H15.1387V19.3994H20.4004V8.05469ZM22 19.999L21.9951 20.1016C21.9472 20.572 21.573 20.9462 21.1025 20.9941L21 20.999H14.5381C13.9859 20.9989 13.5381 20.5512 13.5381 19.999V13.6123H10.4619V19.999L10.4561 20.1016C10.4081 20.5722 10.0342 20.9466 9.56348 20.9941L9.46191 20.999H3C2.48232 20.999 2.05621 20.6057 2.00488 20.1016L2 19.999V8.05469C2.00007 7.48439 2.24289 6.94498 2.66113 6.56836L2.85156 6.41797L10.8516 0.804688C11.5408 0.321259 12.4592 0.321259 13.1484 0.804688L21.1484 6.41797C21.682 6.79232 21.9999 7.40291 22 8.05469V19.999Z" fill="var(--fill-0, #212121)"/>`) },
+  edit: { label: '글쓰기', base: _hcds('0 0 20 20',
+    `<path d="M4.22027 16.8C3.95027 16.8 3.69027 16.69 3.50027 16.5C3.27027 16.27 3.16027 15.93 3.22027 15.6L3.74026 12.67C3.82026 12.23 4.03027 11.83 4.35027 11.51L11.9403 3.92002C13.0503 2.81002 14.9803 2.81002 16.0903 3.92002C16.6403 4.47002 16.9503 5.20997 16.9503 5.98997C16.9503 6.76997 16.6403 7.51004 16.0903 8.06004L8.50027 15.65C8.18027 15.97 7.78027 16.18 7.34027 16.26L4.41027 16.78C4.35027 16.79 4.29028 16.8 4.23028 16.8H4.22027ZM14.0103 4.45994C13.6003 4.45994 13.2203 4.62001 12.9303 4.91001L5.34027 12.5C5.23027 12.61 5.15026 12.76 5.12026 12.92L4.70028 15.31L7.09027 14.89C7.25027 14.86 7.39028 14.79 7.51028 14.67L15.1003 7.07994C15.3903 6.78994 15.5503 6.40998 15.5503 5.99998C15.5503 5.58998 15.3903 5.21002 15.1003 4.92002C14.8103 4.63002 14.4303 4.46995 14.0203 4.46995L14.0103 4.45994Z" fill="var(--fill-0, #212121)"/>`) },
+  download: { label: '다운로드', base: _hcds('0 0 24 24',
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M11.2002 12.7353V3.2002L12.7998 3.2002V12.7368L15.4346 10.1013L16 9.53485L17.1318 10.6667L16.5654 11.2321L12.5664 15.2321C12.254 15.5446 11.747 15.5445 11.4346 15.2321L7.43457 11.2321L6.86816 10.6667L8 9.53485L8.56543 10.1013L11.2002 12.7353ZM20.7998 19.332C20.7998 20.2458 19.9845 20.7997 19.2295 20.7998H4.77051C4.01396 20.7997 3.2002 20.2453 3.2002 19.332V15.2002H4.7998V19.2002H19.2002V15.2002H20.7998V19.332Z" fill="var(--fill-0, #212121)"/>`) },
+  user: { label: '사용자', base: _hcds('0 0 17 17',
+    `<path fill-rule="evenodd" clip-rule="evenodd" d="M8.5 2.72461C9.73333 2.72461 10.7332 3.72472 10.7334 4.95801C10.7334 6.19144 9.73344 7.19141 8.5 7.19141C7.26671 7.19123 6.2666 6.19134 6.2666 4.95801C6.26678 3.72483 7.26682 2.72479 8.5 2.72461ZM8.5 8.3916C10.3962 8.3916 11.9336 6.85419 11.9336 4.95801C11.9334 3.06198 10.3961 1.52539 8.5 1.52539C6.60408 1.52557 5.06756 3.06209 5.06738 4.95801C5.06738 6.85408 6.60397 8.39143 8.5 8.3916ZM12.9121 10.8789C13.3309 11.2977 13.5663 11.8658 13.5664 12.458V14.4746H14.7666V12.458C14.7665 11.5475 14.4045 10.6741 13.7607 10.0303C13.1169 9.3865 12.2435 9.02539 11.333 9.02539H5.66602C4.75556 9.02548 3.88208 9.38648 3.23828 10.0303C2.59448 10.6741 2.23348 11.5475 2.2334 12.458V14.4746H3.43262V12.458C3.4327 11.8658 3.66816 11.2977 4.08691 10.8789C4.50567 10.4602 5.07382 10.2247 5.66602 10.2246H11.333L11.5537 10.2363C12.0649 10.2871 12.5457 10.5125 12.9121 10.8789Z" fill="var(--fill-0, #212121)"/>`) },
+  chat: { label: '채팅', base: _hcds('0 0 24 24',
+    `<path d="M20.4004 15.2451V4.64941C20.4004 4.03101 19.9148 3.59969 19.4287 3.59961H4.85742C4.21414 3.59961 3.59961 4.16302 3.59961 4.94336V20.3076C3.59962 20.3369 3.60743 20.3552 3.61426 20.3662L3.64648 20.3945C3.64749 20.3937 3.64925 20.3936 3.65039 20.3926L7.37793 17.0684L7.41992 17.0303L7.46484 16.9961C7.73005 16.7912 8.01101 16.7041 8.05859 16.6885C8.11354 16.6705 8.16132 16.6565 8.19531 16.6475C8.21289 16.6428 8.22862 16.6388 8.24121 16.6357C8.24753 16.6342 8.25375 16.633 8.25879 16.6318C8.26116 16.6313 8.26355 16.6304 8.26562 16.6299C8.26664 16.6296 8.26761 16.6291 8.26855 16.6289H8.27148L8.44824 16.5879H19.1426V18.1885H8.62891C8.62891 18.1885 8.49953 18.2176 8.44238 18.2617L4.71387 21.5879C4.39963 21.8674 4.0282 22 3.64258 22C3.41409 22 3.17123 21.9556 2.95703 21.8379C2.40797 21.5757 2.04679 21.0421 2.00391 20.4307L2 20.3076V4.94336C2 3.37503 3.20675 2.083 4.71094 2.00391L4.85742 2H19.4287L19.6904 2.01367C20.9829 2.14993 22 3.28349 22 4.64941V15.2451L21.9854 15.5449C21.8432 16.9751 20.6962 18.1106 19.2891 18.1846L19.1426 18.1885V16.5879C19.7858 16.5879 20.4003 16.0254 20.4004 15.2451Z" fill="var(--fill-0, #212121)"/>`) },
+};
+
+// Alias line/solid/3d to base so existing code works unchanged
+Object.values(ICONS).forEach(ic => { ic.line = ic.solid = ic['3d'] = ic.base; });
+
+
+const STYLE_DESCS = {
+  line:  '얇은 선으로 그려진 미니멀한 아이콘 스타일',
+  solid: '꽉 채운 실루엣의 선명하고 굵은 아이콘 스타일',
+  '3d':  '입체감 있는 그라디언트의 생동감 있는 아이콘 스타일',
+};
+
+/* ── State ── */
+const state = {
+  style: null,
+  hasImage: false,
+  refCount: 0,
+  usedSampleIds: new Set(),
+};
+
+/* ── Build sample picker — individual icon cells ── */
+function buildSamplePicker() {
+  const grid = document.getElementById('samplePickerGrid');
+  const iconKeys = Object.keys(ICONS);           // 8 icons
+  iconKeys.forEach(key => {
+    const cell = document.createElement('div');
+    cell.className = 'sample-icon-cell';
+    cell.dataset.key = key;
+    cell.innerHTML = ICONS[key].base.replace(/fill="var\(--fill-0, #212121\)"/g, 'fill="#1a1a1a"');
+    cell.addEventListener('click', () => {
+      const isSelected = cell.classList.toggle('selected');
+      if (isSelected) {
+        state.usedSampleIds.add(key);
+      } else {
+        state.usedSampleIds.delete(key);
+      }
+      syncPreview();
+    });
+    grid.appendChild(cell);
+  });
+}
+
+/* ── Shape library: 8 distinct forms per icon concept ── */
+const SHAPES = {
+  settings: [
+    // 1. 클래식 기어 (톱니바퀴)
+    `<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>`,
+    // 2. 슬라이더 3개
+    `<path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.5"/><circle cx="16" cy="12" r="2.5"/><circle cx="11" cy="18" r="2.5"/>`,
+    // 3. 토글 스위치
+    `<rect x="1" y="5" width="10" height="6" rx="3"/><circle cx="7" cy="8" r="2"/><rect x="13" y="13" width="10" height="6" rx="3"/><circle cx="17" cy="16" r="2"/>`,
+    // 4. 렌치 공구
+    `<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>`,
+    // 5. 이퀄라이저 바
+    `<rect x="3" y="11" width="3" height="9" rx="1.5"/><rect x="10" y="5" width="3" height="15" rx="1.5"/><rect x="17" y="8" width="3" height="12" rx="1.5"/>`,
+    // 6. 믹서/다이얼
+    `<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>`,
+    // 7. 필터 깔때기
+    `<polygon points="22,3 2,3 10,12.5 10,19 14,21 14,12.5"/>`,
+    // 8. 점 그리드 (앱 설정)
+    `<circle cx="7" cy="7" r="2" fill="currentColor"/><circle cx="12" cy="7" r="2" fill="currentColor"/><circle cx="17" cy="7" r="2" fill="currentColor"/><circle cx="7" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="17" cy="12" r="2" fill="currentColor"/><circle cx="7" cy="17" r="2" fill="currentColor"/><circle cx="12" cy="17" r="2" fill="currentColor"/><circle cx="17" cy="17" r="2" fill="currentColor"/>`,
+  ],
+  bell: [
+    // 1. 클래식 종
+    `<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0M12 2v2"/>`,
+    // 2. 종 + 알림 뱃지
+    `<path d="M17 8A5 5 0 007 8c0 7-3 9-3 9h16s-3-2-3-9M12.73 21a2 2 0 01-3.46 0"/><circle cx="18" cy="4" r="3.5" fill="currentColor"/>`,
+    // 3. 메가폰/확성기
+    `<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/>`,
+    // 4. 알람 시계
+    `<circle cx="12" cy="13" r="7"/><path d="M12 10v3l2.5 2.5"/><path d="M5 3L3 5M19 3l2 2"/><path d="M12 6V4"/>`,
+    // 5. 종 + 진동 웨이브
+    `<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/><path d="M20.5 5.5a9 9 0 010 13M3.5 5.5a9 9 0 000 13"/>`,
+    // 6. 알림 사각형 + 벨
+    `<rect x="5" y="2" width="14" height="17" rx="3"/><path d="M9 22h6M12 2V1"/><circle cx="12" cy="12" r="2.5"/>`,
+    // 7. 음소거 종 (슬래시)
+    `<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/><path d="M2 2l20 20"/>`,
+    // 8. 라운드 뱃지 알림
+    `<rect x="3" y="5" width="18" height="13" rx="4"/><circle cx="12" cy="11.5" r="3"/><path d="M12 2v3M8 22h8"/>`,
+  ],
+  search: [
+    // 1. 클래식 돋보기
+    `<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5l4.5 4.5"/>`,
+    // 2. 돋보기 + 플러스 (검색 추가)
+    `<circle cx="10" cy="10" r="7"/><path d="M16 16l4.5 4.5M8 10h4M10 8v4"/>`,
+    // 3. 돋보기 + 스파클
+    `<circle cx="10" cy="10" r="7"/><path d="M15.5 15.5l4.5 4.5"/><path d="M19 1l.5 1.5L21 3l-1.5.5L19 5l-.5-1.5L17 3l1.5-.5z"/>`,
+    // 4. 돋보기 + 십자선
+    `<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5l4.5 4.5M8 11h6M11 8v6"/>`,
+    // 5. 문서 안 검색
+    `<path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/><circle cx="10.5" cy="15.5" r="2.5"/><path d="M13 18l1.5 1.5"/>`,
+    // 6. 눈/시야 (visibility)
+    `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`,
+    // 7. 쌍안경
+    `<circle cx="7.5" cy="14" r="4.5"/><circle cx="16.5" cy="14" r="4.5"/><path d="M7.5 9.5V7h9v2.5M10.5 14h3"/>`,
+    // 8. 과녁/타겟
+    `<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>`,
+  ],
+  home: [
+    // 1. 클래식 집 + 문
+    `<path d="M3 9.5L12 3l9 6.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 22V13h6v9"/>`,
+    // 2. 집 + 굴뚝
+    `<path d="M3 10.5L12 4l9 6.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z"/><path d="M9 22V13h6v9"/><path d="M16 5V2h2v4"/>`,
+    // 3. 심플 삼각 집
+    `<path d="M2 12L12 3l10 9"/><path d="M4 10v12h16V10"/>`,
+    // 4. 빌딩/아파트
+    `<rect x="2" y="7" width="8" height="15"/><rect x="14" y="11" width="8" height="11"/><path d="M2 22h20"/><rect x="4" y="10" width="2" height="3"/><rect x="4" y="16" width="2" height="3"/><rect x="16" y="14" width="2" height="3"/><rect x="16" y="19" width="2" height="2"/>`,
+    // 5. 집 + 도어
+    `<path d="M3 9.5L12 3l9 6.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><rect x="9.5" y="13.5" width="5" height="8.5" rx="0.5"/><circle cx="13.5" cy="17.5" r="0.5" fill="currentColor"/>`,
+    // 6. 집 + 창문
+    `<path d="M3 9.5L12 3l9 6.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 22V13h6v9"/><rect x="5" y="11" width="3.5" height="3.5" rx="0.5"/><rect x="15.5" y="11" width="3.5" height="3.5" rx="0.5"/>`,
+    // 7. 그리드 아파트
+    `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 9v12M15 9v12"/>`,
+    // 8. 집 + 깃발
+    `<path d="M2 12L12 3l10 9M4 10v12h16V10"/><path d="M9 22V13h6v9"/><path d="M12 3V1M12 1h5l-1.5 2.5L17 6h-5"/>`,
+  ],
+  edit: [
+    // 1. 프레임 + 연필 (모서리 걸친 연필)
+    `<path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2 2 0 012.83 2.83l-9 9-3.83.83.83-3.83 9.17-8.83z"/>`,
+    // 2. 원 + 연필
+    `<circle cx="11" cy="11" r="8"/><path d="M8.5 14.5l5.5-6.5 2 2-5.5 6.5H8.5v-2z"/><path d="M14 8l2 2"/>`,
+    // 3. 연필 + 스파클
+    `<path d="M4 20l9-9.5 2 2L6 22H4v-2z"/><path d="M13 10.5l2 2 3.5-3.5a1.5 1.5 0 00-2.12-2.12L13 10.5z"/><path d="M19 2l.5 1.5L21 4l-1.5.5L19 6l-.5-1.5L17 4l1.5-.5z"/><path d="M5 3l.4 1.1L6.5 4l-1.1.4L5 5.5l-.4-1.1L3.5 4l1.1-.4z"/>`,
+    // 4. 노트패드 + 연필
+    `<rect x="3" y="3" width="13" height="17" rx="2"/><path d="M6 8h7M6 11h7M6 14h4"/><path d="M15 10l3.5-3.5 2 2L17 12h-2v-2z"/>`,
+    // 5. 문서 + 연필
+    `<path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/><path d="M9 17l4.5-4.5 2 2-4.5 4.5H9v-2z"/>`,
+    // 6. 연필 + 밑줄
+    `<path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/><path d="M2 22h20"/>`,
+    // 7. 말풍선 + 연필
+    `<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M8 11.5l5-5.5 2 2-5 5.5H8v-2z"/>`,
+    // 8. 클립보드 + 연필
+    `<path d="M9 2h6v2H9zM16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><path d="M8 15.5l4.5-4.5 2 2L10 17.5H8v-2z"/>`,
+  ],
+  download: [
+    // 1. 클래식 아래 화살표
+    `<path d="M12 3v14M7 12l5 5 5-5"/><path d="M3 20h18"/>`,
+    // 2. 트레이 + 화살표
+    `<path d="M8 5l4 5 4-5M12 2v8"/><rect x="2" y="14" width="20" height="7" rx="2"/>`,
+    // 3. 클라우드 다운로드
+    `<path d="M4 14.5A7 7 0 1115.6 8h1.9a4.5 4.5 0 010 9H5"/><path d="M12 13v8M9 18l3 3 3-3"/>`,
+    // 4. 원형 다운로드
+    `<circle cx="12" cy="12" r="9"/><path d="M12 8v7M9 12l3 3 3-3"/>`,
+    // 5. 박스 + 화살표
+    `<rect x="2" y="14" width="20" height="7" rx="2"/><path d="M12 2v11M8 9.5l4 4.5 4-4.5"/>`,
+    // 6. 플로피 디스크 (저장)
+    `<path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>`,
+    // 7. 파일 다운로드
+    `<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M12 11v7M9 15l3 3 3-3"/>`,
+    // 8. 공유/내보내기 화살표
+    `<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M12 3v12M8 11l4 4 4-4"/>`,
+  ],
+  user: [
+    // 1. 클래식 사람 실루엣
+    `<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>`,
+    // 2. 원 안 사람
+    `<circle cx="12" cy="12" r="9"/><path d="M16 20a4 4 0 00-8 0"/><circle cx="12" cy="9.5" r="3"/>`,
+    // 3. 두 사람 (그룹)
+    `<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>`,
+    // 4. 신분증 카드
+    `<rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="8.5" cy="12" r="3"/><path d="M14 10h5M14 14h3"/>`,
+    // 5. 아바타 단순형
+    `<circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>`,
+    // 6. 사람 + 체크
+    `<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M16 11l2 2 4-4"/>`,
+    // 7. 사람 + 플러스 (추가)
+    `<path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M16 11h6"/>`,
+    // 8. 사람 + 별 (즐겨찾기)
+    `<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M20 2l.6 2L23 5l-2.4.6L20 8l-.6-2.4L17 5l2.4-.6z"/>`,
+  ],
+  chat: [
+    // 1. 클래식 말풍선
+    `<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>`,
+    // 2. 말풍선 + 점 세개
+    `<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><circle cx="8" cy="11" r="1.2" fill="currentColor"/><circle cx="12" cy="11" r="1.2" fill="currentColor"/><circle cx="16" cy="11" r="1.2" fill="currentColor"/>`,
+    // 3. 두 말풍선 (대화)
+    `<path d="M18 3H6a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2V5a2 2 0 00-2-2z"/><path d="M2 8a2 2 0 00-2 2v5a2 2 0 002 2h1l2 2 2-2h2"/>`,
+    // 4. 사각 메시지 박스
+    `<rect x="2" y="4" width="20" height="14" rx="3"/><path d="M7 9h10M7 13h7"/><path d="M2 18l4-4"/>`,
+    // 5. 생각 말풍선
+    `<circle cx="12" cy="10" r="7"/><circle cx="7" cy="19" r="2.5"/><circle cx="4" cy="22.5" r="1.5"/>`,
+    // 6. 채팅 + 알림 뱃지
+    `<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><circle cx="18.5" cy="3.5" r="3.5" fill="currentColor"/>`,
+    // 7. 메시지 + 텍스트 라인
+    `<rect x="3" y="3" width="18" height="13" rx="2.5"/><path d="M8 21l4-5h5"/><path d="M7 8h10M7 12h6"/>`,
+    // 8. 전송 화살표
+    `<path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>`,
+  ],
+};
+
+/* ── Variation generator ── */
+function makeVariations(iconKey, style) {
+  const shapes = SHAPES[iconKey] || SHAPES.edit;
+
+  const COLORS   = ['#1a1a1a','#0066ff','#6c5ce7','#00b894','#e03737','#e17055','#636e72','#fd79a8'];
+  const PALETTES = [
+    ['#a29bfe','#6c5ce7'], ['#74b9ff','#0984e3'], ['#55efc4','#00b894'], ['#fdcb6e','#e17055'],
+    ['#fd79a8','#e84393'], ['#ff7675','#c0392b'], ['#ffeaa7','#f9ca24'], ['#a8e6cf','#2ecc71'],
+  ];
+
+  const wrap = (inner, attrs, extraStyle = '') =>
+    `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" ${attrs} style="${extraStyle}">${inner}</svg>`;
+
+  if (style === 'line') {
+    return shapes.map((inner, i) => {
+      const c = COLORS[i];
+      return wrap(inner,
+        `fill="none" stroke="${c}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"`);
+    });
+  }
+
+  if (style === 'solid') {
+    return shapes.map((inner, i) => {
+      if (i === 7) {
+        return wrap(inner,
+          `fill="white" stroke="white" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"`,
+          'background:#1a1a1a;border-radius:14px');
+      }
+      const c = COLORS[i];
+      return wrap(inner,
+        `fill="${c}" stroke="${c}" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"`);
+    });
+  }
+
+  // 3D — gradient fill + stroke
+  return shapes.map((inner, i) => {
+    const [c1, c2] = PALETTES[i];
+    const gid = `g3d_${iconKey}_${i}`;
+    const defs = `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient></defs>`;
+    return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">${defs}<g fill="url(#${gid})" stroke="url(#${gid})" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.18))">${inner}</g></svg>`;
+  });
+}
+
+/* ── File attach (click + drag & drop) ── */
+
+const uploadZone = document.getElementById('uploadZone');
+uploadZone.addEventListener('click', () => document.getElementById('fileInput').click());
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+});
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  handleFiles(e.target.files);
+  e.target.value = '';
+});
+
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = ev => addImagePreview(ev.target.result, file.name);
+    reader.readAsDataURL(file);
+  });
+}
+
+function addImagePreview(src, name) {
+  const previewArea = document.getElementById('previewArea');
+  previewArea.classList.add('visible');
+  const item = document.createElement('div');
+  item.className = 'preview-item';
+  item.innerHTML = `<img src="${src}" alt="${name}" /><button class="remove-btn">✕</button>`;
+  item.querySelector('.remove-btn').addEventListener('click', () => {
+    item.remove();
+    syncPreview();
+  });
+  previewArea.appendChild(item);
+  syncPreview();
+}
+
+/* ── URL attach ── */
+document.getElementById('urlAttachBtn').addEventListener('click', attachUrl);
+document.getElementById('urlInput').addEventListener('keydown', e => { if (e.key === 'Enter') attachUrl(); });
+
+function attachUrl() {
+  const val = document.getElementById('urlInput').value.trim();
+  if (!val) return;
+  try { new URL(val); } catch { showToast('유효한 URL을 입력해주세요'); return; }
+  const previewArea = document.getElementById('previewArea');
+  previewArea.classList.add('visible');
+  const chip = document.createElement('div');
+  chip.className = 'url-chip';
+  chip.innerHTML = `<span>🔗 ${new URL(val).hostname}</span><button title="제거">✕</button>`;
+  chip.querySelector('button').addEventListener('click', () => { chip.remove(); syncPreview(); });
+  previewArea.appendChild(chip);
+  document.getElementById('urlInput').value = '';
+  syncPreview();
+}
+
+/* ── Sync preview → unlock tabs ── */
+function syncPreview() {
+  const previewArea = document.getElementById('previewArea');
+  const urlItems = previewArea.querySelectorAll('.preview-item, .url-chip');
+  if (urlItems.length === 0) previewArea.classList.remove('visible');
+
+  const totalRef = urlItems.length + state.usedSampleIds.size;
+  state.hasImage = totalRef > 0;
+  state.refCount = totalRef;
+
+  document.querySelectorAll('.style-tab').forEach(t =>
+    t.classList.toggle('enabled', state.hasImage)
+  );
+  updateStatus();
+}
+
+function updateStatus() {
+  const countEl = document.getElementById('selectedCount');
+  const genBtn  = document.getElementById('generateBtn');
+
+  countEl.innerHTML = '';
+  if (!state.hasImage || !state.style) {
+    genBtn.disabled = true;
+  } else {
+    genBtn.disabled = false;
+  }
+}
+
+/* ── Style tabs ── */
+document.querySelectorAll('.style-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (!tab.classList.contains('enabled')) return;
+    document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    state.style = tab.dataset.style;
+    const desc = document.getElementById('styleDesc');
+    desc.classList.remove('hidden');
+    desc.textContent = STYLE_DESCS[state.style];
+    // Left panel does NOT change
+    updateStatus();
+  });
+});
+
+/* ── Suggestion tags ── */
+document.querySelectorAll('.form-tag').forEach(tag => {
+  tag.addEventListener('click', () => {
+    tag.classList.toggle('selected');
+    const input = document.getElementById('iconFormInput');
+    const val = tag.dataset.val;
+    const parts = input.value.split(',').map(s => s.trim()).filter(Boolean);
+    if (tag.classList.contains('selected')) {
+      if (!parts.includes(val)) parts.push(val);
+    } else {
+      const i = parts.indexOf(val); if (i > -1) parts.splice(i, 1);
+    }
+    input.value = parts.join(', ');
+  });
+});
+
+/* ── Resolve which icons to generate ── */
+function resolveTargetIcons() {
+  const inputRaw = document.getElementById('iconFormInput').value.trim();
+  const keywords = inputRaw
+    ? inputRaw.split(',').map(s => s.trim()).filter(Boolean)
+    : [];
+
+  // label → key lookup
+  const labelMap = {};
+  Object.entries(ICONS).forEach(([k, v]) => { labelMap[v.label] = k; });
+
+  let matched = keywords
+    .map(kw => labelMap[kw] || Object.keys(ICONS).find(k =>
+      ICONS[k].label.includes(kw) || kw.includes(ICONS[k].label)))
+    .filter(Boolean);
+
+  // deduplicate
+  matched = [...new Set(matched)];
+
+  // fallback: use selected cells, else all
+  if (matched.length === 0) {
+    matched = state.usedSampleIds.size > 0
+      ? [...state.usedSampleIds].filter(k => ICONS[k])
+      : Object.keys(ICONS);
+  }
+
+  return matched;
+}
+
+/* ── Generate ── */
+document.getElementById('generateBtn').addEventListener('click', generate);
+
+async function generate() {
+  const btn = document.getElementById('generateBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const outputCard = document.getElementById('outputCard');
+  const outputGrid = document.getElementById('outputGrid');
+  outputCard.classList.add('visible');
+  outputGrid.innerHTML = '';
+  document.getElementById('dlAllBtn').classList.remove('visible');
+
+  const targetKeys = resolveTargetIcons();
+  const isSingleType = targetKeys.length === 1;
+  const outputLabel = isSingleType
+    ? `"${ICONS[targetKeys[0]].label}" 아이콘 배리에이션 · ${state.style.toUpperCase()}`
+    : `생성된 아이콘 · ${state.style.toUpperCase()} 스타일`;
+  document.getElementById('outputLabel').textContent = outputLabel;
+
+  // Build task list: if single type → 8 variations; multi → 4 variations each (max 8 total)
+  let tasks = [];
+  if (isSingleType) {
+    const variations = makeVariations(targetKeys[0], state.style);
+    tasks = variations.map((svg, i) => ({
+      svg, label: `${ICONS[targetKeys[0]].label} v${i + 1}`, key: targetKeys[0], idx: i,
+    }));
+  } else {
+    const varsPerIcon = Math.max(1, Math.floor(8 / targetKeys.length));
+    targetKeys.forEach(key => {
+      const variations = makeVariations(key, state.style);
+      for (let i = 0; i < varsPerIcon; i++) {
+        tasks.push({ svg: variations[i] || variations[0], label: ICONS[key].label, key, idx: i });
+      }
+    });
+    tasks = tasks.slice(0, 8);
+  }
+
+  // Skeleton
+  tasks.forEach(() => {
+    const c = document.createElement('div');
+    c.className = 'out-card';
+    c.style.pointerEvents = 'none';
+    c.innerHTML = `<div class="skeleton skel-icon"></div><div class="skeleton skel-text"></div>`;
+    outputGrid.appendChild(c);
+  });
+  outputCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  await new Promise(r => setTimeout(r, 480));
+  outputGrid.innerHTML = '';
+
+  for (let i = 0; i < tasks.length; i++) {
+    await new Promise(r => setTimeout(r, 60 + i * 55));
+    const { svg, label, key, idx } = tasks[i];
+    const card = document.createElement('div');
+    card.className = 'out-card';
+    card.style.animationDelay = `${i * 0.05}s`;
+    const dispLabel = isSingleType ? `v${idx + 1}` : label;
+    card.innerHTML = `${svg}<span class="out-name">${dispLabel}</span><button class="btn-dl">SVG 저장</button>`;
+    card.querySelector('.btn-dl').addEventListener('click', e => {
+      e.stopPropagation();
+      downloadSvg(svg, `icon-${key}-${state.style}-v${idx + 1}.svg`);
+    });
+    outputGrid.appendChild(card);
+  }
+
+  document.getElementById('dlAllBtn').classList.add('visible');
+  btn.classList.remove('loading');
+  btn.disabled = false;
+}
+
+function downloadSvg(svgStr, filename) {
+  const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a'); a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('dlAllBtn').addEventListener('click', () => {
+  document.querySelectorAll('.out-card .btn-dl').forEach(b => b.click());
+  showToast('모든 아이콘을 다운로드했습니다');
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+buildSamplePicker();
+</script>
 </body>
 </html>
