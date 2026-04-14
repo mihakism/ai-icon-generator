@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WORKS AI — 캘린더 데모</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --white: #FFFFFF;
+      --surface-1: #F7F8FA;
+      --surface-2: #EAECEF;
+      --border: #EAECEF;
+      --selected: #EBF1FF;
+      --text-primary: #1A1A1A;
+      --text-secondary: #4A4A4A;
+      --text-tertiary: #9B9B9B;
+      --text-placeholder: #C2C2C2;
+      --green: #03C75A;
+      --blue: #1A6AFF;
+      --red: #FF3B30;
+      --ai-blue-bg: #E8F0FE;
+      --ai-blue-border: #A8C4F4;
+      --ai-blue-text: #1A6AFF;
+      --ai-green-bg: #E8F8EF;
+      --ai-green-text: #03C75A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+      background: #E8EAED;
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Prototype nav ── */
+    .proto-nav {
+      background: #111;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .proto-nav .brand { font-size: 13px; font-weight: 700; color: var(--green); margin-right: 12px; }
+    .proto-nav a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .proto-nav a:hover { background: rgba(255,255,255,0.08); color: white; }
+    .proto-nav a.active { background: rgba(255,255,255,0.14); color: white; }
+    .proto-nav .spacer { flex: 1; }
+
+    /* ── Demo controls ── */
+    .demo-controls {
+      background: #1A1A1A;
+      border-bottom: 1px solid #333;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .demo-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 4px; }
+    .demo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .demo-btn:hover { background: rgba(255,255,255,0.14); color: white; }
+    .demo-btn.active { background: rgba(3,199,90,0.2); border-color: rgba(3,199,90,0.4); color: #03C75A; }
+
+    /* ── App frame ── */
+    .app-frame {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      background: var(--white);
+      height: calc(100vh - 88px);
+      overflow: hidden;
+    }
+
+    /* ── Left: Calendar sidebar ── */
+    .cal-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .cal-sidebar-header {
+      height: 52px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .cal-sidebar-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+    .cal-new-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    /* Mini calendar */
+    .mini-cal { padding: 12px; }
+    .mini-cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .mini-cal-month { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .mini-cal-nav { font-size: 14px; color: var(--text-tertiary); cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+    .mini-cal-nav:hover { background: var(--surface-1); }
+    .mini-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .mini-cal-day-label { text-align: center; font-size: 10px; color: var(--text-tertiary); font-weight: 600; padding: 4px 0; }
+    .mini-cal-day {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding: 5px 2px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .mini-cal-day:hover { background: var(--surface-1); }
+    .mini-cal-day.today { background: var(--green); color: white; font-weight: 700; }
+    .mini-cal-day.selected { background: var(--selected); color: var(--blue); font-weight: 600; }
+    .mini-cal-day.has-event::after { content: '·'; display: block; color: var(--green); font-size: 14px; margin-top: -6px; }
+    .mini-cal-day.ai-event { color: var(--blue); font-weight: 600; }
+    .mini-cal-day.other-month { color: var(--text-placeholder); }
+
+    /* Calendar list section */
+    .cal-list-section { padding: 12px 0; border-top: 1px solid var(--border); }
+    .cal-list-header { padding: 0 16px 8px; font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .cal-list-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: background 0.1s;
+    }
+    .cal-list-item:hover { background: var(--surface-1); }
+    .cal-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── Right: Calendar content ── */
+    .cal-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Cal header */
+    .cal-header {
+      height: 52px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+    }
+    .cal-view-btns {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .cal-view-btn {
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      transition: background 0.1s, color 0.1s;
+    }
+    .cal-view-btn + .cal-view-btn { border-left: 1px solid var(--border); }
+    .cal-view-btn.active { background: var(--selected); color: var(--blue); font-weight: 600; }
+    .cal-nav-group { display: flex; align-items: center; gap: 4px; }
+    .cal-nav-btn {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-tertiary);
+      font-size: 16px;
+    }
+    .cal-nav-btn:hover { background: var(--surface-1); }
+    .cal-month-label { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .cal-header-spacer { flex: 1; }
+    .cal-today-btn {
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Week view */
+    .week-view {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .week-header {
+      display: grid;
+      grid-template-columns: 52px repeat(7, 1fr);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 10;
+    }
+    .week-header-time { height: 44px; }
+    .week-day-col {
+      padding: 8px 4px;
+      text-align: center;
+      border-left: 1px solid var(--border);
+    }
+    .week-day-name { font-size: 11px; color: var(--text-tertiary); font-weight: 600; }
+    .week-day-num {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2px auto 0;
+    }
+    .week-day-num.today { background: var(--green); color: white; }
+    .week-day-num.selected { background: var(--selected); color: var(--blue); }
+
+    /* Time grid */
+    .time-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 52px repeat(7, 1fr);
+      position: relative;
+    }
+    .time-labels { display: flex; flex-direction: column; }
+    .time-label {
+      height: 48px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding-right: 8px;
+      padding-top: 2px;
+      font-size: 10px;
+      color: var(--text-tertiary);
+    }
+    .day-column {
+      border-left: 1px solid var(--border);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .time-slot {
+      height: 48px;
+      border-bottom: 1px solid #F0F2F5;
+      position: relative;
+    }
+    .time-slot:hover { background: rgba(26,106,255,0.02); }
+
+    /* Events */
+    .cal-event {
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      border-radius: 4px;
+      padding: 3px 6px;
+      font-size: 11px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: opacity 0.15s;
+    }
+    .cal-event:hover { opacity: 0.85; }
+    .cal-event-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cal-event-time { font-size: 10px; opacity: 0.8; }
+
+    .event-blue { background: #D2E4FE; color: var(--blue); border-left: 3px solid var(--blue); }
+    .event-green { background: #C7EDD8; color: #007A3A; border-left: 3px solid var(--green); }
+    .event-gray { background: #EFEFEF; color: #555; border-left: 3px solid #AAAAAA; }
+    .event-ai { background: var(--ai-blue-bg); color: var(--blue); border-left: 3px solid var(--blue); border: 1px solid var(--ai-blue-border); }
+
+    /* AI event badge */
+    .ai-event-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: var(--blue);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 3px;
+      margin-top: 2px;
+    }
+
+    /* ── New Event Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.28);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 12px;
+      width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title { font-size: 16px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+    .modal-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: var(--surface-1);
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-tertiary);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-body { padding: 20px; }
+    .form-row { margin-bottom: 16px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+    .form-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: var(--blue); }
+    .form-row-inline { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* Participants chips */
+    .participants-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-height: 42px;
+      align-items: center;
+    }
+    .participant-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 8px 3px 4px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .participant-chip .p-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 9px;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .participants-row input {
+      border: none;
+      outline: none;
+      font-size: 13px;
+      font-family: inherit;
+      flex: 1;
+      min-width: 100px;
+      color: var(--text-primary);
+    }
+    .participants-row input::placeholder { color: var(--text-placeholder); }
+
+    /* AI section header */
+    .ai-section-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .ai-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ai-generating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
+    .dot-pulse {
+      display: flex;
+      gap: 3px;
+    }
+    .dot-pulse span {
+      width: 4px;
+      height: 4px;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+    .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse { 0%,60%,100% { opacity: 0.3; } 30% { opacity: 1; } }
+
+    /* Feature 1: Slot suggestion cards */
+    .slot-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 0; }
+    .slot-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .slot-card:hover { border-color: var(--blue); background: var(--ai-blue-bg); }
+    .slot-card.selected { border-color: var(--blue); background: var(--ai-blue-bg); }
+    .slot-card-day { font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px; }
+    .slot-card-time { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .slot-card.selected .slot-card-time { color: var(--blue); }
+    .slot-avail {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .avail-all { background: var(--ai-green-bg); color: var(--green); }
+    .avail-most { background: #FFF8E1; color: #E6A817; }
+
+    /* Feature 2: Agenda draft */
+    .agenda-draft {
+      background: var(--ai-blue-bg);
+      border: 1px solid var(--ai-blue-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .agenda-draft-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--ai-blue-border);
+    }
+    .agenda-draft-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .agenda-edit-btn {
+      font-size: 11px;
+      color: var(--blue);
+      cursor: pointer;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--ai-blue-border);
+      background: white;
+    }
+    .agenda-items { padding: 10px 12px; }
+    .agenda-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .agenda-item:last-child { margin-bottom: 0; }
+    .agenda-item-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .agenda-item-text { flex: 1; }
+    .agenda-item-duration {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+    }
+
+    /* Modal footer */
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .btn-save {
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .btn-cancel {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* ── Meeting detail modal (Feature 3 & 4) ── */
+    .meeting-detail {
+      background: white;
+      border-radius: 12px;
+      width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .meeting-detail-header {
+      padding: 20px 20px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .meeting-detail-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--ai-blue-bg);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .meeting-detail-title { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+    .meeting-detail-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+    .meta-item { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; }
+    .meta-icon { font-size: 13px; }
+
+    .meeting-detail-body { padding: 20px; }
+
+    /* Meeting notes section (Feature 3) */
+    .notes-section {
+      background: var(--ai-blue-bg);
+      border: 1px solid var(--ai-blue-border);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .notes-section-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ai-blue-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .notes-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .notes-section-actions { display: flex; gap: 6px; }
+    .notes-action-btn {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 5px;
+      border: 1px solid var(--ai-blue-border);
+      background: white;
+      color: var(--blue);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .notes-block { padding: 14px 16px; }
+    .notes-sub-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .notes-content { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+    .notes-divider { height: 1px; background: var(--ai-blue-border); margin: 0 16px; }
+
+    .speaker-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    .speaker-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .speaker-text { font-size: 12px; color: var(--text-secondary); line-height: 1.6; flex: 1; }
+    .speaker-name { font-weight: 600; color: var(--text-primary); }
+
+    /* Feature 4: Task follow-up */
+    .task-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .task-section-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .task-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .task-register-btn {
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .task-register-btn.done {
+      background: var(--green);
+    }
+    .task-item {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--surface-1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .task-checkbox.checked { background: var(--blue); border-color: var(--blue); color: white; font-size: 10px; }
+    .task-item-content { flex: 1; }
+    .task-item-title { font-size: 13px; color: var(--text-primary); margin-bottom: 2px; }
+    .task-item-meta { font-size: 11px; color: var(--text-tertiary); display: flex; gap: 8px; }
+    .task-assignee {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .task-assignee-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      font-size: 7px;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .task-deadline { color: var(--red); }
+
+    /* Task registered state */
+    .task-registered-banner {
+      margin: 0 16px 12px;
+      background: var(--ai-green-bg);
+      border: 1px solid rgba(3,199,90,0.3);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      display: none;
+    }
+    .task-registered-banner.visible { display: flex; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- Proto nav -->
+<nav class="proto-nav">
+  <span class="brand">WORKS AI</span>
+  <a href="index.html">개요</a>
+  <a href="messenger.html">💬 메신저 AI</a>
+  <a href="calendar.html" class="active">📅 캘린더 AI</a>
+  <span class="spacer"></span>
+  <span style="font-size:11px;color:rgba(255,255,255,0.3);">v0.1 프로토타입 · 내부 검토용</span>
+</nav>
+
+<!-- Demo controls -->
+<div class="demo-controls">
+  <span class="demo-label">데모 트리거</span>
+  <button class="demo-btn" onclick="showNewEvent()">📅 F1+F2 새 일정 만들기 (최적 슬롯 + 아젠다)</button>
+  <button class="demo-btn" onclick="showMeetingDetail()">📋 F3+F4 회의록 + 태스크 (회의 완료 후)</button>
+  <span style="font-size:11px;color:rgba(255,255,255,0.25);margin-left:8px;">💡 캘린더 빈 칸 클릭으로도 새 일정 생성 가능</span>
+</div>
+
+<!-- App frame -->
+<div class="app-frame">
+
+  <!-- Left: Sidebar -->
+  <div class="cal-sidebar">
+    <div class="cal-sidebar-header">
+      <span class="cal-sidebar-title">캘린더</span>
+      <button class="cal-new-btn" onclick="showNewEvent()" title="새 일정">+</button>
+    </div>
+
+    <!-- Mini calendar -->
+    <div class="mini-cal">
+      <div class="mini-cal-header">
+        <span class="mini-cal-month">2025년 11월</span>
+        <div style="display:flex;gap:0;">
+          <span class="mini-cal-nav">‹</span>
+          <span class="mini-cal-nav">›</span>
+        </div>
+      </div>
+      <div class="mini-cal-grid">
+        <div class="mini-cal-day-label">일</div>
+        <div class="mini-cal-day-label">월</div>
+        <div class="mini-cal-day-label">화</div>
+        <div class="mini-cal-day-label">수</div>
+        <div class="mini-cal-day-label">목</div>
+        <div class="mini-cal-day-label">금</div>
+        <div class="mini-cal-day-label">토</div>
+        <!-- Week 1 -->
+        <div class="mini-cal-day other-month">27</div>
+        <div class="mini-cal-day other-month">28</div>
+        <div class="mini-cal-day other-month">29</div>
+        <div class="mini-cal-day other-month">30</div>
+        <div class="mini-cal-day other-month">31</div>
+        <div class="mini-cal-day">1</div>
+        <div class="mini-cal-day">2</div>
+        <!-- Week 2 -->
+        <div class="mini-cal-day">3</div>
+        <div class="mini-cal-day today">4</div>
+        <div class="mini-cal-day ai-event selected has-event">5</div>
+        <div class="mini-cal-day">6</div>
+        <div class="mini-cal-day">7</div>
+        <div class="mini-cal-day">8</div>
+        <div class="mini-cal-day">9</div>
+        <!-- Week 3 -->
+        <div class="mini-cal-day">10</div>
+        <div class="mini-cal-day">11</div>
+        <div class="mini-cal-day">12</div>
+        <div class="mini-cal-day">13</div>
+        <div class="mini-cal-day">14</div>
+        <div class="mini-cal-day">15</div>
+        <div class="mini-cal-day">16</div>
+        <!-- Week 4 -->
+        <div class="mini-cal-day">17</div>
+        <div class="mini-cal-day">18</div>
+        <div class="mini-cal-day">19</div>
+        <div class="mini-cal-day">20</div>
+        <div class="mini-cal-day">21</div>
+        <div class="mini-cal-day">22</div>
+        <div class="mini-cal-day">23</div>
+        <!-- Week 5 -->
+        <div class="mini-cal-day">24</div>
+        <div class="mini-cal-day">25</div>
+        <div class="mini-cal-day">26</div>
+        <div class="mini-cal-day">27</div>
+        <div class="mini-cal-day">28</div>
+        <div class="mini-cal-day">29</div>
+        <div class="mini-cal-day">30</div>
+      </div>
+    </div>
+
+    <!-- Calendar list -->
+    <div class="cal-list-section">
+      <div class="cal-list-header">내 캘린더</div>
+      <div class="cal-list-item"><span class="cal-dot" style="background:#03C75A;"></span>김지현</div>
+      <div class="cal-list-item"><span class="cal-dot" style="background:#1A6AFF;"></span>팀 일정</div>
+      <div class="cal-list-item"><span class="cal-dot" style="background:#FF8C42;"></span>외부 미팅</div>
+    </div>
+    <div class="cal-list-section">
+      <div class="cal-list-header">다른 사람 캘린더</div>
+      <div class="cal-list-item"><span class="cal-dot" style="background:#FF8C42;"></span>박민수</div>
+      <div class="cal-list-item"><span class="cal-dot" style="background:#1ABC9C;"></span>이수진</div>
+    </div>
+  </div>
+
+  <!-- Right: Calendar content -->
+  <div class="cal-content">
+    <!-- Cal header -->
+    <div class="cal-header">
+      <div class="cal-view-btns">
+        <button class="cal-view-btn">일</button>
+        <button class="cal-view-btn active">주</button>
+        <button class="cal-view-btn">월</button>
+      </div>
+      <div class="cal-nav-group">
+        <button class="cal-nav-btn">‹</button>
+        <span class="cal-month-label">2025년 11월 3일 — 9일</span>
+        <button class="cal-nav-btn">›</button>
+      </div>
+      <div class="cal-header-spacer"></div>
+      <button class="cal-today-btn">오늘</button>
+    </div>
+
+    <!-- Week view -->
+    <div class="week-view">
+      <div class="week-header">
+        <div class="week-header-time"></div>
+        <div class="week-day-col"><div class="week-day-name">일</div><div class="week-day-num">3</div></div>
+        <div class="week-day-col"><div class="week-day-name">월</div><div class="week-day-num today">4</div></div>
+        <div class="week-day-col"><div class="week-day-name">화</div><div class="week-day-num selected">5</div></div>
+        <div class="week-day-col"><div class="week-day-name">수</div><div class="week-day-num">6</div></div>
+        <div class="week-day-col"><div class="week-day-name">목</div><div class="week-day-num">7</div></div>
+        <div class="week-day-col"><div class="week-day-name">금</div><div class="week-day-num">8</div></div>
+        <div class="week-day-col"><div class="week-day-name">토</div><div class="week-day-num">9</div></div>
+      </div>
+
+      <div class="time-grid">
+        <!-- Time labels -->
+        <div class="time-labels">
+          <div class="time-label">8 AM</div>
+          <div class="time-label">9 AM</div>
+          <div class="time-label">10 AM</div>
+          <div class="time-label">11 AM</div>
+          <div class="time-label">12 PM</div>
+          <div class="time-label">1 PM</div>
+          <div class="time-label">2 PM</div>
+          <div class="time-label">3 PM</div>
+          <div class="time-label">4 PM</div>
+          <div class="time-label">5 PM</div>
+        </div>
+
+        <!-- Sunday col -->
+        <div class="day-column">
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+        </div>
+
+        <!-- Monday col -->
+        <div class="day-column" style="position:relative;">
+          <div class="time-slot"></div>
+          <div class="time-slot"></div>
+          <!-- 10:00 event -->
+          <div class="time-slot" style="position:relative;">
+            <div class="cal-event event-gray" style="top:4px;height:38px;">
+              <div class="cal-event-title">주간 스탠드업</div>
+              <div class="cal-event-time">10:00 — 10:30</div>
+            </div>
+          </div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+        </div>
+
+        <!-- Tuesday col (Nov 5 - AI event) -->
+        <div class="day-column" style="position:relative;">
+          <div class="time-slot"></div>
+          <div class="time-slot"></div>
+          <div class="time-slot"></div>
+          <!-- 11:00 AI event -->
+          <div class="time-slot" style="position:relative;">
+            <div class="cal-event event-ai" style="top:0;height:96px;cursor:pointer;" onclick="showMeetingDetail()">
+              <div class="cal-event-title">Q4 마케팅 전략 회의</div>
+              <div class="cal-event-time">11:00 — 12:00</div>
+              <div class="ai-event-badge">✦ AI 회의록</div>
+            </div>
+          </div>
+          <div class="time-slot"></div>
+          <div class="time-slot"></div>
+          <div class="time-slot"></div>
+          <div class="time-slot"></div>
+          <!-- 3:00 PM event -->
+          <div class="time-slot" style="position:relative;">
+            <div class="cal-event event-green" style="top:4px;height:38px;">
+              <div class="cal-event-title">1:1 미팅 — 박민수</div>
+              <div class="cal-event-time">15:00 — 15:30</div>
+            </div>
+          </div>
+          <div class="time-slot"></div>
+        </div>
+
+        <!-- Wednesday col -->
+        <div class="day-column">
+          <div class="time-slot"></div>
+          <!-- 9:30 event -->
+          <div class="time-slot" style="position:relative;">
+            <div class="cal-event event-blue" style="top:24px;height:38px;">
+              <div class="cal-event-title">디자인 리뷰</div>
+              <div class="cal-event-time">9:30 — 10:00</div>
+            </div>
+          </div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+        </div>
+
+        <!-- Thursday col -->
+        <div class="day-column">
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <!-- 2:00 event -->
+          <div class="time-slot" style="position:relative;">
+            <div class="cal-event event-blue" style="top:4px;height:58px;">
+              <div class="cal-event-title">Q4 예산 검토</div>
+              <div class="cal-event-time">14:00 — 15:00</div>
+            </div>
+          </div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+        </div>
+
+        <!-- Friday col -->
+        <div class="day-column">
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+        </div>
+
+        <!-- Saturday col -->
+        <div class="day-column">
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+          <div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div><div class="time-slot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app-frame -->
+
+<!-- ── Modal: New Event (Feature 1 + 2) ── -->
+<div class="modal-overlay" id="newEventModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span>새 일정 만들기</span>
+        <span class="ai-badge" style="font-size:10px;">AI</span>
+      </div>
+      <button class="modal-close" onclick="closeNewEvent()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Title -->
+      <div class="form-row">
+        <label class="form-label">제목</label>
+        <input type="text" class="form-input" value="Q4 마케팅 전략 회의" placeholder="회의 제목 입력">
+      </div>
+
+      <!-- Participants -->
+      <div class="form-row">
+        <label class="form-label">참석자</label>
+        <div class="participants-row">
+          <div class="participant-chip">
+            <div class="p-avatar" style="background:#4A85E8;">김</div>
+            김지현
+          </div>
+          <div class="participant-chip">
+            <div class="p-avatar" style="background:#FF8C42;">박</div>
+            박민수
+          </div>
+          <div class="participant-chip">
+            <div class="p-avatar" style="background:#1ABC9C;">이</div>
+            이수진
+          </div>
+          <input type="text" placeholder="이름 또는 이메일 추가">
+        </div>
+      </div>
+
+      <!-- Feature 1: AI slot suggestion -->
+      <div class="form-row">
+        <div class="ai-section-header">
+          <span class="ai-section-label">✦ AI 최적 일정 제안</span>
+          <div class="ai-generating" id="slotGenerating">
+            <div class="dot-pulse"><span></span><span></span><span></span></div>
+            참석자 캘린더 분석 중…
+          </div>
+        </div>
+        <div class="slot-cards" id="slotCards" style="display:none;">
+          <div class="slot-card selected" onclick="selectSlot(this)">
+            <div class="slot-card-day">화 · 11/5</div>
+            <div class="slot-card-time">오전 11:00</div>
+            <span class="slot-avail avail-all">✓ 전원 가능</span>
+          </div>
+          <div class="slot-card" onclick="selectSlot(this)">
+            <div class="slot-card-day">수 · 11/6</div>
+            <div class="slot-card-time">오전 10:00</div>
+            <span class="slot-avail avail-most">4/5 가능</span>
+          </div>
+          <div class="slot-card" onclick="selectSlot(this)">
+            <div class="slot-card-day">목 · 11/7</div>
+            <div class="slot-card-time">오후 2:00</div>
+            <span class="slot-avail avail-most">4/5 가능</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date/time (populated after slot selection) -->
+      <div class="form-row form-row-inline" id="dateTimeRow" style="display:none;">
+        <div>
+          <label class="form-label">날짜</label>
+          <input type="text" class="form-input" value="2025년 11월 5일 (화)" readonly>
+        </div>
+        <div>
+          <label class="form-label">시간</label>
+          <input type="text" class="form-input" value="오전 11:00 — 12:00" readonly>
+        </div>
+      </div>
+
+      <!-- Feature 2: Agenda draft -->
+      <div class="form-row" id="agendaSection" style="display:none;">
+        <div class="ai-section-header">
+          <span class="ai-section-label">✦ AI 아젠다 초안</span>
+          <div class="ai-generating" id="agendaGenerating">
+            <div class="dot-pulse"><span></span><span></span><span></span></div>
+            이전 회의록 및 문서 분석 중…
+          </div>
+        </div>
+        <div class="agenda-draft" id="agendaDraft" style="display:none;">
+          <div class="agenda-draft-header">
+            <div class="agenda-draft-title">
+              <span>✦</span> AI가 생성한 아젠다 초안
+            </div>
+            <button class="agenda-edit-btn">✎ 편집</button>
+          </div>
+          <div class="agenda-items">
+            <div class="agenda-item">
+              <div class="agenda-item-num">1</div>
+              <div class="agenda-item-text">Q4 목표 달성 현황 리뷰</div>
+              <div class="agenda-item-duration">15분</div>
+            </div>
+            <div class="agenda-item">
+              <div class="agenda-item-num">2</div>
+              <div class="agenda-item-text">채널별 예산 배분 논의 (소셜 / 검색 / 디스플레이)</div>
+              <div class="agenda-item-duration">20분</div>
+            </div>
+            <div class="agenda-item">
+              <div class="agenda-item-num">3</div>
+              <div class="agenda-item-text">Q4 캠페인 일정 및 담당자 확정</div>
+              <div class="agenda-item-duration">15분</div>
+            </div>
+            <div class="agenda-item">
+              <div class="agenda-item-num">4</div>
+              <div class="agenda-item-text">액션 아이템 정리 및 다음 미팅 일정</div>
+              <div class="agenda-item-duration">10분</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="form-row" id="locationRow" style="display:none;">
+        <label class="form-label">장소 / 링크</label>
+        <input type="text" class="form-input" value="WORKS 화상회의 (자동 링크 생성)" readonly>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeNewEvent()">취소</button>
+      <button class="btn-save" onclick="saveEvent()">일정 저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal: Meeting detail (Feature 3 + 4) ── -->
+<div class="modal-overlay" id="meetingDetailModal">
+  <div class="meeting-detail">
+    <div class="modal-header">
+      <div class="modal-title" style="flex-direction:column;align-items:flex-start;gap:4px;">
+        <div class="meeting-detail-tag">✦ AI 회의록 생성됨</div>
+        <div class="meeting-detail-title">Q4 마케팅 전략 회의</div>
+        <div class="meeting-detail-meta">
+          <span class="meta-item"><span class="meta-icon">📅</span>2025년 11월 5일 (화) 오전 11:00 — 12:00</span>
+          <span class="meta-item"><span class="meta-icon">👥</span>참석자 5명</span>
+          <span class="meta-item"><span class="meta-icon">⏱</span>60분</span>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeMeetingDetail()">✕</button>
+    </div>
+    <div class="meeting-detail-body">
+
+      <!-- Feature 3: Meeting notes -->
+      <div class="notes-section">
+        <div class="notes-section-header">
+          <div class="notes-section-title">
+            <span class="ai-badge">AI</span>
+            회의록 자동 생성 — Feature 3
+          </div>
+          <div class="notes-section-actions">
+            <button class="notes-action-btn">✎ 편집</button>
+            <button class="notes-action-btn">공유</button>
+          </div>
+        </div>
+
+        <div class="notes-block">
+          <div class="notes-sub-title">결정사항</div>
+          <div class="notes-content">
+            📌 Q4 총 마케팅 예산 1.8억 확정 (소셜 40%, 검색 35%, 디스플레이 25%)<br>
+            📌 11월 캠페인 론칭 일정 11/18(월)로 확정<br>
+            📌 퍼포먼스 리포팅 주기 매주 금요일로 변경
+          </div>
+        </div>
+        <div class="notes-divider"></div>
+        <div class="notes-block">
+          <div class="notes-sub-title">참석자별 발화 요약</div>
+          <div class="speaker-row">
+            <div class="speaker-avatar" style="background:#4A85E8;">김</div>
+            <div class="speaker-text">
+              <span class="speaker-name">김지현</span> — Q3 대비 소셜 채널 ROAS가 12% 하락했으며, Q4에서는 소셜 예산 비중을 높여 보완 필요하다고 제안. 캠페인 론칭을 11/18로 제안하고 합의됨.
+            </div>
+          </div>
+          <div class="speaker-row">
+            <div class="speaker-avatar" style="background:#FF8C42;">박</div>
+            <div class="speaker-text">
+              <span class="speaker-name">박민수</span> — Q3 리포트 공유, 검색 채널이 안정적인 성과를 내고 있으므로 예산 유지 권장. 리포팅 주기를 매주 금요일로 변경 제안.
+            </div>
+          </div>
+          <div class="speaker-row">
+            <div class="speaker-avatar" style="background:#1ABC9C;">이</div>
+            <div class="speaker-text">
+              <span class="speaker-name">이수진</span> — 디스플레이 예산 축소에 동의. 크리에이티브 소재 준비 일정 상 11/15까지 완료 가능하다고 확인.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 4: Task follow-up -->
+      <div class="task-section">
+        <div class="task-section-header">
+          <div class="task-section-title">
+            <span>📋</span>
+            액션 아이템 — Feature 4
+          </div>
+          <button class="task-register-btn" id="registerTaskBtn" onclick="registerTasks()">
+            ✦ 게시판 태스크 등록
+          </button>
+        </div>
+
+        <div class="task-registered-banner" id="taskRegisteredBanner">
+          ✓ WORKS 게시판 업무 탭에 3개 태스크가 등록되었습니다.
+        </div>
+
+        <div class="task-item">
+          <div class="task-checkbox" onclick="toggleTask(this)"></div>
+          <div class="task-item-content">
+            <div class="task-item-title">소셜 채널 Q4 집행 계획서 작성</div>
+            <div class="task-item-meta">
+              <div class="task-assignee">
+                <div class="task-assignee-dot" style="background:#4A85E8;">김</div>
+                김지현
+              </div>
+              <span class="task-deadline">11/12 (수) 마감</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-checkbox" onclick="toggleTask(this)"></div>
+          <div class="task-item-content">
+            <div class="task-item-title">Q4 캠페인 크리에이티브 소재 제작 완료</div>
+            <div class="task-item-meta">
+              <div class="task-assignee">
+                <div class="task-assignee-dot" style="background:#1ABC9C;">이</div>
+                이수진
+              </div>
+              <span class="task-deadline">11/15 (토) 마감</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-item">
+          <div class="task-checkbox" onclick="toggleTask(this)"></div>
+          <div class="task-item-content">
+            <div class="task-item-title">주간 리포팅 템플릿 업데이트 및 팀 공유</div>
+            <div class="task-item-meta">
+              <div class="task-assignee">
+                <div class="task-assignee-dot" style="background:#FF8C42;">박</div>
+                박민수
+              </div>
+              <span style="color:var(--text-tertiary);">11/8 (금) 마감</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── New event modal (Feature 1 + 2) ──
+  function showNewEvent() {
+    document.getElementById('newEventModal').classList.add('visible');
+    // Simulate AI generating slots
+    setTimeout(() => {
+      document.getElementById('slotGenerating').style.display = 'none';
+      document.getElementById('slotCards').style.display = 'grid';
+      document.getElementById('dateTimeRow').style.display = 'grid';
+      document.getElementById('agendaSection').style.display = 'block';
+      document.getElementById('locationRow').style.display = 'block';
+      // Simulate agenda generating
+      setTimeout(() => {
+        document.getElementById('agendaGenerating').style.display = 'none';
+        document.getElementById('agendaDraft').style.display = 'block';
+      }, 1800);
+    }, 1200);
+  }
+
+  function closeNewEvent() {
+    document.getElementById('newEventModal').classList.remove('visible');
+    // Reset state for next open
+    document.getElementById('slotGenerating').style.display = 'flex';
+    document.getElementById('slotCards').style.display = 'none';
+    document.getElementById('dateTimeRow').style.display = 'none';
+    document.getElementById('agendaSection').style.display = 'none';
+    document.getElementById('agendaDraft').style.display = 'none';
+    document.getElementById('locationRow').style.display = 'none';
+    document.getElementById('agendaGenerating').style.display = 'flex';
+  }
+
+  function selectSlot(card) {
+    document.querySelectorAll('.slot-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    const day = card.querySelector('.slot-card-day').textContent;
+    const time = card.querySelector('.slot-card-time').textContent;
+    const dateRow = document.getElementById('dateTimeRow');
+    const inputs = dateRow.querySelectorAll('input');
+    const dateMap = {
+      '화 · 11/5': '2025년 11월 5일 (화)',
+      '수 · 11/6': '2025년 11월 6일 (수)',
+      '목 · 11/7': '2025년 11월 7일 (목)'
+    };
+    inputs[0].value = dateMap[day] || day;
+    inputs[1].value = time + ' — ' + (parseInt(time) + 1) + ':00';
+  }
+
+  function saveEvent() {
+    closeNewEvent();
+    alert('✓ 일정이 저장되었습니다. 참석자에게 초대가 발송됩니다.');
+  }
+
+  // ── Meeting detail modal (Feature 3 + 4) ──
+  function showMeetingDetail() {
+    document.getElementById('meetingDetailModal').classList.add('visible');
+  }
+
+  function closeMeetingDetail() {
+    document.getElementById('meetingDetailModal').classList.remove('visible');
+  }
+
+  function registerTasks() {
+    const btn = document.getElementById('registerTaskBtn');
+    const banner = document.getElementById('taskRegisteredBanner');
+    btn.textContent = '✓ 등록 완료';
+    btn.classList.add('done');
+    btn.disabled = true;
+    banner.classList.add('visible');
+  }
+
+  function toggleTask(checkbox) {
+    checkbox.classList.toggle('checked');
+    if (checkbox.classList.contains('checked')) {
+      checkbox.textContent = '✓';
+      checkbox.closest('.task-item').querySelector('.task-item-title').style.textDecoration = 'line-through';
+      checkbox.closest('.task-item').querySelector('.task-item-title').style.color = 'var(--text-tertiary)';
+    } else {
+      checkbox.textContent = '';
+      checkbox.closest('.task-item').querySelector('.task-item-title').style.textDecoration = 'none';
+      checkbox.closest('.task-item').querySelector('.task-item-title').style.color = 'var(--text-primary)';
+    }
+  }
+
+  // Click on empty time slot to create new event
+  document.querySelectorAll('.time-slot').forEach(slot => {
+    slot.addEventListener('click', function(e) {
+      if (e.target === this) {
+        showNewEvent();
+      }
+    });
+  });
+
+  // Close modals on overlay click
+  document.getElementById('newEventModal').addEventListener('click', function(e) {
+    if (e.target === this) closeNewEvent();
+  });
+  document.getElementById('meetingDetailModal').addEventListener('click', function(e) {
+    if (e.target === this) closeMeetingDetail();
+  });
+</script>
+
+</body>
+</html>
